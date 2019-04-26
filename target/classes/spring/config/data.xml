@@ -12,12 +12,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd                           
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
-	">
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<!-- Repository packages -->
 
@@ -28,7 +26,7 @@
 
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"	destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/Acme-Hacker-Rank" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/Acme-Rookies" />
 		<property name="user" value="acme-user" />
 		<property name="password" value="ACME-Us3r-P@ssw0rd" />
 		<property name="minPoolSize" value="1" />
@@ -38,7 +36,7 @@
 	<!-- JPA -->
 
 	<bean id="persistenceUnit" class="java.lang.String">
-		<constructor-arg value="Acme-Hacker-Rank" />
+		<constructor-arg value="Acme-Acme-Rookies" />
 	</bean>
 
 	<bean id="sqlDialect" class="java.lang.String">

@@ -13,7 +13,7 @@
 	<!-- Artifact identification and properties -->
 
 	<groupId>Design-and-Testing</groupId>
-	<artifactId>Acme-Hacker-Rank</artifactId>
+	<artifactId>Acme-Rookies</artifactId>
 	<version>1.0</version>
 	<packaging>war</packaging>
 
@@ -23,8 +23,8 @@
 
 	<!-- Indexing information -->
 
-	<name>Acme Hacker-Rank</name>
-	<url>http://www.Acme-Hacker-Rank.com</url>
+	<name>Acme Rookies</name>
+	<url>http://www.Acme-Rookies.com</url>
 
 	<!-- Build commands -->
 

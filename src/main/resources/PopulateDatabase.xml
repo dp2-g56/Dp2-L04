@@ -69,7 +69,7 @@
 		<property name="welcomeMessageEnglish" value="Welcome to Acme hacker Rank!We´re IT hacker´s favourite job marketplace!" />
 		<property name="welcomeMessageSpanish" value="¡Bienvenidos a Acme Hacker Rank! ¡Somos el mercado de trabajo favorito de los profesionales de las TICs!" />
 		
-		<property name="systemName" value="Acme Hacker Rank" />
+		<property name="systemName" value="Acme Rookies" />
 		<property name="imageURL" value="https://i.imgur.com/7b8lu4b.pngby" />
 
 		<property name="VAT" value="21" />
