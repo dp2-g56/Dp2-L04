@@ -28,6 +28,12 @@
 		<bean class="converters.ApplicationToStringConverter" />
 		<bean class="converters.StringToApplicationConverter" />
 		
+		<bean class="converters.AuditorToStringConverter" />
+		<bean class="converters.StringToAuditorConverter" />
+		
+		<bean class="converters.AuditToStringConverter" />
+		<bean class="converters.StringToAuditConverter" />
+		
 		<bean class="converters.CompanyToStringConverter" />
 		<bean class="converters.StringToCompanyConverter" />
 		
@@ -45,6 +51,9 @@
 		
 		<bean class="converters.HackerToStringConverter" />
 		<bean class="converters.StringToHackerConverter" />
+		
+		<bean class="converters.ItemToStringConverter" />
+		<bean class="converters.StringToItemConverter" />
 		
 		<bean class="converters.MessageToStringConverter" />
 		<bean class="converters.StringToMessageConverter" />
@@ -64,8 +73,14 @@
 		<bean class="converters.ProblemToStringConverter" />
 		<bean class="converters.StringToProblemConverter" />
 		
+		<bean class="converters.ProviderToStringConverter" />
+		<bean class="converters.StringToProviderConverter" />
+		
 		<bean class="converters.SocialProfileToStringConverter" />
 		<bean class="converters.StringToSocialProfileConverter" />
+		
+		<bean class="converters.SponsorshipToStringConverter" />
+		<bean class="converters.StringToSponsorshipConverter" />
 	</util:list>
 	
 </beans>
