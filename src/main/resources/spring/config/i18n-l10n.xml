@@ -30,6 +30,7 @@
 		<value>/views/actor/messages</value>
 		<value>/views/hacker/messages</value>
 		<value>/views/message/messages</value>
+		<value>/views/provider/messages</value>
 
 	</util:list>
 
