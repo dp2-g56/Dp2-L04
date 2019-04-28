@@ -26,7 +26,7 @@ public class Item extends DomainEntity {
 		return this.name;
 	}
 
-	public void setName(final String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -35,7 +35,7 @@ public class Item extends DomainEntity {
 		return this.description;
 	}
 
-	public void setDescription(final String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -45,7 +45,7 @@ public class Item extends DomainEntity {
 		return this.links;
 	}
 
-	public void setLinks(final List<String> links) {
+	public void setLinks(List<String> links) {
 		this.links = links;
 	}
 
@@ -55,7 +55,7 @@ public class Item extends DomainEntity {
 		return this.pictures;
 	}
 
-	public void setPictures(final List<String> pictures) {
+	public void setPictures(List<String> pictures) {
 		this.pictures = pictures;
 	}
 }
