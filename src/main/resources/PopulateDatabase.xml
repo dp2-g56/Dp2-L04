@@ -244,6 +244,21 @@
 		<property name="isNotLocked" value="True" />
 	</bean>
 	
+	<!-- PROVIDER2 -->
+		<bean id="userAccount12" class="security.UserAccount">
+		<property name="username" value="provider2" />
+		<property name="password"
+			value="ebfc815ee2cc6a16225105bb7b3e1e53" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+        </bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+
 	<!-- AUDITOR1 -->
 	<bean id="userAccount12" class="security.UserAccount">
 		<property name="username" value="auditor1" />
@@ -373,20 +388,48 @@
 			</bean>
 	
 	<!-- PROVIDER -->
-		<!-- PROVIDER1 -->
-			<bean id="provider1" class="domain.Provider">
-				<property name="make" value="the master provider"/>
-				<property name="name" value="provider" />
-				<property name="surname" value="provider surname" />
-				<property name="VATNumber" value="SE123456778" />
-				<property name="creditCard" ref="creditCard11" />
-				<property name="photo"
-					value="https://trello.com/c/unl0e9cp/1-requisitos" />
-				<property name="email" value="provider1@gmail.com" />
-				<property name="phone" value="+34609882920" />
-				<property name="address" value="Sevilla Este" />
-				<property name="userAccount" ref="userAccount11" />
-			</bean>	
+
+	<bean id="provider1" class="domain.Provider">
+		<property name="make" value="the master provider"/>
+		<property name="name" value="provider" />
+		<property name="surname" value="provider surname" />
+		<property name="VATNumber" value="SE123456778" />
+		<property name="creditCard" ref="creditCard11" />
+		<property name="photo"
+			value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="provider1@gmail.com" />
+		<property name="phone" value="+34609882920" />
+		<property name="address" value="Sevilla Este" />
+		<property name="userAccount" ref="userAccount11" />
+		<property name="items">
+			<list>
+				<ref bean="item1" />
+				<ref bean="item2" />
+				<ref bean="item3" />
+			</list>
+		</property>
+	</bean>	
+	
+		<bean id="provider2" class="domain.Provider">
+		<property name="make" value="Acme"/>
+		<property name="name" value="Wile E" />
+		<property name="surname" value="Coyote" />
+		<property name="VATNumber" value="SE123456778" />
+		<property name="creditCard" ref="creditCard12" />
+		<property name="photo"
+			value="http://tuitmarketing.com/wp-content/uploads/2018/07/6951120-thumb.jpg" />
+		<property name="email" value="provider2@gmail.com" />
+		<property name="phone" value="+34609882920" />
+		<property name="address" value="Sevilla Oeste" />
+		<property name="userAccount" ref="userAccount12" />
+		<property name="items">
+			<list>
+				<ref bean="item4" />
+				<ref bean="item5" />
+				<ref bean="item6" />
+			</list>
+		</property>
+	</bean>	
 	
 	<!-- ADMIN -->
 	<!-- ADMIN1 -->
@@ -2924,5 +2967,103 @@
 	</bean>
 	
 	<bean id ="finder125" class="domain.Finder"/>
+	
+	<!-- ITEMS -->
+	
+	<!-- Provider1 -->
+	
+	<bean id="item1" class="domain.Item">
+		<property name="name" value="PyCharm" />
+		<property name="description" value="A very simple program to install" />
+		<property name="links">
+		<list>
+			<value>https://www.jetbrains.com/pycharm/</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>https://www.jetbrains.com/pycharm/img/screenshots/simpleLook@2x.jpg</value>
+		</list>
+		</property>
+	</bean>
+	
+		<bean id="item2" class="domain.Item">
+		<property name="name" value="Dreamweaver" />
+		<property name="description" value="A very free IDE" />
+		<property name="links">
+		<list>
+			<value>https://www.adobe.com/es/products/dreamweaver.html</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>https://imag.malavida.com/mvimgbig/download-fs/dreamweaver-4084-7.jpg</value>
+		</list>
+		</property>
+	</bean>
+	
+		<bean id="item3" class="domain.Item">
+		<property name="name" value="Eclipse for Python" />
+		<property name="description" value="A not really good IDE for Python" />
+		<property name="links">
+		<list>
+			<value>http://www.pydev.org</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>https://i.ytimg.com/vi/1BsWjVByonk/maxresdefault.jpg</value>
+		</list>
+		</property>
+	</bean>
+	
+	<!-- Provider2 -->
+	
+		
+	<bean id="item4" class="domain.Item">
+		<property name="name" value="Tomcat" />
+		<property name="description" value="A really nice program that always works" />
+		<property name="links">
+		<list>
+			<value>http://tomcat.apache.org</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>https://i.ytimg.com/vi/NrQSk9uwqaI/maxresdefault.jpg</value>
+		</list>
+		</property>
+	</bean>
+	
+	<bean id="item5" class="domain.Item">
+		<property name="name" value="Clevercloud" />
+		<property name="description" value="A really nice platform that always works" />
+		<property name="links">
+		<list>
+			<value>https://www.clever-cloud.com/en/</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>https://www.notaweaponofwar.org/wp-content/uploads/2018/06/logo_clever-cloud.png</value>
+		</list>
+		</property>
+	</bean>
+	
+	<bean id="item6" class="domain.Item">
+		<property name="name" value="Aptana" />
+		<property name="description" value="A really nice IDE that always works" />
+		<property name="links">
+		<list>
+			<value>http://www.aptana.com</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>http://www.aptana.com/images/hero/studio3.png</value>
+		</list>
+		</property>
+	</bean>
+	
 
 </beans>
