@@ -88,5 +88,19 @@ public class ItemProviderController extends AbstractController {
 		
 		return result;	
 	}
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public ModelAndView deleteItem(@RequestParam int itemId) {
+		ModelAndView result;
+		
+		try {
+			this.itemService.deleteItem(itemId);
+			result = new ModelAndView("redirect:list.do");
+		} catch(Throwable oops) {
+			result = new ModelAndView("redirect:list.do");
+		}
+		
+		return result;	
+	}
 
 }

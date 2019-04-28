@@ -36,6 +36,16 @@
 			</a>
 		</display:column>
 		
+		<display:column titleKey="provider.action">
+			<spring:url var="deleteUrl" value="/item/provider/delete.do">
+				<spring:param name="itemId" value="${row.id}"/>
+			</spring:url>
+			<a href="${deleteUrl}" onclick="return confirm('<spring:message code="item.delete.confirmation" />')">
+				<spring:message code="item.delete" var = "deleteMessage" />
+				<jstl:out value="${deleteMessage}"/>
+			</a>
+		</display:column>
+		
 	</display:table>
 	
 	<spring:url var="newItemUrl" value="/item/provider/new.do"/>
