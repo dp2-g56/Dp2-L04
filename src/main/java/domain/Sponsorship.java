@@ -29,7 +29,7 @@ public class Sponsorship extends DomainEntity {
 		return this.creditCard;
 	}
 
-	public void setCreditCard(final CreditCard creditCard) {
+	public void setCreditCard(CreditCard creditCard) {
 		this.creditCard = creditCard;
 	}
 
@@ -39,7 +39,7 @@ public class Sponsorship extends DomainEntity {
 		return this.banner;
 	}
 
-	public void setBanner(final String banner) {
+	public void setBanner(String banner) {
 		this.banner = banner;
 	}
 
@@ -49,7 +49,7 @@ public class Sponsorship extends DomainEntity {
 		return this.targetUrl;
 	}
 
-	public void setTargetUrl(final String targetUrl) {
+	public void setTargetUrl(String targetUrl) {
 		this.targetUrl = targetUrl;
 	}
 
@@ -58,7 +58,7 @@ public class Sponsorship extends DomainEntity {
 		return this.position;
 	}
 
-	public void setPosition(final Position position) {
+	public void setPosition(Position position) {
 		this.position = position;
 	}
 
@@ -67,7 +67,7 @@ public class Sponsorship extends DomainEntity {
 		return this.provider;
 	}
 
-	public void setProvider(final Provider provider) {
+	public void setProvider(Provider provider) {
 		this.provider = provider;
 	}
 

@@ -10,7 +10,6 @@
 
 <p><spring:message code="brotherhood.position.application.list" /></p>
 
-
 	<display:table pagesize="5" name="allApplications" id="row" requestURI="${requestURI}" >
 
 

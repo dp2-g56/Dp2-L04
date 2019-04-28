@@ -243,11 +243,152 @@
 		</property>
 		<property name="isNotLocked" value="True" />
 	</bean>
+	
+	<!-- PROVIDER2 -->
+		<bean id="userAccount12" class="security.UserAccount">
+		<property name="username" value="provider2" />
+		<property name="password"
+			value="ebfc815ee2cc6a16225105bb7b3e1e53" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+        </bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+
+	<!-- AUDITOR1 -->
+	<bean id="userAccount12" class="security.UserAccount">
+		<property name="username" value="auditor1" />
+		<property name="password"
+			value="175d2e7a63f386554a4dd66e865c3e14" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<!-- AUDITOR2 -->
+	<bean id="userAccount13" class="security.UserAccount">
+		<property name="username" value="auditor2" />
+		<property name="password"
+			value="04dd94ba3212ac52ad3a1f4cbfb52d4f" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<!-- AUDITOR3 -->
+	<bean id="userAccount14" class="security.UserAccount">
+		<property name="username" value="auditor3" />
+		<property name="password"
+			value="fc2073dbe4f65dfd71e46602f8e6a5f3" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
 
 	<!-- FIN USER ACCOUNT -->
 
 	<!-- ACTOR -->
+	
+	<!-- AUDITOR -->
+		<!-- AUDITOR1 -->
+			<bean id="auditor1" class="domain.Auditor">
+				<property name="name" value="John" />
+				<property name="surname" value="Unknown" />
+				<property name="VATNumber" value="SE321456789" />
+				<property name="creditCard" ref="creditCard12" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor1@gmail.com" />
+				<property name="phone" value="+34609236921" />
+				<property name="address" value="Auditor1 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount12" />
+			</bean>
+		
+		<!-- AUDITOR2 -->
+			<bean id="auditor2" class="domain.Auditor">
+				<property name="name" value="Jane" />
+				<property name="surname" value="Also Unknown" />
+				<property name="VATNumber" value="SE123456987" />
+				<property name="creditCard" ref="creditCard13" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor2@gmail.com" />
+				<property name="phone" value="+34609116921" />
+				<property name="address" value="Auditor2 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount13" />
+			</bean>
+		
+		<!-- AUDITOR3 -->
+			<bean id="auditor3" class="domain.Auditor">
+				<property name="name" value="Jacob" />
+				<property name="surname" value="Elmonzo" />
+				<property name="VATNumber" value="SE123666987" />
+				<property name="creditCard" ref="creditCard14" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor3@gmail.com" />
+				<property name="phone" value="+34609161921" />
+				<property name="address" value="Auditor3 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount14" />
+			</bean>
+	
 	<!-- PROVIDER -->
+
 	<bean id="provider1" class="domain.Provider">
 		<property name="make" value="the master provider"/>
 		<property name="name" value="provider" />
@@ -260,6 +401,34 @@
 		<property name="phone" value="+34609882920" />
 		<property name="address" value="Sevilla Este" />
 		<property name="userAccount" ref="userAccount11" />
+		<property name="items">
+			<list>
+				<ref bean="item1" />
+				<ref bean="item2" />
+				<ref bean="item3" />
+			</list>
+		</property>
+	</bean>	
+	
+		<bean id="provider2" class="domain.Provider">
+		<property name="make" value="Acme"/>
+		<property name="name" value="Wile E" />
+		<property name="surname" value="Coyote" />
+		<property name="VATNumber" value="SE123456778" />
+		<property name="creditCard" ref="creditCard12" />
+		<property name="photo"
+			value="http://tuitmarketing.com/wp-content/uploads/2018/07/6951120-thumb.jpg" />
+		<property name="email" value="provider2@gmail.com" />
+		<property name="phone" value="+34609882920" />
+		<property name="address" value="Sevilla Oeste" />
+		<property name="userAccount" ref="userAccount12" />
+		<property name="items">
+			<list>
+				<ref bean="item4" />
+				<ref bean="item5" />
+				<ref bean="item6" />
+			</list>
+		</property>
 	</bean>	
 	
 	<!-- ADMIN -->
@@ -728,6 +897,38 @@
 		<property name="expirationYear" value="23" />
 		<property name="cvvCode" value="123" />
 	</bean>
+	
+	<!-- AUDITOR -->
+		<!-- AUDITOR1 -->
+			<bean id="creditCard12" class="domain.CreditCard">
+				<property name="holderName" value="Provider One" />
+				<property name="brandName" value="VISA" />
+				<property name="number" value="4552196498057173" />
+				<property name="expirationMonth" value="08" />
+				<property name="expirationYear" value="23" />
+				<property name="cvvCode" value="123" />
+			</bean>
+			
+		<!-- AUDITOR2 -->
+			<bean id="creditCard13" class="domain.CreditCard">
+				<property name="holderName" value="Provider Two" />
+				<property name="brandName" value="VISA" />
+				<property name="number" value="5442196258057173" />
+				<property name="expirationMonth" value="08" />
+				<property name="expirationYear" value="23" />
+				<property name="cvvCode" value="321" />
+			</bean>
+		
+		<!-- AUDITOR3 -->
+			<bean id="creditCard14" class="domain.CreditCard">
+				<property name="holderName" value="Provider One" />
+				<property name="brandName" value="VISA" />
+				<property name="number" value="4559216258057173" />
+				<property name="expirationMonth" value="08" />
+				<property name="expirationYear" value="23" />
+				<property name="cvvCode" value="123" />
+			</bean>
+		
 
 	<!-- FIN CREDIT CARD -->
 
@@ -1259,6 +1460,10 @@
 				<ref bean="problem3" />
 			</list>
 		</property>
+		<property name="audits">
+			<list>
+			</list>
+		</property>
 	</bean>
 
 
@@ -1291,6 +1496,10 @@
 				<ref bean="problem4" />
 			</list>
 		</property>
+		<property name="audits">
+			<list>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="position3" class="domain.Position">
@@ -1318,6 +1527,10 @@
 			<list>
 				<ref bean="problem1" />
 				<ref bean="problem3" />
+			</list>
+		</property>
+		<property name="audits">
+			<list>
 			</list>
 		</property>
 	</bean>
@@ -1348,6 +1561,10 @@
 			<list>
 				<ref bean="problem1" />
 				<ref bean="problem2" />
+			</list>
+		</property>
+		<property name="audits">
+			<list>
 			</list>
 		</property>
 	</bean>
@@ -1382,6 +1599,10 @@
 				<ref bean="problem9" />
 			</list>
 		</property>
+		<property name="audits">
+			<list>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="position6" class="domain.Position">
@@ -1409,6 +1630,10 @@
 			<list>
 				<ref bean="problem8" />
 				<ref bean="problem9" />
+			</list>
+		</property>
+		<property name="audits">
+			<list>
 			</list>
 		</property>
 	</bean>
@@ -1444,6 +1669,10 @@
 				<ref bean="problem11" />
 			</list>
 		</property>
+		<property name="audits">
+			<list>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="position8" class="domain.Position">
@@ -1473,6 +1702,10 @@
 			<list>
 				<ref bean="problem10" />
 				<ref bean="problem12" />
+			</list>
+		</property>
+		<property name="audits">
+			<list>
 			</list>
 		</property>
 	</bean>
@@ -2734,5 +2967,103 @@
 	</bean>
 	
 	<bean id ="finder125" class="domain.Finder"/>
+	
+	<!-- ITEMS -->
+	
+	<!-- Provider1 -->
+	
+	<bean id="item1" class="domain.Item">
+		<property name="name" value="PyCharm" />
+		<property name="description" value="A very simple program to install" />
+		<property name="links">
+		<list>
+			<value>https://www.jetbrains.com/pycharm/</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>https://www.jetbrains.com/pycharm/img/screenshots/simpleLook@2x.jpg</value>
+		</list>
+		</property>
+	</bean>
+	
+		<bean id="item2" class="domain.Item">
+		<property name="name" value="Dreamweaver" />
+		<property name="description" value="A very free IDE" />
+		<property name="links">
+		<list>
+			<value>https://www.adobe.com/es/products/dreamweaver.html</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>https://imag.malavida.com/mvimgbig/download-fs/dreamweaver-4084-7.jpg</value>
+		</list>
+		</property>
+	</bean>
+	
+		<bean id="item3" class="domain.Item">
+		<property name="name" value="Eclipse for Python" />
+		<property name="description" value="A not really good IDE for Python" />
+		<property name="links">
+		<list>
+			<value>http://www.pydev.org</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>https://i.ytimg.com/vi/1BsWjVByonk/maxresdefault.jpg</value>
+		</list>
+		</property>
+	</bean>
+	
+	<!-- Provider2 -->
+	
+		
+	<bean id="item4" class="domain.Item">
+		<property name="name" value="Tomcat" />
+		<property name="description" value="A really nice program that always works" />
+		<property name="links">
+		<list>
+			<value>http://tomcat.apache.org</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>https://i.ytimg.com/vi/NrQSk9uwqaI/maxresdefault.jpg</value>
+		</list>
+		</property>
+	</bean>
+	
+	<bean id="item5" class="domain.Item">
+		<property name="name" value="Clevercloud" />
+		<property name="description" value="A really nice platform that always works" />
+		<property name="links">
+		<list>
+			<value>https://www.clever-cloud.com/en/</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>https://www.notaweaponofwar.org/wp-content/uploads/2018/06/logo_clever-cloud.png</value>
+		</list>
+		</property>
+	</bean>
+	
+	<bean id="item6" class="domain.Item">
+		<property name="name" value="Aptana" />
+		<property name="description" value="A really nice IDE that always works" />
+		<property name="links">
+		<list>
+			<value>http://www.aptana.com</value>
+		</list>
+		</property>
+		<property name="pictures">
+		<list>
+			<value>http://www.aptana.com/images/hero/studio3.png</value>
+		</list>
+		</property>
+	</bean>
+	
 
 </beans>

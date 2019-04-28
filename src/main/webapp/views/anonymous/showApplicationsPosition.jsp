@@ -10,11 +10,10 @@
 
 <p><spring:message code="brotherhood.position.application.list" /></p>
 
-
 	<display:table pagesize="5" name="allApplications" id="row" requestURI="${requestURI}" >
 
 
-	
+
 	<display:column property="creationMoment" titleKey="application.creationMoment" />
 	
 	<display:column property="link" titleKey="application.link" />	
