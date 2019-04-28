@@ -24,7 +24,7 @@ public class Provider extends Actor {
 		return this.make;
 	}
 
-	public void setMake(final String make) {
+	public void setMake(String make) {
 		this.make = make;
 	}
 
@@ -33,7 +33,7 @@ public class Provider extends Actor {
 		return this.items;
 	}
 
-	public void setItems(final List<Item> items) {
+	public void setItems(List<Item> items) {
 		this.items = items;
 	}
 
@@ -42,7 +42,7 @@ public class Provider extends Actor {
 		return this.sponsorships;
 	}
 
-	public void setSponsorships(final List<Sponsorship> sponsorships) {
+	public void setSponsorships(List<Sponsorship> sponsorships) {
 		this.sponsorships = sponsorships;
 	}
 }

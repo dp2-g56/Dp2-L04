@@ -64,6 +64,9 @@
 		<security:intercept-url pattern="/educationData/hacker/**" access="hasRole('HACKER')" /> 
 		<security:intercept-url pattern="/export/hacker.do" access="hasRole('HACKER')" /> 
 		<security:intercept-url pattern="/position/hacker/**" access="hasRole('HACKER')" /> 
+		
+		<!-- PROVIDER -->
+		<security:intercept-url pattern="/item/provider/**" access="hasRole('PROVIDER')" /> 
 
 		<!-- AUTHENTICATED -->
 		<security:intercept-url pattern="/authenticated/**" access="isAuthenticated()" />

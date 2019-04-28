@@ -17,7 +17,6 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -26,11 +25,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Access(AccessType.PROPERTY)
 @Table(indexes = {
-		@Index(columnList = "title, description, ticker, requiredProfile, isDraftMode"), 
-		@Index(columnList = "deadline, isDraftMode"),
-		@Index(columnList = "offeredSalary, isDraftMode"),
-		@Index(columnList = "isDraftMode")
-	})
+	@Index(columnList = "title, description, ticker, requiredProfile, isDraftMode"), @Index(columnList = "deadline, isDraftMode"), @Index(columnList = "offeredSalary, isDraftMode"), @Index(columnList = "isDraftMode")
+})
 public class Position extends DomainEntity {
 
 	private String				title;
@@ -47,6 +43,10 @@ public class Position extends DomainEntity {
 	private List<Problem>		problems;
 
 	private List<Application>	applications;
+
+	private List<Audit>			audits;
+
+	private List<Sponsorship>	sponsorships;
 
 
 	@NotBlank
@@ -161,6 +161,24 @@ public class Position extends DomainEntity {
 
 	public void setApplications(List<Application> applications) {
 		this.applications = applications;
+	}
+
+	@OneToMany(mappedBy = "position")
+	public List<Audit> getAudits() {
+		return this.audits;
+	}
+
+	public void setAudits(List<Audit> audits) {
+		this.audits = audits;
+	}
+
+	@OneToMany(mappedBy = "position")
+	public List<Sponsorship> getSponsorships() {
+		return this.sponsorships;
+	}
+
+	public void setSponsorships(List<Sponsorship> sponsorships) {
+		this.sponsorships = sponsorships;
 	}
 
 }

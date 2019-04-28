@@ -1,37 +1,45 @@
 
 package services;
 
+
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-
 import repositories.AuditorRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
 import domain.Audit;
 import domain.Auditor;
+
 import domain.CreditCard;
 import domain.Message;
 import domain.SocialProfile;
 import forms.FormObjectAuditor;
 import forms.FormObjectEditAuditor;
 
+
+
 @Service
 @Transactional
 public class AuditorService {
 
+@Autowired
+	private AuditorRepository	auditorRepository;
+
 	@Autowired
-	AuditorRepository		auditorRepository;
+	private AuditService		auditService;
 
 	@Autowired
 	CreditCardService		creditCardService;
@@ -43,7 +51,20 @@ public class AuditorService {
 	AdminService			adminService;
 
 
+	//-----------------------------------------SECURITY-----------------------------
+	//------------------------------------------------------------------------------
+
+	public Auditor save(Auditor auditor) {
+		return this.auditorRepository.save(auditor);
+	}
+
+	/**
+	 * LoggedCompany now contains the security of loggedAsCompany
+	 * 
+	 * @return
+	 */
 	public Auditor loggedAuditor() {
+
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
 		return this.auditorRepository.getAuditorByUsername(userAccount.getUsername());
@@ -57,7 +78,19 @@ public class AuditorService {
 
 	}
 
-	public Auditor createAuditor() {
+	public void addAudit(Audit a) {
+		this.loggedAsAuditor();
+		Auditor loggedAuditor = this.loggedAuditor();
+		Assert.isTrue(a.getId() == 0);
+
+		Audit audit = this.auditService.save(a);
+		List<Audit> audits = loggedAuditor.getAudits();
+		audits.add(audit);
+		loggedAuditor.setAudits(audits);
+		this.save(loggedAuditor);
+	}
+  
+  public Auditor createAuditor() {
 
 		Auditor auditor = new Auditor();
 		CreditCard card = new CreditCard();
@@ -286,14 +319,9 @@ public class AuditorService {
 		return res;
 
 	}
-
-	public Auditor save(Auditor auditor) {
-		return this.auditorRepository.save(auditor);
-
-	}
-
-	public void flush() {
+  
+  public void flush() {
 		this.auditorRepository.flush();
 	}
-
+  
 }
