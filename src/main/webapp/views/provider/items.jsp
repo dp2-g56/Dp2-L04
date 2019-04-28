@@ -30,7 +30,7 @@
 			<spring:url var="pictures" value="/item/provider/listPictures.do">
 				<spring:param name="itemId" value="${row.id}"/>
 			</spring:url>
-			<a href="${links}">
+			<a href="${pictures}">
 				<spring:message code="item.pictures.show" var ="show" />
 				<jstl:out value="${show} (${row.pictures.size()})"/>
 			</a>

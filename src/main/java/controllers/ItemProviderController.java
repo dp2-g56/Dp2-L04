@@ -56,6 +56,37 @@ public class ItemProviderController extends AbstractController {
 		
 		return result;	
 	}
-
+	
+	@RequestMapping(value = "/listLinks", method = RequestMethod.GET)
+	public ModelAndView listLinks(@RequestParam int itemId) {
+		ModelAndView result;
+		
+		try {
+			List<String> links = this.itemService.getLinksOfItem(itemId);
+			
+			result = new ModelAndView("provider/links");
+			result.addObject("links", links);
+		} catch(Throwable oops) {
+			result = new ModelAndView("redirect:list.do");
+		}
+		
+		return result;	
+	}
+	
+	@RequestMapping(value = "/listPictures", method = RequestMethod.GET)
+	public ModelAndView listPictures(@RequestParam int itemId) {
+		ModelAndView result;
+		
+		try {
+			List<String> pictures = this.itemService.getPicturesOfItem(itemId);
+			
+			result = new ModelAndView("provider/pictures");
+			result.addObject("pictures", pictures);
+		} catch(Throwable oops) {
+			result = new ModelAndView("redirect:list.do");
+		}
+		
+		return result;	
+	}
 
 }
