@@ -20,7 +20,7 @@ public class Auditor extends Actor {
 		return this.audits;
 	}
 
-	public void setAudits(final List<Audit> audits) {
+	public void setAudits(List<Audit> audits) {
 		this.audits = audits;
 	}
 

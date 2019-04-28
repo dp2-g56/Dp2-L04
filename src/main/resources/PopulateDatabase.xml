@@ -243,24 +243,150 @@
 		</property>
 		<property name="isNotLocked" value="True" />
 	</bean>
+	
+	<!-- AUDITOR1 -->
+	<bean id="userAccount12" class="security.UserAccount">
+		<property name="username" value="auditor1" />
+		<property name="password"
+			value="175d2e7a63f386554a4dd66e865c3e14" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<!-- AUDITOR2 -->
+	<bean id="userAccount13" class="security.UserAccount">
+		<property name="username" value="auditor2" />
+		<property name="password"
+			value="04dd94ba3212ac52ad3a1f4cbfb52d4f" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<!-- AUDITOR3 -->
+	<bean id="userAccount14" class="security.UserAccount">
+		<property name="username" value="auditor3" />
+		<property name="password"
+			value="fc2073dbe4f65dfd71e46602f8e6a5f3" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
 
 	<!-- FIN USER ACCOUNT -->
 
 	<!-- ACTOR -->
+	
+	<!-- AUDITOR -->
+		<!-- AUDITOR1 -->
+			<bean id="auditor1" class="domain.Auditor">
+				<property name="name" value="John" />
+				<property name="surname" value="Unknown" />
+				<property name="VATNumber" value="SE321456789" />
+				<property name="creditCard" ref="creditCard12" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor1@gmail.com" />
+				<property name="phone" value="+34609236921" />
+				<property name="address" value="Auditor1 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount12" />
+			</bean>
+		
+		<!-- AUDITOR2 -->
+			<bean id="auditor2" class="domain.Auditor">
+				<property name="name" value="Jane" />
+				<property name="surname" value="Also Unknown" />
+				<property name="VATNumber" value="SE123456987" />
+				<property name="creditCard" ref="creditCard13" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor2@gmail.com" />
+				<property name="phone" value="+34609116921" />
+				<property name="address" value="Auditor2 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount13" />
+			</bean>
+		
+		<!-- AUDITOR3 -->
+			<bean id="auditor3" class="domain.Auditor">
+				<property name="name" value="Jacob" />
+				<property name="surname" value="Elmonzo" />
+				<property name="VATNumber" value="SE123666987" />
+				<property name="creditCard" ref="creditCard14" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor3@gmail.com" />
+				<property name="phone" value="+34609161921" />
+				<property name="address" value="Auditor3 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount14" />
+			</bean>
+	
 	<!-- PROVIDER -->
-	<bean id="provider1" class="domain.Provider">
-		<property name="make" value="the master provider"/>
-		<property name="name" value="provider" />
-		<property name="surname" value="provider surname" />
-		<property name="VATNumber" value="SE123456778" />
-		<property name="creditCard" ref="creditCard11" />
-		<property name="photo"
-			value="https://trello.com/c/unl0e9cp/1-requisitos" />
-		<property name="email" value="provider1@gmail.com" />
-		<property name="phone" value="+34609882920" />
-		<property name="address" value="Sevilla Este" />
-		<property name="userAccount" ref="userAccount11" />
-	</bean>	
+		<!-- PROVIDER1 -->
+			<bean id="provider1" class="domain.Provider">
+				<property name="make" value="the master provider"/>
+				<property name="name" value="provider" />
+				<property name="surname" value="provider surname" />
+				<property name="VATNumber" value="SE123456778" />
+				<property name="creditCard" ref="creditCard11" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="provider1@gmail.com" />
+				<property name="phone" value="+34609882920" />
+				<property name="address" value="Sevilla Este" />
+				<property name="userAccount" ref="userAccount11" />
+			</bean>	
 	
 	<!-- ADMIN -->
 	<!-- ADMIN1 -->
@@ -728,6 +854,38 @@
 		<property name="expirationYear" value="23" />
 		<property name="cvvCode" value="123" />
 	</bean>
+	
+	<!-- AUDITOR -->
+		<!-- AUDITOR1 -->
+			<bean id="creditCard12" class="domain.CreditCard">
+				<property name="holderName" value="Provider One" />
+				<property name="brandName" value="VISA" />
+				<property name="number" value="4552196498057173" />
+				<property name="expirationMonth" value="08" />
+				<property name="expirationYear" value="23" />
+				<property name="cvvCode" value="123" />
+			</bean>
+			
+		<!-- AUDITOR2 -->
+			<bean id="creditCard13" class="domain.CreditCard">
+				<property name="holderName" value="Provider Two" />
+				<property name="brandName" value="VISA" />
+				<property name="number" value="5442196258057173" />
+				<property name="expirationMonth" value="08" />
+				<property name="expirationYear" value="23" />
+				<property name="cvvCode" value="321" />
+			</bean>
+		
+		<!-- AUDITOR3 -->
+			<bean id="creditCard14" class="domain.CreditCard">
+				<property name="holderName" value="Provider One" />
+				<property name="brandName" value="VISA" />
+				<property name="number" value="4559216258057173" />
+				<property name="expirationMonth" value="08" />
+				<property name="expirationYear" value="23" />
+				<property name="cvvCode" value="123" />
+			</bean>
+		
 
 	<!-- FIN CREDIT CARD -->
 
@@ -1259,6 +1417,10 @@
 				<ref bean="problem3" />
 			</list>
 		</property>
+		<property name="audits">
+			<list>
+			</list>
+		</property>
 	</bean>
 
 
@@ -1291,6 +1453,10 @@
 				<ref bean="problem4" />
 			</list>
 		</property>
+		<property name="audits">
+			<list>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="position3" class="domain.Position">
@@ -1318,6 +1484,10 @@
 			<list>
 				<ref bean="problem1" />
 				<ref bean="problem3" />
+			</list>
+		</property>
+		<property name="audits">
+			<list>
 			</list>
 		</property>
 	</bean>
@@ -1348,6 +1518,10 @@
 			<list>
 				<ref bean="problem1" />
 				<ref bean="problem2" />
+			</list>
+		</property>
+		<property name="audits">
+			<list>
 			</list>
 		</property>
 	</bean>
@@ -1382,6 +1556,10 @@
 				<ref bean="problem9" />
 			</list>
 		</property>
+		<property name="audits">
+			<list>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="position6" class="domain.Position">
@@ -1409,6 +1587,10 @@
 			<list>
 				<ref bean="problem8" />
 				<ref bean="problem9" />
+			</list>
+		</property>
+		<property name="audits">
+			<list>
 			</list>
 		</property>
 	</bean>
@@ -1444,6 +1626,10 @@
 				<ref bean="problem11" />
 			</list>
 		</property>
+		<property name="audits">
+			<list>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="position8" class="domain.Position">
@@ -1473,6 +1659,10 @@
 			<list>
 				<ref bean="problem10" />
 				<ref bean="problem12" />
+			</list>
+		</property>
+		<property name="audits">
+			<list>
 			</list>
 		</property>
 	</bean>

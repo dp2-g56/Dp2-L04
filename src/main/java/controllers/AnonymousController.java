@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
 import services.ApplicationService;
+import services.AuditService;
 import services.CompanyService;
 import services.ConfigurationService;
 import services.HackerService;
@@ -24,6 +25,7 @@ import services.PositionService;
 import services.ProblemService;
 import domain.Actor;
 import domain.Application;
+import domain.Audit;
 import domain.Company;
 import domain.Configuration;
 import domain.Curriculum;
@@ -57,6 +59,9 @@ public class AnonymousController extends AbstractController {
 
 	@Autowired
 	private ActorService			actorService;
+
+	@Autowired
+	private AuditService			auditService;
 
 
 	public AnonymousController() {
@@ -339,6 +344,22 @@ public class AnonymousController extends AbstractController {
 		result.addObject("allApplications", allApplications);
 		result.addObject("sameActorLogged", sameActorLogged);
 		result.addObject("requestURI", "anonymous/application/list.do");
+		result.addObject("positionId", positionId);
+
+		return result;
+	}
+
+	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
+	public ModelAndView listAudits(@RequestParam int positionId) {
+		ModelAndView result;
+
+		List<Audit> finalAudits = new ArrayList<Audit>();
+		finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
+
+		result = new ModelAndView("anonymous/audit/list");
+
+		result.addObject("finalAudits", finalAudits);
+		result.addObject("requestURI", "anonymous/audit/list.do");
 		result.addObject("positionId", positionId);
 
 		return result;

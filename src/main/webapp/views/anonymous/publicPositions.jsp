@@ -31,10 +31,7 @@
 		</display:column>
 		
 		 <display:column titleKey="position.applications">
-    
 
-    	
-    		
        		<spring:url var="applicationsUrl" value="/anonymous/application/list.do?positionId={positionId}">
             	<spring:param name="positionId" value="${row.id}"/>
         	</spring:url>
@@ -42,6 +39,19 @@
         	<a href="${applicationsUrl}">
               <spring:message var ="viewApplications1" code="position.viewApplications" />
              <jstl:out value="${viewApplications1}" />   
+        	</a>
+        	
+        </display:column>
+        
+        <display:column titleKey="position.audits">
+
+       		<spring:url var="auditsUrl" value="/anonymous/audit/list.do?positionId={positionId}">
+            	<spring:param name="positionId" value="${row.id}"/>
+        	</spring:url>
+        	
+        	<a href="${applicationsUrl}">
+              <spring:message var ="viewAudits" code="position.viewAudits" />
+             <jstl:out value="${viewAudits}" />   
         	</a>
         	
         </display:column>
@@ -55,6 +65,12 @@
 			<a href="${createUrl1}"><spring:message
 				code="annonymous.company" /></a>
 		</display:column>
+		
+		<security:authorize access="hasRole('AUDITOR')">
+			<display:column titleKey="position.createAudit">
+				
+			</display:column>
+		</security:authorize>
         	
         	
   
