@@ -260,7 +260,7 @@
 	</bean>
 
 	<!-- AUDITOR1 -->
-	<bean id="userAccount12" class="security.UserAccount">
+	<bean id="userAccount15" class="security.UserAccount">
 		<property name="username" value="auditor1" />
 		<property name="password"
 			value="175d2e7a63f386554a4dd66e865c3e14" />
@@ -332,7 +332,7 @@
 					<list>
 					</list>
 				</property>
-				<property name="userAccount" ref="userAccount12" />
+				<property name="userAccount" ref="userAccount15" />
 			</bean>
 		
 		<!-- AUDITOR2 -->
