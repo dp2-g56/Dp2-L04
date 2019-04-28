@@ -134,20 +134,22 @@ public class ItemService {
 		return res;
 	}
 	
-	public void deleteItem(Item item) {
-		Provider provider = this.providerService.loggedProvider();
+	public void deleteItem(int itemId) {
+		Provider provider = this.providerService.securityAndProvider();
+		Item item = this.getItemOfProvider(itemId, provider.getId());
 		Assert.notNull(item);
 		
-		List<Item> items = this.getLoggedProviderItems();
-		Assert.isTrue(items.contains(item));
-		
+		List<Item> items = provider.getItems();
 		items.remove(item);
-		
 		provider.setItems(items);
 		
 		this.providerService.save(provider);
 		this.delete(item);
 		
+	}
+
+	private Item getItemOfProvider(int itemId, int providerId) {
+		return this.itemRepository.getItemOfProvider(itemId, providerId);
 	}
 
 	public List<String> getLinksOfItem(int itemId) {

@@ -36,7 +36,7 @@ public class ProviderService {
 	}
 	
 	public Provider save(Provider provider) {
-		return this.save(provider);
+		return this.providerRepository.save(provider);
 	}
 	
 
