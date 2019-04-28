@@ -91,7 +91,7 @@ public class AuditController extends AbstractController {
 	}
 
 	//SAVE AUDIT
-	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public ModelAndView save(Audit audit, BindingResult binding) {
 		ModelAndView result;
 
