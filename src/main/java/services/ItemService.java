@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.ArrayList;
@@ -10,28 +11,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import repositories.ItemRepository;
 import domain.Item;
 import domain.Provider;
 import forms.FormObjectItem;
-import repositories.ItemRepository;
 
 @Service
 @Transactional
 public class ItemService {
-	
+
 	@Autowired
-	private ItemRepository itemRepository;
-	
+	private ItemRepository	itemRepository;
+
 	@Autowired
 	private ProviderService	providerService;
-	
-	
+
+
 	public Item createItem() {
-		
+
 		Item res = new Item();
-		
+
 		List<String> voidList = new ArrayList<String>();
-		
+
 		res.setDescription("");
 		res.setLinks(voidList);
 		res.setPictures(voidList);
@@ -160,6 +161,10 @@ public class ItemService {
 	public List<String> getPicturesOfItem(int itemId) {
 		Provider loggedProvider = this.providerService.securityAndProvider();
 		return this.itemRepository.getPicturesOfItem(itemId, loggedProvider.getId());
+	}
+
+	public void deleteInBatch(Iterable<Item> lista) {
+		this.itemRepository.deleteInBatch(lista);
 	}
 
 }

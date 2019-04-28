@@ -69,6 +69,20 @@
 			code="export" />
 	</jstl:if> 	
 	</security:authorize>
+	
+	<security:authorize access="hasAnyRole('AUDITOR')">
+	<jstl:if test="${sameActorLogged || trueValue}">
+		<acme:cancel url="/export/auditor.do?id=${actor.id}"
+			code="export" />
+	</jstl:if> 	
+	</security:authorize>
+	
+	<security:authorize access="hasAnyRole('PROVIDER')">
+	<jstl:if test="${sameActorLogged || trueValue}">
+		<acme:cancel url="/export/provider.do?id=${actor.id}"
+			code="export" />
+	</jstl:if> 	
+	</security:authorize>
 
 	<h2>
 		<spring:message code="socialProfile.mySocialProfiles" />

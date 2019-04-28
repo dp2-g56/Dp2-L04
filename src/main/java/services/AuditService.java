@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -101,5 +102,41 @@ public class AuditService {
 
 		this.auditRepository.delete(audit);
 
+	}
+
+	public void deleteAllAudits() {
+
+		Auditor auditor = new Auditor();
+
+		auditor = this.auditorService.loggedAuditor();
+
+		List<Audit> audits = new ArrayList<Audit>();
+		audits = auditor.getAudits();
+
+		// Quitamos todos los applications de hacker
+
+		for (Audit add : audits) {
+			Position pos = new Position();
+			pos = add.getPosition();
+			pos.getApplications().remove(add);
+			// app.setHacker(null);
+			// app.setPosition(null);
+		}
+
+		// hacker.getApplications().removeAll(applications);
+
+		/*
+		 * List<Position> allPositionsOfHacker = new ArrayList<Position>();
+		 * 
+		 * allPositionsOfHacker =
+		 * this.positionService.positionsOfApplicationOfHacker(hacker);
+		 * 
+		 * for (Position p : allPositionsOfHacker) if
+		 * (Collections.disjoint(p.getApplications(), applications)) {
+		 * 
+		 * }
+		 */
+
+		this.auditRepository.deleteInBatch(audits);
 	}
 }
