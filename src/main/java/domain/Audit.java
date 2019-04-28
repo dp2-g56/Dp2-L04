@@ -58,7 +58,7 @@ public class Audit extends DomainEntity {
 		this.score = score;
 	}
 
-	@OneToOne
+	@ManyToOne
 	public Position getPosition() {
 		return this.position;
 	}
