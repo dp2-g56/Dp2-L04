@@ -56,9 +56,9 @@ public class ItemService {
 		this.itemRepository.delete(item);
 	}
 	
-	public List<Item> getLogguedProviderItems(){
-		Provider logguedProvider = this.providerService.loggedProvider();
-		return this.itemRepository.getItemsByProvier(logguedProvider);
+	public List<Item> getLoggedProviderItems(){
+		Provider loggedProvider = this.providerService.loggedProvider();
+		return this.itemRepository.getItemsByProvider(loggedProvider);
 	}
 	
 	public void saveItem(Item item) {
@@ -138,7 +138,7 @@ public class ItemService {
 		Provider provider = this.providerService.loggedProvider();
 		Assert.notNull(item);
 		
-		List<Item> items = this.getLogguedProviderItems();
+		List<Item> items = this.getLoggedProviderItems();
 		Assert.isTrue(items.contains(item));
 		
 		items.remove(item);

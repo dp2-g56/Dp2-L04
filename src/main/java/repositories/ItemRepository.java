@@ -13,7 +13,7 @@ import domain.Provider;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 	
-	@Query("select p.items from Provider p where p=?1")
-	List<Item> getItemsByProvier(Provider provider);
+	@Query("select p.items from Provider p where p = ?1")
+	List<Item> getItemsByProvider(Provider provider);
 
 }
