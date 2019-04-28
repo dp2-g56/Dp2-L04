@@ -26,11 +26,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
 import services.AdminService;
+import services.AuditorService;
 import services.ConfigurationService;
 import domain.Actor;
 import domain.Admin;
+import domain.Auditor;
 import domain.Configuration;
 import forms.FormObjectAdmin;
+import forms.FormObjectAuditor;
 
 @Controller
 @RequestMapping("/administrator")
@@ -44,6 +47,9 @@ public class AdministratorController extends AbstractController {
 
 	@Autowired
 	private ActorService			actorService;
+
+	@Autowired
+	AuditorService					auditorService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -162,6 +168,73 @@ public class AdministratorController extends AbstractController {
 
 		return result;
 
+	}
+
+	@RequestMapping(value = "/auditor/create", method = RequestMethod.GET)
+	public ModelAndView createAuditor() {
+		ModelAndView result;
+
+		FormObjectAuditor formObjectAuditor = new FormObjectAuditor();
+		formObjectAuditor.setTermsAndConditions(false);
+
+		result = this.createEditModelAndView(formObjectAuditor);
+
+		return result;
+	}
+
+	@RequestMapping(value = "/auditor/create", method = RequestMethod.POST, params = "save")
+	public ModelAndView saveAuditor(@Valid FormObjectAuditor formObjectAuditor, BindingResult binding) {
+
+		ModelAndView result;
+
+		Auditor auditor = new Auditor();
+		auditor = this.auditorService.createAuditor();
+
+		Configuration configuration = this.configurationService.getConfiguration();
+		String prefix = configuration.getSpainTelephoneCode();
+
+		//Reconstruccion
+		auditor = this.auditorService.reconstruct(formObjectAuditor, binding);
+
+		if (binding.hasErrors())
+			result = this.createEditModelAndView(formObjectAuditor);
+		else
+			try {
+
+				if (auditor.getPhone().matches("([0-9]{4,})$"))
+					auditor.setPhone(prefix + auditor.getPhone());
+				this.auditorService.saveNewAuditor(auditor);
+
+				result = new ModelAndView("redirect:/");
+
+			} catch (Throwable oops) {
+				result = this.createEditModelAndView(formObjectAuditor, "company.commit.error");
+
+			}
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(FormObjectAuditor formObjectAuditor) {
+		ModelAndView result;
+
+		result = this.createEditModelAndView(formObjectAuditor, null);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(FormObjectAuditor formObjectAuditor, String messageCode) {
+		ModelAndView result;
+
+		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
+		List<String> cardType = this.configurationService.getConfiguration().getCardType();
+
+		result = new ModelAndView("administrator/auditor/create");
+		result.addObject("formObjectAuditor", formObjectAuditor);
+		result.addObject("message", messageCode);
+		result.addObject("locale", locale);
+		result.addObject("cardType", cardType);
+
+		return result;
 	}
 
 }
