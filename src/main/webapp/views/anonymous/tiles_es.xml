@@ -84,6 +84,10 @@
 		<put-attribute name="body" value="/views/anonymous/curriculumOfApplication.jsp" />
 	</definition>
 	
+	<definition name="anonymous/audit/list" extends="master.page">	
+		<put-attribute name="title" value="Auditorias" />
+		<put-attribute name="body" value="/views/anonymous/showAuditsPosition.jsp" />
+	</definition>
 
 	
 	

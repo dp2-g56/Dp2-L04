@@ -7,7 +7,6 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -25,7 +24,17 @@ public class Audit extends DomainEntity {
 	private int			score;
 	private Position	position;
 	private Auditor		auditor;
+	private Boolean		isDraftMode;
 
+
+	@NotNull
+	public Boolean getIsDraftMode() {
+		return this.isDraftMode;
+	}
+
+	public void setIsDraftMode(Boolean isDraftMode) {
+		this.isDraftMode = isDraftMode;
+	}
 
 	@Past
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
@@ -34,7 +43,7 @@ public class Audit extends DomainEntity {
 		return this.momentCreation;
 	}
 
-	public void setMomentCreation(final Date momentCreation) {
+	public void setMomentCreation(Date momentCreation) {
 		this.momentCreation = momentCreation;
 	}
 
@@ -43,7 +52,7 @@ public class Audit extends DomainEntity {
 		return this.freeText;
 	}
 
-	public void setFreeText(final String freeText) {
+	public void setFreeText(String freeText) {
 		this.freeText = freeText;
 	}
 
@@ -54,7 +63,7 @@ public class Audit extends DomainEntity {
 		return this.score;
 	}
 
-	public void setScore(final int score) {
+	public void setScore(int score) {
 		this.score = score;
 	}
 
@@ -63,7 +72,7 @@ public class Audit extends DomainEntity {
 		return this.position;
 	}
 
-	public void setPosition(final Position position) {
+	public void setPosition(Position position) {
 		this.position = position;
 	}
 
@@ -72,7 +81,7 @@ public class Audit extends DomainEntity {
 		return this.auditor;
 	}
 
-	public void setAuditor(final Auditor auditor) {
+	public void setAuditor(Auditor auditor) {
 		this.auditor = auditor;
 	}
 

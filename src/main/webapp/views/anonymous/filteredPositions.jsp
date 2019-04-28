@@ -67,12 +67,37 @@
 			<a href="${createUrl1}"><spring:message
 				code="annonymous.company" /></a>
 		</display:column>
+		
+		
+		<!-- AUDITOR -->
+		<display:column titleKey="position.audits">
+
+       		<spring:url var="auditsUrl" value="/anonymous/audit/list.do?positionId={positionId}">
+            	<spring:param name="positionId" value="${row.id}"/>
+        	</spring:url>
         	
+        	<a href="${auditsUrl}">
+              <spring:message var ="viewAudits" code="position.viewAudits" />
+             <jstl:out value="${viewAudits}" />   
+        	</a>
         	
-  
+        </display:column>
+		
+		<security:authorize access="hasRole('AUDITOR')">
+			<display:column>
+			
+				<spring:url var="createAuditUrl" value="/audit/auditor/create.do?positionId={positionId}">
+            	<spring:param name="positionId" value="${row.id}"/>
+        	</spring:url>
+        	
+        	<a href="${createAuditUrl}">
+              <spring:message var ="createAudit" code="position.createAudit" />
+             <jstl:out value="${createAudit}" />   
+        	</a>
+				
+			</display:column>
+		</security:authorize>
 	
 	</display:table>
 	
-	
-
 </security:authorize>
