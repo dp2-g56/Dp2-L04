@@ -47,6 +47,8 @@ public class Position extends DomainEntity {
 	private List<Problem>		problems;
 
 	private List<Application>	applications;
+	private List<Audit> audits;
+	private List<Sponsorship> sponsorships;
 
 
 	@NotBlank
@@ -161,6 +163,24 @@ public class Position extends DomainEntity {
 
 	public void setApplications(List<Application> applications) {
 		this.applications = applications;
+	}
+
+	@OneToMany(mappedBy = "position")
+	public List<Audit> getAudits() {
+		return audits;
+	}
+
+	public void setAudits(List<Audit> audits) {
+		this.audits = audits;
+	}
+
+	@OneToMany(mappedBy = "position")
+	public List<Sponsorship> getSponsorships() {
+		return sponsorships;
+	}
+
+	public void setSponsorships(List<Sponsorship> sponsorships) {
+		this.sponsorships = sponsorships;
 	}
 
 }

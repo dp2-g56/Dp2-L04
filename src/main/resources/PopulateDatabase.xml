@@ -228,10 +228,40 @@
 		</property>
 		<property name="isNotLocked" value="True" />
 	</bean>
+	
+	<!-- PROVIDER1 -->
+	<bean id="userAccount11" class="security.UserAccount">
+		<property name="username" value="provider1" />
+		<property name="password"
+			value="cdb82d56473901641525fbbd1d5dab56" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
 
 	<!-- FIN USER ACCOUNT -->
 
 	<!-- ACTOR -->
+	<!-- PROVIDER -->
+	<bean id="provider1" class="domain.Provider">
+		<property name="make" value="the master provider"/>
+		<property name="name" value="provider" />
+		<property name="surname" value="provider surname" />
+		<property name="VATNumber" value="SE123456778" />
+		<property name="creditCard" ref="creditCard11" />
+		<property name="photo"
+			value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="provider1@gmail.com" />
+		<property name="phone" value="+34609882920" />
+		<property name="address" value="Sevilla Este" />
+		<property name="userAccount" ref="userAccount11" />
+	</bean>	
+	
 	<!-- ADMIN -->
 	<!-- ADMIN1 -->
 	<bean id="admin1" class="domain.Admin">
@@ -688,6 +718,15 @@
 		<property name="expirationMonth" value="08" />
 		<property name="expirationYear" value="24" />
 		<property name="cvvCode" value="560" />
+	</bean>
+	
+	<bean id="creditCard11" class="domain.CreditCard">
+		<property name="holderName" value="Provider One" />
+		<property name="brandName" value="VISA" />
+		<property name="number" value="4552196258057173" />
+		<property name="expirationMonth" value="08" />
+		<property name="expirationYear" value="23" />
+		<property name="cvvCode" value="123" />
 	</bean>
 
 	<!-- FIN CREDIT CARD -->
