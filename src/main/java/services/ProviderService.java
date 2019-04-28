@@ -56,6 +56,14 @@ public class ProviderService {
 
 	}
 	
+	public Provider securityAndProvider() {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		List<Authority> authorities = (List<Authority>) userAccount.getAuthorities();
+		Assert.isTrue(authorities.get(0).toString().equals("PROVIDER"));
+		return this.providerRepository.getProviderByUsername(userAccount.getUsername());
+	}
+	
 	
 
 

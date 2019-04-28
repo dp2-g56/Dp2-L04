@@ -57,7 +57,7 @@ public class ItemService {
 	}
 	
 	public List<Item> getLoggedProviderItems(){
-		Provider loggedProvider = this.providerService.loggedProvider();
+		Provider loggedProvider = this.providerService.securityAndProvider();
 		return this.itemRepository.getItemsByProvider(loggedProvider);
 	}
 	
@@ -148,6 +148,16 @@ public class ItemService {
 		this.providerService.save(provider);
 		this.delete(item);
 		
+	}
+
+	public List<String> getLinksOfItem(int itemId) {
+		Provider loggedProvider = this.providerService.securityAndProvider();
+		return this.itemRepository.getLinksOfItem(itemId, loggedProvider.getId());
+	}
+
+	public List<String> getPicturesOfItem(int itemId) {
+		Provider loggedProvider = this.providerService.securityAndProvider();
+		return this.itemRepository.getPicturesOfItem(itemId, loggedProvider.getId());
 	}
 
 }
