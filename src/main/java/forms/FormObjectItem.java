@@ -13,6 +13,9 @@ public class FormObjectItem {
 	private String			links;
 	private String			pictures;
 	
+	public FormObjectItem() {
+		this.id = 0;
+	}
 	
 	@NotNull
 	public Integer getId() {
@@ -52,12 +55,9 @@ public class FormObjectItem {
 	public String getPictures() {
 		return pictures;
 	}
+	
 	public void setPictures(String pictures) {
 		this.pictures = pictures;
 	}
-
-	
-	
-	
 
 }

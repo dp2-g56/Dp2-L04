@@ -22,6 +22,7 @@ import domain.Hacker;
 import domain.Item;
 import domain.PersonalData;
 import forms.FormObjectCurriculumPersonalData;
+import forms.FormObjectItem;
 import services.CurriculumService;
 import services.HackerService;
 import services.ItemService;
@@ -98,6 +99,24 @@ public class ItemProviderController extends AbstractController {
 			result = new ModelAndView("redirect:list.do");
 		} catch(Throwable oops) {
 			result = new ModelAndView("redirect:list.do");
+		}
+		
+		return result;	
+	}
+	
+	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	public ModelAndView create() {
+		ModelAndView result;
+		
+		try {
+			this.providerService.securityAndProvider();
+			
+			FormObjectItem formObjectItem = new FormObjectItem();
+			
+			result = new ModelAndView("provider/createItem");
+			result.addObject("formObjectItem", formObjectItem);
+		} catch(Throwable oops) {
+			result = new ModelAndView("redirect:/");
 		}
 		
 		return result;	
