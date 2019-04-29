@@ -18,6 +18,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class Company extends Actor {
 
+
 	private String companyName;
 	private Double score;
 

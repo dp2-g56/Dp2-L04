@@ -70,6 +70,7 @@ public class ItemService {
 			Item itemDB = this.getItemOfProvider(item.getId(), loggProvider.getId());
 			Assert.notNull(itemDB);
 			this.save(item);
+
 		} else {
 			Item savedItem = this.save(item);
 			items.add(savedItem);
