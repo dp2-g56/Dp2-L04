@@ -8,6 +8,9 @@ import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -15,17 +18,16 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class Company extends Actor {
 
-	private String			companyName;
+	private String companyName;
+	private Double score;
 
-	private List<Problem>	problems;
-	private List<Position>	positions;
-
+	private List<Problem> problems;
+	private List<Position> positions;
 
 	@NotBlank
 	public String getCompanyName() {
 		return this.companyName;
 	}
-
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
@@ -54,11 +56,11 @@ public class Company extends Actor {
 	@NotNull
 	@Min(-1)
 	@Max(1)
-	public int getScore() {
+	public Double getScore() {
 		return this.score;
 	}
 
-	public void setScore(final int score) {
+	public void setScore(Double score) {
 		this.score = score;
 	}
 
