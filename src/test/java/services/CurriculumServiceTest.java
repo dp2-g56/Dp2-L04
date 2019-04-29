@@ -29,15 +29,15 @@ public class CurriculumServiceTest extends AbstractTest {
 	@Autowired
 	private CurriculumService curriculumService;
 	@Autowired
-	private HackerService hackerService;
+	private RookieService rookieService;
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes listing them.
 	 * 
 	 * Ratio of data coverage: 100%
-	 *  - Access as a hacker or not
+	 *  - Access as a rookie or not
 	 * 
 	 **/
 	@Test
@@ -46,9 +46,9 @@ public class CurriculumServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is listing his curriculums
+				 * POSITIVE TEST: Rookie is listing his curriculums
 				 **/
-				{ "hacker1", null},
+				{ "rookie1", null},
 				/**
 				 * NEGATIVE TEST: Another user is trying to list curriculums
 				 **/
@@ -60,15 +60,15 @@ public class CurriculumServiceTest extends AbstractTest {
 
 	}
 
-	private void listCurriculumsTemplate(String hacker, Class<?> expected) {
+	private void listCurriculumsTemplate(String rookie, Class<?> expected) {
 		
 		Class<?> caught = null;
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.curriculumService.getCurriculumsOfLoggedHacker();
+			this.curriculumService.getCurriculumsOfLoggedRookie();
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {
@@ -82,13 +82,13 @@ public class CurriculumServiceTest extends AbstractTest {
 	}
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes showing them.
 	 * 
 	 * Ratio of data coverage: 100%
-	 *  - Access as a hacker or not.
-	 *  - Show a curriculum that does not belong to the hacker logged in.
+	 *  - Access as a rookie or not.
+	 *  - Show a curriculum that does not belong to the rookie logged in.
 	 * 
 	 **/
 	@Test
@@ -97,13 +97,13 @@ public class CurriculumServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is showing one of his curriculums
+				 * POSITIVE TEST: Rookie is showing one of his curriculums
 				 **/
-				{ "hacker1", super.getEntityId("curriculum1"), null},
+				{ "rookie1", super.getEntityId("curriculum1"), null},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to show a curriculum from other hacker
+				 * NEGATIVE TEST: Rookie is trying to show a curriculum from other rookie
 				 **/
-				{ "hacker1", super.getEntityId("curriculum3"), IllegalArgumentException.class},
+				{ "rookie1", super.getEntityId("curriculum3"), IllegalArgumentException.class},
 				/**
 				 * NEGATIVE TEST: Another user is trying to show a curriculum
 				 **/
@@ -115,15 +115,15 @@ public class CurriculumServiceTest extends AbstractTest {
 
 	}
 
-	private void showCurriculumTemplate(String hacker, int curriculumId, Class<?> expected) {
+	private void showCurriculumTemplate(String rookie, int curriculumId, Class<?> expected) {
 		
 		Class<?> caught = null;
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.curriculumService.getCurriculumOfLoggedHacker(curriculumId);
+			this.curriculumService.getCurriculumOfLoggedRookie(curriculumId);
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {
@@ -137,13 +137,13 @@ public class CurriculumServiceTest extends AbstractTest {
 	}
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes deleting them.
 	 * 
 	 * Ratio of data coverage: 100%
-	 *  - Access as a hacker or not.
-	 *  - Delete a curriculum that does belongs to the hacker logged in or not.
+	 *  - Access as a rookie or not.
+	 *  - Delete a curriculum that does belongs to the rookie logged in or not.
 	 * 
 	 **/
 	@Test
@@ -152,13 +152,13 @@ public class CurriculumServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is deleting one of his curriculums
+				 * POSITIVE TEST: Rookie is deleting one of his curriculums
 				 **/
-				{ "hacker1", super.getEntityId("curriculum1"), null},
+				{ "rookie1", super.getEntityId("curriculum1"), null},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to delete a curriculum from other hacker
+				 * NEGATIVE TEST: Rookie is trying to delete a curriculum from other rookie
 				 **/
-				{ "hacker1", super.getEntityId("curriculum3"), IllegalArgumentException.class},
+				{ "rookie1", super.getEntityId("curriculum3"), IllegalArgumentException.class},
 				/**
 				 * NEGATIVE TEST: Another user is trying to delete a curriculum
 				 **/
@@ -170,15 +170,15 @@ public class CurriculumServiceTest extends AbstractTest {
 
 	}
 
-	private void deleteCurriculumTemplate(String hacker, int curriculumId, Class<?> expected) {
+	private void deleteCurriculumTemplate(String rookie, int curriculumId, Class<?> expected) {
 		
 		Class<?> caught = null;
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.curriculumService.deleteCurriculumAsHacker(curriculumId);
+			this.curriculumService.deleteCurriculumAsRookie(curriculumId);
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {
@@ -192,12 +192,12 @@ public class CurriculumServiceTest extends AbstractTest {
 	}
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes creating them.
 	 * 
 	 * Ratio of data coverage: 4/7 = 57.14%
-	 * - Access as a hacker or not.
+	 * - Access as a rookie or not.
 	 * - 5 attributes with domain restrictions.
 	 * 
 	 **/
@@ -207,21 +207,21 @@ public class CurriculumServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is creating a curriculum
+				 * POSITIVE TEST: Rookie is creating a curriculum
 				 **/
-				{ "hacker1", "Title", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", null},
+				{ "rookie1", "Title", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", null},
 				/**
 				 * NEGATIVE TEST: Another user is trying to create a curriculum
 				 **/
 				{ "company1", "Title", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", IllegalArgumentException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is creating a curriculum with a title in blank
+				 * NEGATIVE TEST: Rookie is creating a curriculum with a title in blank
 				 **/
-				{ "hacker1", "", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", ConstraintViolationException.class},
+				{ "rookie1", "", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", ConstraintViolationException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is creating a curriculum with a gitHub profile in blank
+				 * NEGATIVE TEST: Rookie is creating a curriculum with a gitHub profile in blank
 				 **/
-				{ "hacker1", "Title", "Full name", "Statement", "+34123456789", "", "https://linkedin.com", ConstraintViolationException.class}
+				{ "rookie1", "Title", "Full name", "Statement", "+34123456789", "", "https://linkedin.com", ConstraintViolationException.class}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
@@ -229,7 +229,7 @@ public class CurriculumServiceTest extends AbstractTest {
 
 	}
 
-	private void createCurriculumTemplate(String hacker, String title, String fullName, String statement, String phoneNumber, String gitHubProfile, String linkedinProfile, Class<?> expected) {
+	private void createCurriculumTemplate(String rookie, String title, String fullName, String statement, String phoneNumber, String gitHubProfile, String linkedinProfile, Class<?> expected) {
 		
 		PersonalData personalData = new PersonalData();
 		personalData.setFullName(fullName);
@@ -246,9 +246,9 @@ public class CurriculumServiceTest extends AbstractTest {
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.hackerService.addOrUpdateCurriculum(curriculum);
+			this.rookieService.addOrUpdateCurriculum(curriculum);
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {
@@ -262,13 +262,13 @@ public class CurriculumServiceTest extends AbstractTest {
 	}
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes updating them.
 	 * 
 	 * Ratio of data coverage: 5/8 = 62.5%
-	 * - Access as a hacker or not.
-	 * - Edit a curriculum that does belongs to the hacker logged in or not.
+	 * - Access as a rookie or not.
+	 * - Edit a curriculum that does belongs to the rookie logged in or not.
 	 * - 5 attributes with domain restrictions.
 	 * 
 	 **/
@@ -278,25 +278,25 @@ public class CurriculumServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is updating a curriculum
+				 * POSITIVE TEST: Rookie is updating a curriculum
 				 **/
-				{ "hacker1", super.getEntityId("curriculum1"), "Title", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", null},
+				{ "rookie1", super.getEntityId("curriculum1"), "Title", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", null},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to update a curriculum of other hacker
+				 * NEGATIVE TEST: Rookie is trying to update a curriculum of other rookie
 				 **/
-				{ "hacker3", super.getEntityId("curriculum1"), "Title", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", IllegalArgumentException.class},
+				{ "rookie3", super.getEntityId("curriculum1"), "Title", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", IllegalArgumentException.class},
 				/**
 				 * NEGATIVE TEST: Another user is trying to update a curriculum
 				 **/
 				{ "company1", super.getEntityId("curriculum1"), "Title", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", IllegalArgumentException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to update a curriculum with a title in blank
+				 * NEGATIVE TEST: Rookie is trying to update a curriculum with a title in blank
 				 **/
-				{ "hacker1", super.getEntityId("curriculum1"), "", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", ConstraintViolationException.class},
+				{ "rookie1", super.getEntityId("curriculum1"), "", "Full name", "Statement", "+34123456789", "https://github.com", "https://linkedin.com", ConstraintViolationException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to update a curriculum with a gitHub profile in blank
+				 * NEGATIVE TEST: Rookie is trying to update a curriculum with a gitHub profile in blank
 				 **/
-				{ "hacker1", super.getEntityId("curriculum1"), "Title", "Full name", "Statement", "+34123456789", "", "https://linkedin.com", ConstraintViolationException.class}
+				{ "rookie1", super.getEntityId("curriculum1"), "Title", "Full name", "Statement", "+34123456789", "", "https://linkedin.com", ConstraintViolationException.class}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
@@ -304,7 +304,7 @@ public class CurriculumServiceTest extends AbstractTest {
 
 	}
 
-	private void updateCurriculumTemplate(String hacker, Integer curriculumId, String title, String fullName, String statement, String phoneNumber, String gitHubProfile, String linkedinProfile, Class<?> expected) {
+	private void updateCurriculumTemplate(String rookie, Integer curriculumId, String title, String fullName, String statement, String phoneNumber, String gitHubProfile, String linkedinProfile, Class<?> expected) {
 		Curriculum curriculum = this.curriculumService.findOne(curriculumId);
 		PersonalData personalData = curriculum.getPersonalData();
 		
@@ -321,9 +321,9 @@ public class CurriculumServiceTest extends AbstractTest {
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.hackerService.addOrUpdateCurriculum(curriculum);
+			this.rookieService.addOrUpdateCurriculum(curriculum);
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {

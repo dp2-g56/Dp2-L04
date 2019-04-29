@@ -56,9 +56,9 @@
 	</jstl:if> 
 	</security:authorize>
 
-	<security:authorize access="hasAnyRole('HACKER')">
+	<security:authorize access="hasAnyRole('ROOKIE')">
 	<jstl:if test="${sameActorLogged || trueValue}">
-		<acme:cancel url="/export/hacker.do?id=${actor.id}"
+		<acme:cancel url="/export/rookie.do?id=${actor.id}"
 			code="export" />
 	</jstl:if> 
 	</security:authorize>

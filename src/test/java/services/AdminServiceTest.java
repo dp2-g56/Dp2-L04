@@ -21,7 +21,7 @@ import domain.Actor;
 import domain.Admin;
 import domain.Company;
 import domain.CreditCard;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Position;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -63,20 +63,20 @@ public class AdminServiceTest extends AbstractTest {
 			 * Positive test: an admin bans an actor with the spammer flag
 			 */
 			{
-				"hacker1", "admin1", null
+				"rookie1", "admin1", null
 			},
 			/**
 			 * Negative test: an actor that is not authenticated as an admin
 			 * tries to ban an user and an IllegalArgumentException is thrown
 			 */
 			{
-				"hacker1", "hacker2", IllegalArgumentException.class
+				"rookie1", "rookie2", IllegalArgumentException.class
 			},
 			/**
 			 * Negative test: an admin tries to ban an actor that is not suspicious
 			 */
 			{
-				"hacker2", "admin1", IllegalArgumentException.class
+				"rookie2", "admin1", IllegalArgumentException.class
 			}
 		};
 
@@ -134,13 +134,13 @@ public class AdminServiceTest extends AbstractTest {
 			 * Positivce case: an actor logged as an admin unbans an actor
 			 */
 			{
-				"hacker1", "admin1", null
+				"rookie1", "admin1", null
 			},
 			/**
 			 * Negative case: an actor that is not an admin tries to unban an actor
 			 */
 			{
-				"hacker1", "hacker2", IllegalArgumentException.class
+				"rookie1", "rookie2", IllegalArgumentException.class
 			}
 		};
 
@@ -229,7 +229,7 @@ public class AdminServiceTest extends AbstractTest {
 				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "", "admin1", ConstraintViolationException.class
 			}, {
 				//Negative test, Blank adminNumber
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "hacker1", IllegalArgumentException.class
+				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "rookie1", IllegalArgumentException.class
 			},
 		};
 
@@ -287,26 +287,26 @@ public class AdminServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void testAvgCurriculumPerHacker() {
-		Float query = this.adminRepository.avgCurriculumPerHacker();
+	public void testAvgCurriculumPerRookie() {
+		Float query = this.adminRepository.avgCurriculumPerRookie();
 		Assert.isTrue(query > 0.1);
 	}
 
 	@Test
-	public void testMinCurriculumPerHacker() {
-		Float query = this.adminRepository.minCurriculumPerHacker();
+	public void testMinCurriculumPerRookie() {
+		Float query = this.adminRepository.minCurriculumPerRookie();
 		Assert.isTrue(query == 0.0);
 	}
 
 	@Test
-	public void testMaxCurriculumPerHacker() {
-		Float query = this.adminRepository.maxCurriculumPerHacker();
+	public void testMaxCurriculumPerRookie() {
+		Float query = this.adminRepository.maxCurriculumPerRookie();
 		Assert.isTrue(query == 2.0);
 	}
 
 	@Test
-	public void testStddevCurriculumPerHacker() {
-		Float query = this.adminRepository.stddevCurriculumPerHacker();
+	public void testStddevCurriculumPerRookie() {
+		Float query = this.adminRepository.stddevCurriculumPerRookie();
 		Assert.isTrue(query < 0.5 && query > 0.3);
 	}
 
@@ -377,27 +377,27 @@ public class AdminServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void testAvgApplicationsHacker() {
+	public void testAvgApplicationsRookie() {
 
-		Float query = this.adminRepository.avgApplicationsHacker();
+		Float query = this.adminRepository.avgApplicationsRookie();
 		Assert.isTrue(query > 0.0033);
 	}
 
 	@Test
-	public void testMinApplicationsHacker() {
-		Float query = this.adminRepository.minApplicationsHacker();
+	public void testMinApplicationsRookie() {
+		Float query = this.adminRepository.minApplicationsRookie();
 		Assert.isTrue(query == 0.0);
 	}
 
 	@Test
-	public void testMaxApplicationsHacker() {
-		Float query = this.adminRepository.maxApplicationsHacker();
+	public void testMaxApplicationsRookie() {
+		Float query = this.adminRepository.maxApplicationsRookie();
 		Assert.isTrue(query == 1.0);
 	}
 
 	@Test
-	public void testStddevApplicationsHacker() {
-		Float query = this.adminRepository.stddevApplicationsHacker();
+	public void testStddevApplicationsRookie() {
+		Float query = this.adminRepository.stddevApplicationsRookie();
 		Assert.isTrue(query < 0.2 && query > 0.1);
 	}
 
@@ -434,8 +434,8 @@ public class AdminServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void testHackersMoreApplications() {
-		List<Hacker> query = this.adminRepository.hackersMoreApplications();
+	public void testRookiesMoreApplications() {
+		List<Rookie> query = this.adminRepository.rookiesMoreApplications();
 		Assert.isTrue(query.size() == 1);
 
 	}

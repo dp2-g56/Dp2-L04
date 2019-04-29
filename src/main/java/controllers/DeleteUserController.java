@@ -22,7 +22,7 @@ import security.Authority;
 import services.ActorService;
 import services.AuditorService;
 import services.CompanyService;
-import services.HackerService;
+import services.RookieService;
 import services.ProviderService;
 import domain.Actor;
 
@@ -33,7 +33,7 @@ public class DeleteUserController extends AbstractController {
 	@Autowired
 	private ActorService	actorService;
 	@Autowired
-	private HackerService	hackerService;
+	private RookieService	rookieService;
 	@Autowired
 	private CompanyService	companyService;
 	@Autowired
@@ -57,8 +57,8 @@ public class DeleteUserController extends AbstractController {
 		List<Authority> authorities = (List<Authority>) actor.getUserAccount().getAuthorities();
 
 		try {
-			if (authorities.get(0).toString().equals("HACKER"))
-				this.hackerService.deleteHacker();
+			if (authorities.get(0).toString().equals("ROOKIE"))
+				this.rookieService.deleteRookie();
 			else if (authorities.get(0).toString().equals("COMPANY"))
 				this.companyService.deleteCompany();
 			else if (authorities.get(0).toString().equals("AUDITOR"))

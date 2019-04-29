@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import domain.Application;
 import domain.Company;
 import domain.Curriculum;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Position;
 
 @Repository
@@ -37,8 +37,8 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 	@Query("select distinct p.applications from Company c join c.positions p where c.id = ?1")
 	public List<Application> applicationsOfCompany(int idCompany);
 
-	@Query("select distinct a.hacker from Company c join c.positions p join p.applications a where c.id = ?1")
-	public List<Hacker> hackersOfCompany(int idCompany);
+	@Query("select distinct a.rookie from Company c join c.positions p join p.applications a where c.id = ?1")
+	public List<Rookie> rookiesOfCompany(int idCompany);
 
 	@Query("select distinct a.curriculum from Company c join c.positions p join p.applications a where c.id = ?1")
 	public List<Curriculum> curriculumsOfApplicationssOfCompany(int idCompany);

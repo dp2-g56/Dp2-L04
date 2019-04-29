@@ -23,7 +23,7 @@ import services.AdminService;
 import services.AuditorService;
 import services.CompanyService;
 import services.ConfigurationService;
-import services.HackerService;
+import services.RookieService;
 import services.ProviderService;
 import services.SocialProfileService;
 import domain.Actor;
@@ -31,13 +31,13 @@ import domain.Admin;
 import domain.Auditor;
 import domain.Company;
 import domain.Configuration;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Provider;
 import domain.SocialProfile;
 import forms.FormObjectEditAdmin;
 import forms.FormObjectEditAuditor;
 import forms.FormObjectEditCompany;
-import forms.FormObjectEditHacker;
+import forms.FormObjectEditRookie;
 import forms.FormObjectEditProvider;
 
 @Controller
@@ -60,7 +60,7 @@ public class SocialProfileController extends AbstractController {
 	private AdminService			adminService;
 
 	@Autowired
-	private HackerService			hackerService;
+	private RookieService			rookieService;
 
 	@Autowired
 	private AuditorService			auditorService;
@@ -208,12 +208,12 @@ public class SocialProfileController extends AbstractController {
 			FormObjectEditAdmin formAdmin = this.adminService.getFormObjectEditadmin(admin);
 			formAdmin.setId(admin.getId());
 			result = this.createEditModelAndView(formAdmin);
-		} else if (authorities.get(0).toString().equals("HACKER")) {
-			Hacker hacker = this.hackerService.loggedHacker();
-			Assert.notNull(hacker);
-			FormObjectEditHacker formHacker = this.hackerService.getFormObjectEditHacker(hacker);
-			formHacker.setId(hacker.getId());
-			result = this.createEditModelAndView(formHacker);
+		} else if (authorities.get(0).toString().equals("ROOKIE")) {
+			Rookie rookie = this.rookieService.loggedRookie();
+			Assert.notNull(rookie);
+			FormObjectEditRookie formRookie = this.rookieService.getFormObjectEditRookie(rookie);
+			formRookie.setId(rookie.getId());
+			result = this.createEditModelAndView(formRookie);
 		} else if (authorities.get(0).toString().equals("AUDITOR")) {
 			Auditor auditor = this.auditorService.loggedAuditor();
 			Assert.notNull(auditor);
@@ -301,31 +301,31 @@ public class SocialProfileController extends AbstractController {
 		return result;
 	}
 
-	@RequestMapping(value = "/hacker/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView saveHacker(@Valid FormObjectEditHacker hackerForm, BindingResult binding) {
+	@RequestMapping(value = "/rookie/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView saveRookie(@Valid FormObjectEditRookie rookieForm, BindingResult binding) {
 		ModelAndView result;
 
-		Hacker hacker = this.hackerService.reconstructHackerPersonalData(hackerForm, binding);
+		Rookie rookie = this.rookieService.reconstructRookiePersonalData(rookieForm, binding);
 		Configuration configuration = this.configurationService.getConfiguration();
 
 		String prefix = configuration.getSpainTelephoneCode();
 
 		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(hackerForm);
+			result = this.createEditModelAndView(rookieForm);
 			result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
 		} else
 			try {
-				if (hacker.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
-						|| hacker.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
-					this.hackerService.save(hacker);
-				else if (hacker.getPhone().matches("([0-9]{4,})$")) {
-					hacker.setPhone(prefix + hacker.getPhone());
-					this.hackerService.save(hacker);
+				if (rookie.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
+						|| rookie.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+					this.rookieService.save(rookie);
+				else if (rookie.getPhone().matches("([0-9]{4,})$")) {
+					rookie.setPhone(prefix + rookie.getPhone());
+					this.rookieService.save(rookie);
 				} else
-					this.hackerService.save(hacker);
+					this.rookieService.save(rookie);
 				result = new ModelAndView("redirect:/authenticated/showProfile.do");
 			} catch (Throwable oops) {
-				result = this.createEditModelAndView(hackerForm, "socialProfile.commit.error");
+				result = this.createEditModelAndView(rookieForm, "socialProfile.commit.error");
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
 			}
 
@@ -459,21 +459,21 @@ public class SocialProfileController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(FormObjectEditHacker hacker) {
+	protected ModelAndView createEditModelAndView(FormObjectEditRookie rookie) {
 
 		ModelAndView result;
 
-		result = this.createEditModelAndView(hacker, null);
+		result = this.createEditModelAndView(rookie, null);
 
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(FormObjectEditHacker hacker, String messageCode) {
+	protected ModelAndView createEditModelAndView(FormObjectEditRookie rookie, String messageCode) {
 
 		ModelAndView result;
 
 		result = new ModelAndView("authenticated/edit");
-		result.addObject("formObjectEditHacker", hacker);
+		result.addObject("formObjectEditRookie", rookie);
 		result.addObject("message", messageCode);
 
 		return result;

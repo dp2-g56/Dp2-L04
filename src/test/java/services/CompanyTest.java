@@ -360,7 +360,7 @@ public class CompanyTest extends AbstractTest {
 			{
 				"company1", null
 			}, {
-				"hacker1", IllegalArgumentException.class
+				"rookie1", IllegalArgumentException.class
 			}
 		// Negative case: Trying to delete an user with a different role
 

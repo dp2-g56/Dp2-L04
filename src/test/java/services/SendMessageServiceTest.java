@@ -39,15 +39,15 @@ public class SendMessageServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 			{
-				"admin1", "subject", "body", "tags", "hacker1", null
+				"admin1", "subject", "body", "tags", "rookie1", null
 			}, {
-				"admin1", "subject", "body", "", "hacker1", null
+				"admin1", "subject", "body", "", "rookie1", null
 			}, {
-				"", "subject", "body", "", "hacker1", IllegalArgumentException.class
+				"", "subject", "body", "", "rookie1", IllegalArgumentException.class
 			}, {
-				"admin1", "", "body", "tags", "hacker1", ConstraintViolationException.class
+				"admin1", "", "body", "tags", "rookie1", ConstraintViolationException.class
 			}, {
-				"admin1", "subject", "", "tags", "hacker1", ConstraintViolationException.class
+				"admin1", "subject", "", "tags", "rookie1", ConstraintViolationException.class
 			}
 		};
 

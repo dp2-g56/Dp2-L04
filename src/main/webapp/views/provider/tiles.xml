@@ -25,4 +25,14 @@
 		<put-attribute name="body" value="/views/provider/pictures.jsp" />
 	</definition>
 	
+	<definition name="provider/createItem" extends="master.page">	
+		<put-attribute name="title" value="Create item" />
+		<put-attribute name="body" value="/views/provider/createEditItem.jsp" />
+	</definition>
+	
+	<definition name="provider/editItem" extends="master.page">	
+		<put-attribute name="title" value="Edit item" />
+		<put-attribute name="body" value="/views/provider/createEditItem.jsp" />
+	</definition>
+	
 </tiles-definitions>

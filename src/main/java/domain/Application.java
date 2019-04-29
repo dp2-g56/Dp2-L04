@@ -31,7 +31,7 @@ public class Application extends DomainEntity {
 	private Problem problem;
 	private Position position;
 	private Curriculum curriculum;
-	private Hacker hacker;
+	private Rookie rookie;
 
 	@Past
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
@@ -111,11 +111,11 @@ public class Application extends DomainEntity {
 	}
 
 	@ManyToOne
-	public Hacker getHacker() {
-		return this.hacker;
+	public Rookie getRookie() {
+		return this.rookie;
 	}
 
-	public void setHacker(Hacker hacker) {
-		this.hacker = hacker;
+	public void setRookie(Rookie rookie) {
+		this.rookie = rookie;
 	}
 }

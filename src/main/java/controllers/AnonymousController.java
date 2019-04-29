@@ -20,7 +20,7 @@ import services.ApplicationService;
 import services.AuditService;
 import services.CompanyService;
 import services.ConfigurationService;
-import services.HackerService;
+import services.RookieService;
 import services.PositionService;
 import services.ProblemService;
 import domain.Actor;
@@ -29,19 +29,19 @@ import domain.Audit;
 import domain.Company;
 import domain.Configuration;
 import domain.Curriculum;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Position;
 import domain.Problem;
 import domain.SocialProfile;
 import forms.FormObjectCompany;
-import forms.FormObjectHacker;
+import forms.FormObjectRookie;
 
 @Controller
 @RequestMapping("/anonymous")
 public class AnonymousController extends AbstractController {
 
 	@Autowired
-	private HackerService			hackerService;
+	private RookieService			rookieService;
 
 	@Autowired
 	private ConfigurationService	configurationService;
@@ -88,70 +88,70 @@ public class AnonymousController extends AbstractController {
 		return result;
 	}
 
-	//CREATE HACKER-----------------------------------------------------------------------
+	//CREATE ROOKIE-----------------------------------------------------------------------
 
-	@RequestMapping(value = "/hacker/create", method = RequestMethod.GET)
+	@RequestMapping(value = "/rookie/create", method = RequestMethod.GET)
 	public ModelAndView createAdmin() {
 		ModelAndView result;
 
-		FormObjectHacker formObjectHacker = new FormObjectHacker();
-		formObjectHacker.setTermsAndConditions(false);
+		FormObjectRookie formObjectRookie = new FormObjectRookie();
+		formObjectRookie.setTermsAndConditions(false);
 
-		result = new ModelAndView("anonymous/hacker/create");
+		result = new ModelAndView("anonymous/rookie/create");
 
-		result = this.createEditModelAndView(formObjectHacker);
+		result = this.createEditModelAndView(formObjectRookie);
 
 		return result;
 	}
 
-	@RequestMapping(value = "/hacker/create", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid FormObjectHacker formObjectHacker, BindingResult binding) {
+	@RequestMapping(value = "/rookie/create", method = RequestMethod.POST, params = "save")
+	public ModelAndView save(@Valid FormObjectRookie formObjectRookie, BindingResult binding) {
 
 		ModelAndView result;
 
-		Hacker hacker = new Hacker();
-		hacker = this.hackerService.createHacker();
+		Rookie rookie = new Rookie();
+		rookie = this.rookieService.createRookie();
 
 		Configuration configuration = this.configurationService.getConfiguration();
 		String prefix = configuration.getSpainTelephoneCode();
 
 		//Reconstruccion
-		hacker = this.hackerService.reconstruct(formObjectHacker, binding);
+		rookie = this.rookieService.reconstruct(formObjectRookie, binding);
 
 		if (binding.hasErrors())
-			result = this.createEditModelAndView(formObjectHacker);
+			result = this.createEditModelAndView(formObjectRookie);
 		else
 			try {
 
-				if (hacker.getPhone().matches("([0-9]{4,})$"))
-					hacker.setPhone(prefix + hacker.getPhone());
-				this.hackerService.save(hacker);
+				if (rookie.getPhone().matches("([0-9]{4,})$"))
+					rookie.setPhone(prefix + rookie.getPhone());
+				this.rookieService.save(rookie);
 
 				result = new ModelAndView("redirect:/");
 
 			} catch (Throwable oops) {
-				result = this.createEditModelAndView(formObjectHacker, "company.commit.error");
+				result = this.createEditModelAndView(formObjectRookie, "company.commit.error");
 
 			}
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(FormObjectHacker formObjectHacker) {
+	protected ModelAndView createEditModelAndView(FormObjectRookie formObjectRookie) {
 		ModelAndView result;
 
-		result = this.createEditModelAndView(formObjectHacker, null);
+		result = this.createEditModelAndView(formObjectRookie, null);
 
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(FormObjectHacker formObjectHacker, String messageCode) {
+	protected ModelAndView createEditModelAndView(FormObjectRookie formObjectRookie, String messageCode) {
 		ModelAndView result;
 
 		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 		List<String> cardType = this.configurationService.getConfiguration().getCardType();
 
-		result = new ModelAndView("anonymous/hacker/create");
-		result.addObject("formObjectHacker", formObjectHacker);
+		result = new ModelAndView("anonymous/rookie/create");
+		result.addObject("formObjectRookie", formObjectRookie);
 		result.addObject("message", messageCode);
 		result.addObject("locale", locale);
 		result.addObject("cardType", cardType);
@@ -159,7 +159,7 @@ public class AnonymousController extends AbstractController {
 		return result;
 	}
 
-	//END OF CREATE HACKER-----------------------------------------------------------------------
+	//END OF CREATE ROOKIE-----------------------------------------------------------------------
 
 	//CREATE COMPANY-----------------------------------------------------------------------
 

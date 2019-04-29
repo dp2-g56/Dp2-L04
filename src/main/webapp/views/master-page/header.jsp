@@ -14,7 +14,7 @@
 <%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 
 <div>
-	<a href="#"><img src="${imageURL}" height= 150px width= 500px alt="Acme Hacker-Rank Co., Inc." /></a>
+	<a href="#"><img src="${imageURL}" height= 150px width= 500px alt="Acme Rookie Co., Inc." /></a>
 </div>
 
 <div>
@@ -44,13 +44,13 @@
 			</li>
 		</security:authorize>
 		
-		<security:authorize access="hasRole('HACKER')">
-			<li><a class="fNiv"><spring:message	code="master.page.hacker" /></a>
+		<security:authorize access="hasRole('ROOKIE')">
+			<li><a class="fNiv"><spring:message	code="master.page.rookie" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="finder/hacker/list.do"><spring:message code="master.page.hacker.finder" /></a></li>
-					<li><a href="curriculum/hacker/list.do"><spring:message code="master.page.hacker.curriculums" /></a></li>
-					<li><a href="application/hacker/list.do"><spring:message code="master.page.hacker.application" /></a></li>			
+					<li><a href="finder/rookie/list.do"><spring:message code="master.page.rookie.finder" /></a></li>
+					<li><a href="curriculum/rookie/list.do"><spring:message code="master.page.rookie.curriculums" /></a></li>
+					<li><a href="application/rookie/list.do"><spring:message code="master.page.rookie.application" /></a></li>			
 				</ul>
 			</li>
 		</security:authorize>
@@ -69,7 +69,7 @@
 			<li><a class="fNiv"><spring:message	code="master.page.register" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="anonymous/hacker/create.do"><spring:message code="master.page.createHacker" /></a></li>	
+					<li><a href="anonymous/rookie/create.do"><spring:message code="master.page.createRookie" /></a></li>	
 					<li><a href="anonymous/company/create.do"><spring:message code="master.page.createCompany" /></a></li>			
 				</ul>
 			</li>
@@ -109,7 +109,7 @@
 			</li>
 		</security:authorize>
 		
-		<security:authorize access="hasAnyRole('HACKER', 'COMPANY', 'AUDITOR', 'PROVIDER')">
+		<security:authorize access="hasAnyRole('ROOKIE', 'COMPANY', 'AUDITOR', 'PROVIDER')">
 		<li><a href="authenticated/deleteUser.do" onClick="return confirm('<spring:message code="delete.user.confirmation" />')"><spring:message code="master.page.deleteUser" /> </a></li>
 		</security:authorize>
 		

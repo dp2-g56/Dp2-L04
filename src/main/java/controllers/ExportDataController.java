@@ -17,12 +17,12 @@ import services.AdminService;
 import services.AuditorService;
 import services.CompanyService;
 import services.CurriculumService;
-import services.HackerService;
+import services.RookieService;
 import services.ProviderService;
 import domain.Admin;
 import domain.Auditor;
 import domain.Company;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Provider;
 
 @Controller
@@ -30,7 +30,7 @@ import domain.Provider;
 public class ExportDataController {
 
 	@Autowired
-	HackerService		hackerService;
+	RookieService		rookieService;
 
 	@Autowired
 	CurriculumService	curriculumService;
@@ -48,45 +48,45 @@ public class ExportDataController {
 	ProviderService		providerService;
 
 
-	@RequestMapping(value = "/hacker", method = RequestMethod.GET)
+	@RequestMapping(value = "/rookie", method = RequestMethod.GET)
 	public @ResponseBody
 	String export(@RequestParam(value = "id", defaultValue = "-1") int id, HttpServletResponse response) throws IOException {
 
-		this.hackerService.loggedAsHacker();
+		this.rookieService.loggedAsRookie();
 
-		Hacker hacker = new Hacker();
-		hacker = this.hackerService.findOne(id);
+		Rookie rookie = new Rookie();
+		rookie = this.rookieService.findOne(id);
 
 		// Defines un StringBuilder para construir tu string
 		StringBuilder sb = new StringBuilder();
 
 		// linea
 		sb.append("Personal data:").append(System.getProperty("line.separator"));
-		sb.append("Name: " + hacker.getName()).append(System.getProperty("line.separator"));
-		sb.append("Surname: " + hacker.getSurname()).append(System.getProperty("line.separator"));
-		sb.append("Address: " + hacker.getAddress()).append(System.getProperty("line.separator"));
-		sb.append("Email: " + hacker.getEmail()).append(System.getProperty("line.separator"));
-		sb.append("Photo: " + hacker.getPhoto()).append(System.getProperty("line.separator"));
-		sb.append("VAT number: " + hacker.getVATNumber()).append(System.getProperty("line.separator"));
+		sb.append("Name: " + rookie.getName()).append(System.getProperty("line.separator"));
+		sb.append("Surname: " + rookie.getSurname()).append(System.getProperty("line.separator"));
+		sb.append("Address: " + rookie.getAddress()).append(System.getProperty("line.separator"));
+		sb.append("Email: " + rookie.getEmail()).append(System.getProperty("line.separator"));
+		sb.append("Photo: " + rookie.getPhoto()).append(System.getProperty("line.separator"));
+		sb.append("VAT number: " + rookie.getVATNumber()).append(System.getProperty("line.separator"));
 
 		sb.append(System.getProperty("line.separator"));
 		sb.append("SocialProfiles: ").append(System.getProperty("line.separator"));
 		sb.append(System.getProperty("line.separator"));
 		// Este metodo te muestra los socialProfiles de la misma manera que el resto del
 		// documento
-		sb.append(this.hackerService.SocialProfilesToString()).append(System.getProperty("line.separator"));
+		sb.append(this.rookieService.SocialProfilesToString()).append(System.getProperty("line.separator"));
 
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Curriculums: ").append(System.getProperty("line.separator"));
 		sb.append(System.getProperty("line.separator"));
 		sb.append(this.curriculumService.curriculumToStringExport()).append(System.getProperty("line.separator"));
 
-		if (hacker == null || this.hackerService.loggedHacker().getId() != id)
+		if (rookie == null || this.rookieService.loggedRookie().getId() != id)
 			return null;
 
 		// Defines el nombre del archivo y la extension
 		response.setContentType("text/txt");
-		response.setHeader("Content-Disposition", "attachment;filename=exportDataHacker.txt");
+		response.setHeader("Content-Disposition", "attachment;filename=exportDataRookie.txt");
 
 		// Con estos comandos permites su descarga cuando clickas
 		ServletOutputStream outStream = response.getOutputStream();
@@ -124,7 +124,7 @@ public class ExportDataController {
 		sb.append(System.getProperty("line.separator"));
 		// Este metodo te muestra los socialProfiles de la misma manera que el resto del
 		// documento
-		sb.append(this.hackerService.SocialProfilesToString()).append(System.getProperty("line.separator"));
+		sb.append(this.rookieService.SocialProfilesToString()).append(System.getProperty("line.separator"));
 
 		if (admin == null || this.adminService.loggedAdmin().getId() != id)
 			return null;
@@ -169,7 +169,7 @@ public class ExportDataController {
 		sb.append(System.getProperty("line.separator"));
 		// Este metodo te muestra los socialProfiles de la misma manera que el resto del
 		// documento
-		sb.append(this.hackerService.SocialProfilesToString()).append(System.getProperty("line.separator"));
+		sb.append(this.rookieService.SocialProfilesToString()).append(System.getProperty("line.separator"));
 
 		if (company == null || this.companyService.loggedCompany().getId() != id)
 			return null;
@@ -214,7 +214,7 @@ public class ExportDataController {
 		sb.append(System.getProperty("line.separator"));
 		// Este metodo te muestra los socialProfiles de la misma manera que el resto del
 		// documento
-		sb.append(this.hackerService.SocialProfilesToString()).append(System.getProperty("line.separator"));
+		sb.append(this.rookieService.SocialProfilesToString()).append(System.getProperty("line.separator"));
 
 		if (auditor == null || this.auditorService.loggedAuditor().getId() != id)
 			return null;
@@ -260,7 +260,7 @@ public class ExportDataController {
 		sb.append(System.getProperty("line.separator"));
 		// Este metodo te muestra los socialProfiles de la misma manera que el resto del
 		// documento
-		sb.append(this.hackerService.SocialProfilesToString()).append(System.getProperty("line.separator"));
+		sb.append(this.rookieService.SocialProfilesToString()).append(System.getProperty("line.separator"));
 
 		if (provider == null || this.providerService.loggedProvider().getId() != id)
 			return null;

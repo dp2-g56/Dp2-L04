@@ -171,8 +171,8 @@
 		</form:form>
 	</security:authorize>
 	
-	<security:authorize access = "hasRole('HACKER')">
-		<form:form modelAttribute="formObjectEditHacker" action="authenticated/hacker/edit.do">
+	<security:authorize access = "hasRole('ROOKIE')">
+		<form:form modelAttribute="formObjectEditRookie" action="authenticated/rookie/edit.do">
 
 
 		<form:hidden path="id"/>
