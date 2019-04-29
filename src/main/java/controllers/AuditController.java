@@ -63,11 +63,11 @@ public class AuditController extends AbstractController {
 
 		Position position = this.positionService.findOne(positionId);
 
-		if (position.getIsDraftMode())
+		if (!this.auditorService.showAssignablePositions().contains(position)) {
 			return this.list();
+		}
 
-		Audit audit = new Audit();
-		audit = this.auditService.create(position);
+		Audit audit = this.auditService.create(position);
 
 		result = this.createEditModelAndView(audit);
 		result.addObject("audit", audit);
@@ -83,8 +83,9 @@ public class AuditController extends AbstractController {
 		Audit audit = this.auditService.findOne(auditId);
 		position = audit.getPosition();
 
-		if (position.getIsDraftMode())
+		if (position.getIsDraftMode() || position.getIsCancelled()) {
 			return this.list();
+		}
 
 		result = this.createEditModelAndView(audit);
 		return result;
@@ -96,19 +97,25 @@ public class AuditController extends AbstractController {
 		ModelAndView result;
 
 		Audit a = new Audit();
+		List<Position> positions;
 
 		a = this.auditService.reconstruct(audit, binding);
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(audit);
-		else
+		} else {
 			try {
-				this.auditorService.addAudit(audit);
+				this.auditorService.addAudit(a);
 
-				result = new ModelAndView("redirect:list.do");
+				positions = this.auditorService.showAssignablePositions();
+
+				result = new ModelAndView("position/auditor/listAssignablePositions");
+				result.addObject("positions", positions);
+				result.addObject("requestURI", "position/auditor/listAssignablePositions.do");
 			} catch (Throwable oops) {
 				result = this.createEditModelAndView(audit, "commit.error");
 			}
+		}
 
 		return result;
 	}

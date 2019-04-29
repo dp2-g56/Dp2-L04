@@ -137,7 +137,16 @@
   
   <br/>
   
-  <jstl:if test="${publicValue}">
+  <jstl:if test="${publicValue && !assignable}">
   <a href="anonymous/position/list.do"><spring:message code="position.backToPublicData" /></a>
   </jstl:if> 	
+  
+  
+  <security:authorize access="hasAnyRole('AUDITOR')">
+    <jstl:if test="${assignable}">
+  <a href="position/auditor/listAssignablePositions.do"><spring:message code="position.backToAssignablePositions" /></a>
+  </jstl:if> 	
+  
+  </security:authorize>
+  
 

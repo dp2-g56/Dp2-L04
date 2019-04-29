@@ -31,6 +31,7 @@
 		<value>/views/rookie/messages</value>
 		<value>/views/message/messages</value>
 		<value>/views/provider/messages</value>
+		<value>/views/auditor/messages</value>
 
 	</util:list>
 
