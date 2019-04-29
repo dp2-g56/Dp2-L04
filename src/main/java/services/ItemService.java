@@ -71,7 +71,6 @@ public class ItemService {
 			Assert.notNull(itemDB);
 			this.save(item);
 
-			System.out.println("PASA SAVE");
 		} else {
 			Item savedItem = this.save(item);
 			items.add(savedItem);
