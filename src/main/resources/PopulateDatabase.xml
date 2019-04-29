@@ -3365,5 +3365,13 @@
 		<property name="expirationYear" value="24" />
 		<property name="cvvCode" value="193" />
 	</bean>
+	
+	<bean id="sponsorship1" class="domain.Sponsorship">
+		<property name="creditCard" ref="creditCard11" />
+		<property name="banner" value="http://www.banner.com" />
+		<property name="targetUrl" value="http://www.example.com" />
+		<property name="position" ref="position1" />
+		<property name="provider" ref="provider1" />
+	</bean>
 
 </beans>

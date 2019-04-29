@@ -9,7 +9,7 @@
 
 <security:authorize access="hasRole('PROVIDER')">
 	
-	<display:table pagesize="5" name="sponsorship" id="row" class="displaytag" 
+	<display:table pagesize="5" name="sponsorships" id="row" class="displaytag" 
 					requestURI="/sponsorship/provider/list.do">
 			
 		<display:column property="creditCard.number" titleKey="sponsorship.creditCard" />
