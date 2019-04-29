@@ -19,9 +19,6 @@ import org.hibernate.validator.constraints.NotBlank;
 public class Company extends Actor {
 
 
-	private List<Problem>	problems;
-	private List<Position>	positions;
-
 	private String companyName;
 	private Double score;
 
