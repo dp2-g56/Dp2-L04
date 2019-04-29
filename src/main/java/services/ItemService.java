@@ -68,17 +68,7 @@ public class ItemService {
 
 		if (item.getId() != 0) {
 			Item itemDB = this.getItemOfProvider(item.getId(), loggProvider.getId());
-
-			System.out.println("ITEM: " + item);
-			for (String l : item.getLinks())
-				System.out.println("ITEM1: " + l);
-			for (String p : item.getPictures())
-				System.out.println("ITEM2: " + p);
-
-			Assert.notNull(item);
-
-			System.out.println("PASA NOT NULL");
-
+			Assert.notNull(itemDB);
 			this.save(item);
 
 			System.out.println("PASA SAVE");
