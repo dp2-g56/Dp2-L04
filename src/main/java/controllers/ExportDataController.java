@@ -14,12 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import services.AdminService;
+import services.AuditorService;
 import services.CompanyService;
 import services.CurriculumService;
 import services.HackerService;
+import services.ProviderService;
 import domain.Admin;
+import domain.Auditor;
 import domain.Company;
 import domain.Hacker;
+import domain.Provider;
 
 @Controller
 @RequestMapping("/export")
@@ -36,6 +40,12 @@ public class ExportDataController {
 
 	@Autowired
 	CompanyService		companyService;
+
+	@Autowired
+	AuditorService		auditorService;
+
+	@Autowired
+	ProviderService		providerService;
 
 
 	@RequestMapping(value = "/hacker", method = RequestMethod.GET)
@@ -167,6 +177,97 @@ public class ExportDataController {
 		// Defines el nombre del archivo y la extension
 		response.setContentType("text/txt");
 		response.setHeader("Content-Disposition", "attachment;filename=exportDataCompany.txt");
+
+		// Con estos comandos permites su descarga cuando clickas
+		ServletOutputStream outStream = response.getOutputStream();
+		outStream.println(sb.toString());
+		outStream.flush();
+		outStream.close();
+
+		// El return no llega nunca, es del metodo viejo
+		return sb.toString();
+	}
+
+	@RequestMapping(value = "/auditor", method = RequestMethod.GET)
+	public @ResponseBody
+	String exportAuditor(@RequestParam(value = "id", defaultValue = "-1") int id, HttpServletResponse response) throws IOException {
+
+		this.auditorService.loggedAsAuditor();
+
+		Auditor auditor = new Auditor();
+		auditor = this.auditorService.findOne(id);
+
+		// Defines un StringBuilder para construir tu string
+		StringBuilder sb = new StringBuilder();
+
+		// linea
+		sb.append("Personal data:").append(System.getProperty("line.separator"));
+		sb.append("Name: " + auditor.getName()).append(System.getProperty("line.separator"));
+		sb.append("Surname: " + auditor.getSurname()).append(System.getProperty("line.separator"));
+		sb.append("Address: " + auditor.getAddress()).append(System.getProperty("line.separator"));
+		sb.append("Email: " + auditor.getEmail()).append(System.getProperty("line.separator"));
+		sb.append("Photo: " + auditor.getPhoto()).append(System.getProperty("line.separator"));
+		sb.append("VAT number: " + auditor.getVATNumber()).append(System.getProperty("line.separator"));
+
+		sb.append(System.getProperty("line.separator"));
+		sb.append("SocialProfiles: ").append(System.getProperty("line.separator"));
+		sb.append(System.getProperty("line.separator"));
+		// Este metodo te muestra los socialProfiles de la misma manera que el resto del
+		// documento
+		sb.append(this.hackerService.SocialProfilesToString()).append(System.getProperty("line.separator"));
+
+		if (auditor == null || this.auditorService.loggedAuditor().getId() != id)
+			return null;
+
+		// Defines el nombre del archivo y la extension
+		response.setContentType("text/txt");
+		response.setHeader("Content-Disposition", "attachment;filename=exportDataAuditor.txt");
+
+		// Con estos comandos permites su descarga cuando clickas
+		ServletOutputStream outStream = response.getOutputStream();
+		outStream.println(sb.toString());
+		outStream.flush();
+		outStream.close();
+
+		// El return no llega nunca, es del metodo viejo
+		return sb.toString();
+	}
+
+	@RequestMapping(value = "/provider", method = RequestMethod.GET)
+	public @ResponseBody
+	String exportProvider(@RequestParam(value = "id", defaultValue = "-1") int id, HttpServletResponse response) throws IOException {
+
+		this.providerService.loggedAsProvider();
+
+		Provider provider = new Provider();
+		provider = this.providerService.findOne(id);
+
+		// Defines un StringBuilder para construir tu string
+		StringBuilder sb = new StringBuilder();
+
+		// linea
+		sb.append("Personal data:").append(System.getProperty("line.separator"));
+		sb.append("Name: " + provider.getName()).append(System.getProperty("line.separator"));
+		sb.append("Surname: " + provider.getSurname()).append(System.getProperty("line.separator"));
+		sb.append("Address: " + provider.getAddress()).append(System.getProperty("line.separator"));
+		sb.append("Email: " + provider.getEmail()).append(System.getProperty("line.separator"));
+		sb.append("Photo: " + provider.getPhoto()).append(System.getProperty("line.separator"));
+		sb.append("VAT number: " + provider.getVATNumber()).append(System.getProperty("line.separator"));
+		sb.append("Provider: " + provider.getMake()).append(System.getProperty("line.separator"));
+
+		sb.append(System.getProperty("line.separator"));
+		sb.append("SocialProfiles: ").append(System.getProperty("line.separator"));
+		sb.append(System.getProperty("line.separator"));
+		// Este metodo te muestra los socialProfiles de la misma manera que el resto del
+		// documento
+		sb.append(this.hackerService.SocialProfilesToString()).append(System.getProperty("line.separator"));
+
+		if (provider == null || this.providerService.loggedProvider().getId() != id)
+			return null;
+
+		// Defines el nombre del archivo y la extension
+		response.setContentType("text/txt");
+		response.setHeader("Content-Disposition", "attachment;filename=exportDataProvider.txt");
 
 		// Con estos comandos permites su descarga cuando clickas
 		ServletOutputStream outStream = response.getOutputStream();

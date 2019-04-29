@@ -1,54 +1,49 @@
 
 package services;
 
-
 import java.util.ArrayList;
-
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+
 import repositories.AuditorRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
 import domain.Audit;
 import domain.Auditor;
-
 import domain.CreditCard;
 import domain.Message;
 import domain.SocialProfile;
 import forms.FormObjectAuditor;
 import forms.FormObjectEditAuditor;
 
-
-
 @Service
 @Transactional
 public class AuditorService {
 
-@Autowired
+	@Autowired
 	private AuditorRepository	auditorRepository;
 
 	@Autowired
 	private AuditService		auditService;
 
 	@Autowired
-	CreditCardService		creditCardService;
+	CreditCardService			creditCardService;
 
 	@Autowired
-	ConfigurationService	configurationService;
+	ConfigurationService		configurationService;
 
 	@Autowired
-	AdminService			adminService;
+	AdminService				adminService;
 
 
 	//-----------------------------------------SECURITY-----------------------------
@@ -89,8 +84,8 @@ public class AuditorService {
 		loggedAuditor.setAudits(audits);
 		this.save(loggedAuditor);
 	}
-  
-  public Auditor createAuditor() {
+
+	public Auditor createAuditor() {
 
 		Auditor auditor = new Auditor();
 		CreditCard card = new CreditCard();
@@ -293,6 +288,7 @@ public class AuditorService {
 		res.setSocialProfiles(auditor.getSocialProfiles());
 		res.setUserAccount(auditor.getUserAccount());
 		res.setVersion(auditor.getVersion());
+		res.setAudits(auditor.getAudits());
 
 		if (card.getNumber() != null)
 			if (!this.creditCardService.validateNumberCreditCard(card))
@@ -319,9 +315,19 @@ public class AuditorService {
 		return res;
 
 	}
-  
-  public void flush() {
+
+	public void flush() {
 		this.auditorRepository.flush();
 	}
-  
+
+	public void deleteAuditor() {
+
+		Auditor auditor = new Auditor();
+
+		auditor = this.loggedAuditor();
+
+		this.auditService.deleteAllAudits();
+
+		this.auditorRepository.delete(auditor);
+	}
 }
