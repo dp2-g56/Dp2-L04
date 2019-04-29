@@ -18,18 +18,20 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class Company extends Actor {
 
-	private String			companyName;
-	private Double			score;
 
 	private List<Problem>	problems;
 	private List<Position>	positions;
 
+	private String companyName;
+	private Double score;
+
+	private List<Problem> problems;
+	private List<Position> positions;
 
 	@NotBlank
 	public String getCompanyName() {
 		return this.companyName;
 	}
-
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
