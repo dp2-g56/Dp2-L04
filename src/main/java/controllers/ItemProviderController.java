@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import domain.Curriculum;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Item;
 import domain.PersonalData;
 import forms.FormObjectCurriculumPersonalData;
+import forms.FormObjectItem;
 import services.CurriculumService;
-import services.HackerService;
+import services.RookieService;
 import services.ItemService;
 import services.PersonalDataService;
 import services.ProviderService;
@@ -98,6 +99,24 @@ public class ItemProviderController extends AbstractController {
 			result = new ModelAndView("redirect:list.do");
 		} catch(Throwable oops) {
 			result = new ModelAndView("redirect:list.do");
+		}
+		
+		return result;	
+	}
+	
+	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	public ModelAndView create() {
+		ModelAndView result;
+		
+		try {
+			this.providerService.securityAndProvider();
+			
+			FormObjectItem formObjectItem = new FormObjectItem();
+			
+			result = new ModelAndView("provider/createItem");
+			result.addObject("formObjectItem", formObjectItem);
+		} catch(Throwable oops) {
+			result = new ModelAndView("redirect:/");
 		}
 		
 		return result;	

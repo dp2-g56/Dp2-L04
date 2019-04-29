@@ -10,7 +10,7 @@ import domain.PositionData;
 @Repository
 public interface PositionDataRepository extends JpaRepository<PositionData, Integer> {
 
-	@Query("select p from Hacker h join h.curriculums c join c.positionData p where h.id = ?1 and p.id = ?2")
-	PositionData getPositionDataOfHacker(int hackerId, int positionDataId);
+	@Query("select p from Rookie h join h.curriculums c join c.positionData p where h.id = ?1 and p.id = ?2")
+	PositionData getPositionDataOfRookie(int rookieId, int positionDataId);
 
 }

@@ -41,16 +41,16 @@ public class SpamMessageServiceTest extends AbstractTest {
 
 			{
 				//Positive test, spam word in subject
-				"admin1", "sex", "body", "tags", "hacker3", null
+				"admin1", "sex", "body", "tags", "rookie3", null
 			}, {
 				//Positive test, spam word in body
-				"admin1", "subject", "sex", "", "hacker3", null
+				"admin1", "subject", "sex", "", "rookie3", null
 			}, {
 				//Positive test, spam word in tag
-				"admin1", "subject", "body", "sex", "hacker3", null
+				"admin1", "subject", "body", "sex", "rookie3", null
 			}, {
 				//Negative test, no spam words
-				"admin1", "subject", "body", "tags", "hacker3", IllegalArgumentException.class
+				"admin1", "subject", "body", "tags", "rookie3", IllegalArgumentException.class
 			}
 		};
 

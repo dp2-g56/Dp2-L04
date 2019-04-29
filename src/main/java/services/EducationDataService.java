@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
 
 import domain.Curriculum;
 import domain.EducationData;
-import domain.Hacker;
+import domain.Rookie;
 import domain.PersonalData;
 import domain.PositionData;
 import repositories.EducationDataRepository;
@@ -22,7 +22,7 @@ public class EducationDataService {
 	@Autowired
 	private EducationDataRepository educationDataRepository;
 	@Autowired
-	private HackerService hackerService;
+	private RookieService rookieService;
 	@Autowired
 	private CurriculumService curriculumService;
 	
@@ -34,18 +34,18 @@ public class EducationDataService {
 		this.educationDataRepository.deleteInBatch(entities);
 	}
 	
-	public void addOrUpdateEducationDataAsHacker(EducationData educationData, int curriculumId) {
-		Hacker hacker = this.hackerService.securityAndHacker();
+	public void addOrUpdateEducationDataAsRookie(EducationData educationData, int curriculumId) {
+		Rookie rookie = this.rookieService.securityAndRookie();
 		
 		if(educationData.getId()==0) {
-			Curriculum curriculum = this.curriculumService.getCurriculumOfHacker(hacker.getId(), curriculumId);
+			Curriculum curriculum = this.curriculumService.getCurriculumOfRookie(rookie.getId(), curriculumId);
 			Assert.notNull(curriculum);
 			List<EducationData> educationsData = curriculum.getEducationData();
 			educationsData.add(educationData);
 			this.curriculumService.save(curriculum);
 			this.curriculumService.flush();
 		} else {
-			Assert.notNull(this.educationDataRepository.getEducationDataOfHacker(hacker.getId(), educationData.getId()));
+			Assert.notNull(this.educationDataRepository.getEducationDataOfRookie(rookie.getId(), educationData.getId()));
 			this.save(educationData);
 			this.flush();
 		}
@@ -59,9 +59,9 @@ public class EducationDataService {
 		return this.educationDataRepository.findOne(educationDataId);
 	}
 
-	public void deleteEducationDataAsHacker(int educationDataId) {
-		Hacker hacker = this.hackerService.securityAndHacker();
-		Assert.notNull(this.educationDataRepository.getEducationDataOfHacker(hacker.getId(), educationDataId));
+	public void deleteEducationDataAsRookie(int educationDataId) {
+		Rookie rookie = this.rookieService.securityAndRookie();
+		Assert.notNull(this.educationDataRepository.getEducationDataOfRookie(rookie.getId(), educationDataId));
 		EducationData educationData = this.findOne(educationDataId);
 		Curriculum curriculum = this.curriculumService.getCurriculumOfEducationData(educationDataId);
 		List<EducationData> educationsData = curriculum.getEducationData();

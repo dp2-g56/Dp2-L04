@@ -33,12 +33,12 @@
 		<display:column property="description" titleKey="positionData.description" /> 
 		<display:column property="startDate" titleKey="positionData.startDate" /> 
 		<display:column property="endDate" titleKey="positionData.endDate" />
-		<security:authorize access="hasRole('HACKER')">
+		<security:authorize access="hasRole('ROOKIE')">
 			<display:column titleKey="positionData.action">
-				<spring:url var="editPositionData" value="/positionData/hacker/edit.do">
+				<spring:url var="editPositionData" value="/positionData/rookie/edit.do">
 					<spring:param name="positionDataId" value="${row.id}"/>
 				</spring:url>
-				<spring:url var="deletePositionData" value="/positionData/hacker/delete.do">
+				<spring:url var="deletePositionData" value="/positionData/rookie/delete.do">
 					<spring:param name="positionDataId" value="${row.id}"/>
 				</spring:url>
 				<a href="${editPositionData}">
@@ -54,8 +54,8 @@
 	
 	</display:table>
 	
-	<security:authorize access="hasRole('HACKER')">
-		<spring:url var="newPositionData" value="/positionData/hacker/new.do">
+	<security:authorize access="hasRole('ROOKIE')">
+		<spring:url var="newPositionData" value="/positionData/rookie/new.do">
 			<spring:param name="curriculumId" value="${curriculum.id}"/>
 		</spring:url>
 		<p>
@@ -77,12 +77,12 @@
 		<display:column property="mark" titleKey="educationData.mark" /> 
 		<display:column property="startDate" titleKey="educationData.startDate" /> 
 		<display:column property="endDate" titleKey="educationData.endDate" />
-		<security:authorize access="hasRole('HACKER')">
+		<security:authorize access="hasRole('ROOKIE')">
 			<display:column titleKey="educationData.action">
-				<spring:url var="editEducationData" value="/educationData/hacker/edit.do">
+				<spring:url var="editEducationData" value="/educationData/rookie/edit.do">
 					<spring:param name="educationDataId" value="${row.id}"/>
 				</spring:url>
-				<spring:url var="deleteEducationData" value="/educationData/hacker/delete.do">
+				<spring:url var="deleteEducationData" value="/educationData/rookie/delete.do">
 					<spring:param name="educationDataId" value="${row.id}"/>
 				</spring:url>
 				<a href="${editEducationData}">
@@ -98,8 +98,8 @@
 	
 	</display:table>
 	
-	<security:authorize access="hasRole('HACKER')">
-		<spring:url var="newEducationData" value="/educationData/hacker/new.do">
+	<security:authorize access="hasRole('ROOKIE')">
+		<spring:url var="newEducationData" value="/educationData/rookie/new.do">
 			<spring:param name="curriculumId" value="${curriculum.id}"/>
 		</spring:url>
 		<p>
@@ -122,8 +122,8 @@
 		
 	</display:table>
 	
-	<security:authorize access="hasRole('HACKER')">
-		<spring:url var="newMiscellaneousData" value="/miscellaneousData/hacker/new.do">
+	<security:authorize access="hasRole('ROOKIE')">
+		<spring:url var="newMiscellaneousData" value="/miscellaneousData/rookie/new.do">
 			<spring:param name="curriculumId" value="${curriculum.id}"/>
 		</spring:url>
 		<p>
@@ -134,8 +134,8 @@
 		</p>
 	</security:authorize>
 	
-	<security:authorize access="hasRole('HACKER')">
-		<acme:cancel url="/curriculum/hacker/list.do" code="hacker.back" /> 
+	<security:authorize access="hasRole('ROOKIE')">
+		<acme:cancel url="/curriculum/rookie/list.do" code="rookie.back" /> 
 	</security:authorize>
 	
   	<security:authorize access="hasAnyRole('ROLE_ANONYMOUS')">

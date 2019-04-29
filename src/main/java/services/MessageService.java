@@ -227,13 +227,13 @@ public class MessageService {
 
 	public void notificationStatusApplicationSubmitted(Application app) {
 
-		Actor sender = app.getHacker();
+		Actor sender = app.getRookie();
 		Actor receiver = this.applicationService.getCompanyByApplicationId(app.getId());
 
 		Message company = this.create("Status change",
-				"The application " + app.getProblem().getTitle() + " has changed its status to submitted by the hacker "
+				"The application " + app.getProblem().getTitle() + " has changed its status to submitted by the rookie "
 						+ sender.getName() + ". / La aplicacion " + app.getProblem().getTitle()
-						+ " ha cambiado su estado a entregada por el hacker " + sender.getName() + ".",
+						+ " ha cambiado su estado a entregada por el rookie " + sender.getName() + ".",
 				"Notificacion / Notification", sender.getName(), receiver.getName());
 
 		this.sendMessageWithActors(company, sender, receiver);
@@ -241,7 +241,7 @@ public class MessageService {
 	
 	public void notificationStatusApplicationAccepted(Application app) {
 
-		Actor sender = app.getHacker();
+		Actor sender = app.getRookie();
 		Actor receiver = this.applicationService.getCompanyByApplicationId(app.getId());
 
 		Message company = this.create("Status change",
@@ -255,7 +255,7 @@ public class MessageService {
 	
 	public void notificationStatusApplicationRejected(Application app) {
 
-		Actor sender = app.getHacker();
+		Actor sender = app.getRookie();
 		Actor receiver = this.applicationService.getCompanyByApplicationId(app.getId());
 
 		Message company = this.create("Status change",

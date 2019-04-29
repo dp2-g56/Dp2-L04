@@ -31,18 +31,18 @@ public class EducationDataServiceTest extends AbstractTest {
 	@Autowired
 	private CurriculumService curriculumService;
 	@Autowired
-	private HackerService hackerService;
+	private RookieService rookieService;
 	@Autowired
 	private EducationDataService educationDataService;
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes deleting them.
 	 * 
 	 * Ratio of data coverage: 100%
-	 *  - Access as a hacker or not.
-	 *  - Delete an education data that does belongs to the hacker logged in or not.
+	 *  - Access as a rookie or not.
+	 *  - Delete an education data that does belongs to the rookie logged in or not.
 	 * 
 	 **/
 	@Test
@@ -51,13 +51,13 @@ public class EducationDataServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is deleting one of his education data
+				 * POSITIVE TEST: Rookie is deleting one of his education data
 				 **/
-				{ "hacker1", super.getEntityId("educationData1"), null},
+				{ "rookie1", super.getEntityId("educationData1"), null},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to delete an education data from other hacker
+				 * NEGATIVE TEST: Rookie is trying to delete an education data from other rookie
 				 **/
-				{ "hacker2", super.getEntityId("educationData1"), IllegalArgumentException.class},
+				{ "rookie2", super.getEntityId("educationData1"), IllegalArgumentException.class},
 				/**
 				 * NEGATIVE TEST: Another user is trying to delete an education data
 				 **/
@@ -69,15 +69,15 @@ public class EducationDataServiceTest extends AbstractTest {
 
 	}
 
-	private void deleteEducationDataTemplate(String hacker, int educationDataId, Class<?> expected) {
+	private void deleteEducationDataTemplate(String rookie, int educationDataId, Class<?> expected) {
 		
 		Class<?> caught = null;
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.educationDataService.deleteEducationDataAsHacker(educationDataId);
+			this.educationDataService.deleteEducationDataAsRookie(educationDataId);
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {
@@ -91,13 +91,13 @@ public class EducationDataServiceTest extends AbstractTest {
 	}
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes creating them.
 	 * 
 	 * Ratio of data coverage: 4/7 = 57.14%
-	 * - Access as a hacker or not.
-	 * - Create an education data in a curriculum that does belongs to the hacker logged in or not.
+	 * - Access as a rookie or not.
+	 * - Create an education data in a curriculum that does belongs to the rookie logged in or not.
 	 * - 4 attributes with domain restrictions.
 	 * 
 	 **/
@@ -114,28 +114,28 @@ public class EducationDataServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is creating an education data
+				 * POSITIVE TEST: Rookie is creating an education data
 				 **/
-				{ "hacker1", super.getEntityId("curriculum1"), "Degree", "Institution", Mark.A, fecha1, fecha2, null},
+				{ "rookie1", super.getEntityId("curriculum1"), "Degree", "Institution", Mark.A, fecha1, fecha2, null},
 				/**
 				 * NEGATIVE TEST: Another user is trying to create an education data
 				 **/
 				{ "company", super.getEntityId("curriculum1"), "Degree", "Institution", Mark.A, fecha1, fecha2, IllegalArgumentException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to create an education data in a curriculum of other hacker
+				 * NEGATIVE TEST: Rookie is trying to create an education data in a curriculum of other rookie
 				 **/
-				{ "hacker2", super.getEntityId("curriculum1"), "Degree", "Institution", Mark.A, fecha1, fecha2, IllegalArgumentException.class},
+				{ "rookie2", super.getEntityId("curriculum1"), "Degree", "Institution", Mark.A, fecha1, fecha2, IllegalArgumentException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is creating an education data with a degree in blank
+				 * NEGATIVE TEST: Rookie is creating an education data with a degree in blank
 				 **/
-				{ "hacker1", super.getEntityId("curriculum1"), "", "Institution", Mark.A, fecha1, fecha2, ConstraintViolationException.class},
+				{ "rookie1", super.getEntityId("curriculum1"), "", "Institution", Mark.A, fecha1, fecha2, ConstraintViolationException.class},
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			this.createEducationDataTemplate((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Mark) testingData[i][4], (Date) testingData[i][5], (Date) testingData[i][6], (Class<?>) testingData[i][7]);
 	}
 
-	private void createEducationDataTemplate(String hacker, Integer curriculumId, String degree, String institution, Mark mark, Date startDate, Date endDate, Class<?> expected) {
+	private void createEducationDataTemplate(String rookie, Integer curriculumId, String degree, String institution, Mark mark, Date startDate, Date endDate, Class<?> expected) {
 		
 		EducationData educationData = new EducationData();
 		educationData.setDegree(degree);
@@ -148,9 +148,9 @@ public class EducationDataServiceTest extends AbstractTest {
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.educationDataService.addOrUpdateEducationDataAsHacker(educationData, curriculumId);
+			this.educationDataService.addOrUpdateEducationDataAsRookie(educationData, curriculumId);
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {
@@ -164,13 +164,13 @@ public class EducationDataServiceTest extends AbstractTest {
 	}
 
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes updating them.
 	 * 
 	 * Ratio of data coverage: 4/7 = 57.14%
-	 * - Access as a hacker or not.
-	 * - Edit an education data that does belongs to the hacker logged in or not.
+	 * - Access as a rookie or not.
+	 * - Edit an education data that does belongs to the rookie logged in or not.
 	 * - 4 attributes with domain restrictions.
 	 * 
 	 **/
@@ -187,28 +187,28 @@ public class EducationDataServiceTest extends AbstractTest {
 		Object testingData[][] = {
 	
 				/**
-				 * POSITIVE TEST: Hacker is updating an education data
+				 * POSITIVE TEST: Rookie is updating an education data
 				 **/
-				{ "hacker1", super.getEntityId("educationData1"), super.getEntityId("curriculum1"), "Degree", "Institution", Mark.A, fecha1, fecha2, null},
+				{ "rookie1", super.getEntityId("educationData1"), super.getEntityId("curriculum1"), "Degree", "Institution", Mark.A, fecha1, fecha2, null},
 				/**
 				 * NEGATIVE TEST: Another user is trying to update an education data
 				 **/
 				{ "company", super.getEntityId("educationData1"), super.getEntityId("curriculum1"), "Degree", "Institution", Mark.A, fecha1, fecha2, IllegalArgumentException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to update an education data of other hacker
+				 * NEGATIVE TEST: Rookie is trying to update an education data of other rookie
 				 **/
-				{ "hacker2", super.getEntityId("educationData1"), super.getEntityId("curriculum3"), "Degree", "Institution", Mark.A, fecha1, fecha2, IllegalArgumentException.class},
+				{ "rookie2", super.getEntityId("educationData1"), super.getEntityId("curriculum3"), "Degree", "Institution", Mark.A, fecha1, fecha2, IllegalArgumentException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is updating an education data with a degree in blank
+				 * NEGATIVE TEST: Rookie is updating an education data with a degree in blank
 				 **/
-				{ "hacker1", super.getEntityId("educationData1"), super.getEntityId("curriculum1"), "", "Institution", Mark.A, fecha1, fecha2, ConstraintViolationException.class},
+				{ "rookie1", super.getEntityId("educationData1"), super.getEntityId("curriculum1"), "", "Institution", Mark.A, fecha1, fecha2, ConstraintViolationException.class},
 		};
 	
 		for (int i = 0; i < testingData.length; i++)
 			this.updateEducationDataTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Integer) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (Mark) testingData[i][5], (Date) testingData[i][6], (Date) testingData[i][7], (Class<?>) testingData[i][8]);
 	}
 	
-	private void updateEducationDataTemplate(String hacker, Integer educationDataId, Integer curriculumId, String degree, String institution, Mark mark, Date startDate, Date endDate, Class<?> expected) {
+	private void updateEducationDataTemplate(String rookie, Integer educationDataId, Integer curriculumId, String degree, String institution, Mark mark, Date startDate, Date endDate, Class<?> expected) {
 		
 		EducationData educationData = this.educationDataService.findOne(educationDataId);
 		educationData.setDegree(degree);
@@ -221,9 +221,9 @@ public class EducationDataServiceTest extends AbstractTest {
 	
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.educationDataService.addOrUpdateEducationDataAsHacker(educationData, curriculumId);
+			this.educationDataService.addOrUpdateEducationDataAsRookie(educationData, curriculumId);
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {

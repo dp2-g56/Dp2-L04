@@ -34,25 +34,25 @@ public class SponsorshipService {
 		List<Sponsorship> sponsorships = new ArrayList<Sponsorship>();
 		sponsorships = provider.getSponsorships();
 
-		// Quitamos todos los applications de hacker
+		// Quitamos todos los applications de rookie
 
 		for (Sponsorship spo : sponsorships) {
 			Position pos = new Position();
 			pos = spo.getPosition();
 			pos.getApplications().remove(spo);
-			// app.setHacker(null);
+			// app.setRookie(null);
 			// app.setPosition(null);
 		}
 
-		// hacker.getApplications().removeAll(applications);
+		// rookie.getApplications().removeAll(applications);
 
 		/*
-		 * List<Position> allPositionsOfHacker = new ArrayList<Position>();
+		 * List<Position> allPositionsOfRookie = new ArrayList<Position>();
 		 * 
-		 * allPositionsOfHacker =
-		 * this.positionService.positionsOfApplicationOfHacker(hacker);
+		 * allPositionsOfRookie =
+		 * this.positionService.positionsOfApplicationOfRookie(rookie);
 		 * 
-		 * for (Position p : allPositionsOfHacker) if
+		 * for (Position p : allPositionsOfRookie) if
 		 * (Collections.disjoint(p.getApplications(), applications)) {
 		 * 
 		 * }

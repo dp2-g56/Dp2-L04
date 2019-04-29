@@ -25,36 +25,36 @@ public class FinderServiceTest extends AbstractTest {
 	@Autowired
 	private FinderService finderService;
 	@Autowired
-	private HackerService hackerService;
+	private RookieService rookieService;
 	@Autowired
 	private PositionService positionService;
 	@Autowired
 	private ConfigurationService configurationService;
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 2. Manage his or her finder, which involves clearing it.
 	 * 
 	 * Ratio of data coverage: 2/3 = 66.67%
-	 * - Access as a hacker or not.
-	 * - Clean a finder that belongs to the hacker logged in or not.
+	 * - Access as a rookie or not.
+	 * - Clean a finder that belongs to the rookie logged in or not.
 	 * 
 	 **/
 	@Test
 	public void driverCleanFinder() {
-		Finder finder = this.hackerService.getHackerByUsername("hacker1").getFinder();
+		Finder finder = this.rookieService.getRookieByUsername("rookie1").getFinder();
 
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is cleaning his finder
+				 * POSITIVE TEST: Rookie is cleaning his finder
 				 **/
-				{ "hacker1", finder, null },
+				{ "rookie1", finder, null },
 				/**
-				 * NEGATIVE TEST: Hacker is trying to clean another hacker finder
+				 * NEGATIVE TEST: Rookie is trying to clean another rookie finder
 				 **/
-				{ "hacker2", finder, IllegalArgumentException.class}
+				{ "rookie2", finder, IllegalArgumentException.class}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
@@ -63,7 +63,7 @@ public class FinderServiceTest extends AbstractTest {
 
 	}
 
-	private void finderCleanTemplate(String hacker, Finder finder, Class<?> expected) {
+	private void finderCleanTemplate(String rookie, Finder finder, Class<?> expected) {
 		finder.setPositions(new ArrayList<Position> ());
 		this.finderService.save(finder);
 		
@@ -71,7 +71,7 @@ public class FinderServiceTest extends AbstractTest {
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
 			this.finderService.getFinalPositionsAndCleanFinder(finder);
 			
@@ -89,29 +89,29 @@ public class FinderServiceTest extends AbstractTest {
 	}
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 2. Manage his or her finder, which involves listing its contents.
 	 * 
 	 * Ratio of data coverage: 2/3 = 66.67%
-	 * - Access as a hacker or not.
-	 * - List positions of a finder that belongs to the hacker logged in or not.
+	 * - Access as a rookie or not.
+	 * - List positions of a finder that belongs to the rookie logged in or not.
 	 * 
 	 **/
 	@Test
 	public void driverListFinder() {
-		Finder finder = this.hackerService.getHackerByUsername("hacker1").getFinder();
+		Finder finder = this.rookieService.getRookieByUsername("rookie1").getFinder();
 
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is listing his finder
+				 * POSITIVE TEST: Rookie is listing his finder
 				 **/
-				{ "hacker1", finder, null },
+				{ "rookie1", finder, null },
 				/**
-				 * NEGATIVE TEST: Hacker is trying to list another finder
+				 * NEGATIVE TEST: Rookie is trying to list another finder
 				 **/
-				{ "hacker2", finder, IllegalArgumentException.class }
+				{ "rookie2", finder, IllegalArgumentException.class }
 		};
 
 		for (int i = 0; i < testingData.length; i++)
@@ -119,12 +119,12 @@ public class FinderServiceTest extends AbstractTest {
 
 	}
 
-	private void finderListTemplate(String hacker, Finder finder, Class<?> expected) {
+	private void finderListTemplate(String rookie, Finder finder, Class<?> expected) {
 		Class<?> caught = null;
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
 			this.finderService.finderList(finder);
 			
@@ -140,29 +140,29 @@ public class FinderServiceTest extends AbstractTest {
 	}
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 2. Manage his or her finder, which involves updating the search criteria.
 	 * 
 	 * Ratio of data coverage: 2/3 = 66.67%
-	 * - Access as a hacker or not.
-	 * - Edit a finder that belongs to the hacker logged in or not.
+	 * - Access as a rookie or not.
+	 * - Edit a finder that belongs to the rookie logged in or not.
 	 * 
 	 **/
 	@Test
 	public void driverUpdateFinder() {
-		Finder finder = this.hackerService.getHackerByUsername("hacker1").getFinder();
+		Finder finder = this.rookieService.getRookieByUsername("rookie1").getFinder();
 
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is updating his finder
+				 * POSITIVE TEST: Rookie is updating his finder
 				 **/
-				{ "hacker1", finder, 1400., null },
+				{ "rookie1", finder, 1400., null },
 				/**
-				 * NEGATIVE TEST: Hacker is trying to update another finder
+				 * NEGATIVE TEST: Rookie is trying to update another finder
 				 **/
-				{ "hacker2", finder, 1400., IllegalArgumentException.class }
+				{ "rookie2", finder, 1400., IllegalArgumentException.class }
 		};
 
 		for (int i = 0; i < testingData.length; i++)
@@ -170,7 +170,7 @@ public class FinderServiceTest extends AbstractTest {
 
 	}
 
-	private void finderUpdateTemplate(String hacker, Finder finder, Double minSalary, Class<?> expected) {
+	private void finderUpdateTemplate(String rookie, Finder finder, Double minSalary, Class<?> expected) {
 		Date date = new Date();
 	
 		finder.setDeadLine(null);
@@ -184,7 +184,7 @@ public class FinderServiceTest extends AbstractTest {
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
 			this.finderService.filterPositionsByFinder(finder);
 			this.finderService.flush();
@@ -206,29 +206,29 @@ public class FinderServiceTest extends AbstractTest {
 	}
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 2. Manage his or her finder, which involves listing its contents.
 	 * 
 	 * Ratio of data coverage: 2/3 = 66.67%
-	 * - Access as a hacker or not.
-	 * - List the content of a finder that belongs to the hacker logged in or not.
+	 * - Access as a rookie or not.
+	 * - List the content of a finder that belongs to the rookie logged in or not.
 	 * 
 	 **/
 	@Test
 	public void driverListSkillsAndTechnologiesFinder() {
-		Finder finder = this.hackerService.getHackerByUsername("hacker1").getFinder();
+		Finder finder = this.rookieService.getRookieByUsername("rookie1").getFinder();
 
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is listing his finder
+				 * POSITIVE TEST: Rookie is listing his finder
 				 **/
-				{ "hacker1", finder, null },
+				{ "rookie1", finder, null },
 				/**
-				 * NEGATIVE TEST: Hacker is trying to list another finder
+				 * NEGATIVE TEST: Rookie is trying to list another finder
 				 **/
-				{ "hacker2", finder, IllegalArgumentException.class }
+				{ "rookie2", finder, IllegalArgumentException.class }
 		};
 
 		for (int i = 0; i < testingData.length; i++)
@@ -236,12 +236,12 @@ public class FinderServiceTest extends AbstractTest {
 
 	}
 
-	private void finderSkillsAndTechnologiesTemplate(String hacker, Finder finder, Class<?> expected) {
+	private void finderSkillsAndTechnologiesTemplate(String rookie, Finder finder, Class<?> expected) {
 		Class<?> caught = null;
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
 			finder.setKeyWord("xp");
 			this.finderService.filterPositionsByFinder(finder);
@@ -249,8 +249,8 @@ public class FinderServiceTest extends AbstractTest {
 			
 			Finder finderFounded = this.finderService.findOne(finder.getId());
 			
-			this.positionService.getSkillsAsHacker(finderFounded.getPositions().get(0).getId());
-			this.positionService.getTechnologiesAsHacker(finderFounded.getPositions().get(0).getId());
+			this.positionService.getSkillsAsRookie(finderFounded.getPositions().get(0).getId());
+			this.positionService.getTechnologiesAsRookie(finderFounded.getPositions().get(0).getId());
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {

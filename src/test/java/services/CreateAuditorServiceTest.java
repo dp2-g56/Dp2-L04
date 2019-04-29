@@ -39,7 +39,7 @@ public class CreateAuditorServiceTest extends AbstractTest {
 	 */
 
 	@Test
-	public void driverCreateHacker() {
+	public void driverCreateRookie() {
 		Object testingData[][] = {
 
 			{
@@ -94,13 +94,13 @@ public class CreateAuditorServiceTest extends AbstractTest {
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateCreateHacker((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Long) testingData[i][4], (Integer) testingData[i][5], (Integer) testingData[i][6],
+			this.templateCreateRookie((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Long) testingData[i][4], (Integer) testingData[i][5], (Integer) testingData[i][6],
 				(Integer) testingData[i][7], (String) testingData[i][8], (String) testingData[i][9], (String) testingData[i][10], (String) testingData[i][11], (String) testingData[i][12], (String) testingData[i][13], (String) testingData[i][14],
 				(Class<?>) testingData[i][15]);
 
 	}
 
-	private void templateCreateHacker(String name, String surname, String VAT, String holderName, Long number, Integer month, Integer year, Integer CVV, String cardType, String photo, String email, String phone, String address, String username,
+	private void templateCreateRookie(String name, String surname, String VAT, String holderName, Long number, Integer month, Integer year, Integer CVV, String cardType, String photo, String email, String phone, String address, String username,
 		String password, Class<?> expected) {
 		Class<?> caught = null;
 		this.startTransaction();

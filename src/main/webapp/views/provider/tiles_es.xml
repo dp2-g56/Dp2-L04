@@ -30,5 +30,15 @@
 		<put-attribute name="title" value="Imagenes" />
 		<put-attribute name="body" value="/views/provider/pictures.jsp" />
 	</definition>
+	
+	<definition name="provider/createItem" extends="master.page">	
+		<put-attribute name="title" value="Crear articulo" />
+		<put-attribute name="body" value="/views/provider/createEditItem.jsp" />
+	</definition>
+	
+	<definition name="provider/editItem" extends="master.page">	
+		<put-attribute name="title" value="Editar articulo" />
+		<put-attribute name="body" value="/views/provider/createEditItem.jsp" />
+	</definition>
 
 </tiles-definitions>

@@ -33,13 +33,13 @@ public class DeleteCompanyServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 			{
-				//Positive case, a hacker delete his user account
+				//Positive case, a rookie delete his user account
 				"company1", null
 			},
 
 			{
-				//Negative case, a company delete a hacker account
-				"hacker1", IllegalArgumentException.class
+				//Negative case, a company delete a rookie account
+				"rookie1", IllegalArgumentException.class
 			}
 		};
 

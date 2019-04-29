@@ -12,7 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import domain.Curriculum;
-import domain.Hacker;
+import domain.Rookie;
 import domain.MiscellaneousData;
 import domain.PersonalData;
 import domain.PositionData;
@@ -26,7 +26,7 @@ public class MiscellaneousDataService {
 	@Autowired
 	private MiscellaneousDataRepository miscellaneousDataRepository;
 	@Autowired
-	private HackerService hackerService;
+	private RookieService rookieService;
 	@Autowired
 	private CurriculumService curriculumService;
 	@Autowired
@@ -40,9 +40,9 @@ public class MiscellaneousDataService {
 		return this.miscellaneousDataRepository.findOne(miscellaneousDataId);
 	}
 
-	public MiscellaneousData getMiscellaneousDataOfLoggedHacker(int miscellaneousDataId) {
-		Hacker hacker = this.hackerService.securityAndHacker();
-		MiscellaneousData miscellaneousData = this.miscellaneousDataRepository.getMiscellaneousDataOfHacker(hacker.getId(), miscellaneousDataId);
+	public MiscellaneousData getMiscellaneousDataOfLoggedRookie(int miscellaneousDataId) {
+		Rookie rookie = this.rookieService.securityAndRookie();
+		MiscellaneousData miscellaneousData = this.miscellaneousDataRepository.getMiscellaneousDataOfRookie(rookie.getId(), miscellaneousDataId);
 		Assert.notNull(miscellaneousData);
 		return miscellaneousData;
 	}
@@ -51,18 +51,18 @@ public class MiscellaneousDataService {
 		this.miscellaneousDataRepository.deleteInBatch(entities);
 	}
 
-	public void addOrUpdateMiscellaneousDataAsHacker(MiscellaneousData miscellaneousData, int curriculumId) {
-		Hacker hacker = this.hackerService.securityAndHacker();
+	public void addOrUpdateMiscellaneousDataAsRookie(MiscellaneousData miscellaneousData, int curriculumId) {
+		Rookie rookie = this.rookieService.securityAndRookie();
 		
 		if(miscellaneousData.getId()==0) {
-			Curriculum curriculum = this.curriculumService.getCurriculumOfHacker(hacker.getId(), curriculumId);
+			Curriculum curriculum = this.curriculumService.getCurriculumOfRookie(rookie.getId(), curriculumId);
 			Assert.notNull(curriculum);
 			List<MiscellaneousData> miscellaneoussData = curriculum.getMiscellaneousData();
 			miscellaneoussData.add(miscellaneousData);
 			this.curriculumService.save(curriculum);
 			this.curriculumService.flush();
 		} else {
-			Assert.notNull(this.miscellaneousDataRepository.getMiscellaneousDataOfHacker(hacker.getId(), miscellaneousData.getId()));
+			Assert.notNull(this.miscellaneousDataRepository.getMiscellaneousDataOfRookie(rookie.getId(), miscellaneousData.getId()));
 			this.save(miscellaneousData);
 			this.flush();
 		}
@@ -91,9 +91,9 @@ public class MiscellaneousDataService {
 		return miscellaneousDataReconstruct;
 	}
 
-	public void deleteMiscellaneousDataAsHacker(int miscellaneousDataId) {
-		Hacker hacker = this.hackerService.securityAndHacker();
-		Assert.notNull(this.miscellaneousDataRepository.getMiscellaneousDataOfHacker(hacker.getId(), miscellaneousDataId));
+	public void deleteMiscellaneousDataAsRookie(int miscellaneousDataId) {
+		Rookie rookie = this.rookieService.securityAndRookie();
+		Assert.notNull(this.miscellaneousDataRepository.getMiscellaneousDataOfRookie(rookie.getId(), miscellaneousDataId));
 		MiscellaneousData miscellaneousData = this.findOne(miscellaneousDataId);
 		Curriculum curriculum = this.curriculumService.getCurriculumOfMiscellaneousData(miscellaneousDataId);
 		List<MiscellaneousData> miscellaneoussData = curriculum.getMiscellaneousData();
@@ -103,9 +103,9 @@ public class MiscellaneousDataService {
 		this.miscellaneousDataRepository.delete(miscellaneousData);
 	}
 
-	public void addAttachmentAsHacker(int miscellaneousDataId, String attachment) {
-		Hacker hacker = this.hackerService.securityAndHacker();
-		MiscellaneousData miscellaneousData = this.miscellaneousDataRepository.getMiscellaneousDataOfHacker(hacker.getId(), miscellaneousDataId);
+	public void addAttachmentAsRookie(int miscellaneousDataId, String attachment) {
+		Rookie rookie = this.rookieService.securityAndRookie();
+		MiscellaneousData miscellaneousData = this.miscellaneousDataRepository.getMiscellaneousDataOfRookie(rookie.getId(), miscellaneousDataId);
 		Assert.notNull(miscellaneousData);
 		Assert.isTrue(!attachment.contentEquals(""));
 		Assert.notNull(attachment);
@@ -114,9 +114,9 @@ public class MiscellaneousDataService {
 		this.save(miscellaneousData);
 	}
 
-	public void deleteAttachmentAsHacker(int miscellaneousDataId, int attachmentIndex) {
-		Hacker hacker = this.hackerService.securityAndHacker();
-		MiscellaneousData miscellaneousData = this.miscellaneousDataRepository.getMiscellaneousDataOfHacker(hacker.getId(), miscellaneousDataId);
+	public void deleteAttachmentAsRookie(int miscellaneousDataId, int attachmentIndex) {
+		Rookie rookie = this.rookieService.securityAndRookie();
+		MiscellaneousData miscellaneousData = this.miscellaneousDataRepository.getMiscellaneousDataOfRookie(rookie.getId(), miscellaneousDataId);
 		Assert.notNull(miscellaneousData);
 		List<String> attachments = miscellaneousData.getAttachments();
 		Assert.isTrue(attachmentIndex < attachments.size());
@@ -125,7 +125,7 @@ public class MiscellaneousDataService {
 		this.save(miscellaneousData);
 	}
 
-	public List<String> getAttachmentsOfMiscellaneousDataOfLoggedHacker(int miscellaneousDataId) {
-		return this.getMiscellaneousDataOfLoggedHacker(miscellaneousDataId).getAttachments();
+	public List<String> getAttachmentsOfMiscellaneousDataOfLoggedRookie(int miscellaneousDataId) {
+		return this.getMiscellaneousDataOfLoggedRookie(miscellaneousDataId).getAttachments();
 	}
 }
