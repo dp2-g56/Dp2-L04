@@ -19,11 +19,30 @@ import domain.Sponsorship;
 public class SponsorshipService {
 
 	@Autowired
-	ProviderService			providerService;
+	ProviderService providerService;
 
 	@Autowired
-	SponsorshipRepository	sponsorshipRepository;
+	SponsorshipRepository sponsorshipRepository;
 
+	public List<Sponsorship> findAll() {
+		return this.sponsorshipRepository.findAll();
+	}
+
+	public Sponsorship save(Sponsorship h) {
+		return this.sponsorshipRepository.save(h);
+	}
+
+	public void delete(Sponsorship h) {
+		this.sponsorshipRepository.delete(h);
+	}
+
+	public Sponsorship findOne(int id) {
+		return this.sponsorshipRepository.findOne(id);
+	}
+
+	public void flush() {
+		this.sponsorshipRepository.flush();
+	}
 
 	public void deleteAllSponsorships() {
 
@@ -59,5 +78,9 @@ public class SponsorshipService {
 		 */
 
 		this.sponsorshipRepository.deleteInBatch(sponsorships);
+	}
+
+	public List<Sponsorship> findProviderSponsorships(Provider provider) {
+		return provider.getSponsorships();
 	}
 }

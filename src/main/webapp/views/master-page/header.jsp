@@ -60,6 +60,7 @@
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="item/provider/list.do"><spring:message code="master.page.provider.items" /></a></li>
+					<li><a href="sponsorship/provider/list.do"><spring:message code="master.page.provider.sponsorship" /></a></li>
 				</ul>
 			</li>
 		</security:authorize>
