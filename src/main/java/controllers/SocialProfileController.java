@@ -23,22 +23,22 @@ import services.AdminService;
 import services.AuditorService;
 import services.CompanyService;
 import services.ConfigurationService;
-import services.RookieService;
 import services.ProviderService;
+import services.RookieService;
 import services.SocialProfileService;
 import domain.Actor;
 import domain.Admin;
 import domain.Auditor;
 import domain.Company;
 import domain.Configuration;
-import domain.Rookie;
 import domain.Provider;
+import domain.Rookie;
 import domain.SocialProfile;
 import forms.FormObjectEditAdmin;
 import forms.FormObjectEditAuditor;
 import forms.FormObjectEditCompany;
-import forms.FormObjectEditRookie;
 import forms.FormObjectEditProvider;
+import forms.FormObjectEditRookie;
 
 @Controller
 @RequestMapping("/authenticated")
@@ -79,16 +79,21 @@ public class SocialProfileController extends AbstractController {
 		userAccount = LoginService.getPrincipal();
 		Actor logguedActor = new Actor();
 		List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
-
+		List<Authority> authorities = (List<Authority>) userAccount.getAuthorities();
+		Boolean score = false;
 		result = new ModelAndView("authenticated/showProfile");
 
 		logguedActor = this.actorService.getActorByUsername(userAccount.getUsername());
 		socialProfiles = logguedActor.getSocialProfiles();
 		Boolean trueValue = true;
 
+		if (authorities.get(0).toString().equals("COMPANY"))
+			score = true;
+
 		result.addObject("socialProfiles", socialProfiles);
 		result.addObject("actor", logguedActor);
 		result.addObject("trueValue", trueValue);
+		result.addObject("score", score);
 		result.addObject("requestURI", "authenticated/showProfile.do");
 
 		return result;

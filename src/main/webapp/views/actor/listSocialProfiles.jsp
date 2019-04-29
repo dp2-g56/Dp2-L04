@@ -44,6 +44,13 @@
 			<td><spring:message code="actor.address" /></td>
 			<td><jstl:out value="${actor.address}" /></td>
 		</tr>
+		
+		<jstl:if test="${score}">
+		<tr>
+			<td><spring:message code="actor.score" /></td>
+			<td><jstl:out value="${actor.score}" /></td>
+		</tr>
+	</jstl:if> 
 
 
 
