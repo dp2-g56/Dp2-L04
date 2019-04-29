@@ -149,6 +149,10 @@ public class ItemService {
 		this.delete(item);
 
 	}
+	
+	public List<Item> getItemsFromProvider(int providerId){
+		return this.itemRepository.getItemsFromProvider(providerId);
+	}
 
 	private Item getItemOfProvider(int itemId, int providerId) {
 		return this.itemRepository.getItemOfProvider(itemId, providerId);
@@ -166,6 +170,10 @@ public class ItemService {
 
 	public void deleteInBatch(Iterable<Item> lista) {
 		this.itemRepository.deleteInBatch(lista);
+	}
+	
+	public Provider geProviderByItem(int itemId) {
+		return this.itemRepository.getProviderByItem(itemId);
 	}
 
 	public Boolean isUrl(String url) {

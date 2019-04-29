@@ -89,9 +89,15 @@
 		<put-attribute name="body" value="/views/anonymous/showAuditsPosition.jsp" />
 	</definition>
 
+	<definition name="anonymous/provider/list" extends="master.page">	
+		<put-attribute name="title" value="Proovedores" />
+		<put-attribute name="body" value="/views/anonymous/listOfProvider.jsp" />
+	</definition>
 	
-	
-	
+	<definition name="anonymous/item/list" extends="master.page">	
+		<put-attribute name="title" value="Articulos" />
+		<put-attribute name="body" value="/views/anonymous/listOfItems.jsp" />
+	</definition>
 	
 	
 </tiles-definitions>
