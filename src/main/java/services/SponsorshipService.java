@@ -23,7 +23,26 @@ public class SponsorshipService {
 
 	@Autowired
 	SponsorshipRepository	sponsorshipRepository;
+	
+	public List<Sponsorship> findAll() {
+		return this.sponsorshipRepository.findAll();
+	}
 
+	public Sponsorship save(Sponsorship h) {
+		return this.sponsorshipRepository.save(h);
+	}
+
+	public void delete(Sponsorship h) {
+		this.sponsorshipRepository.delete(h);
+	}
+
+	public Sponsorship findOne(int id) {
+		return this.sponsorshipRepository.findOne(id);
+	}
+
+	public void flush() {
+		this.sponsorshipRepository.flush();
+	}
 
 	public void deleteAllSponsorships() {
 
