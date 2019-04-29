@@ -51,4 +51,15 @@ public class Company extends Actor {
 		this.positions = positions;
 	}
 
+	@NotNull
+	@Min(-1)
+	@Max(1)
+	public int getScore() {
+		return this.score;
+	}
+
+	public void setScore(final int score) {
+		this.score = score;
+	}
+
 }

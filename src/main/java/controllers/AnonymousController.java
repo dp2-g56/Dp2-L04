@@ -20,18 +20,18 @@ import services.ApplicationService;
 import services.AuditService;
 import services.CompanyService;
 import services.ConfigurationService;
-import services.RookieService;
 import services.PositionService;
 import services.ProblemService;
+import services.RookieService;
 import domain.Actor;
 import domain.Application;
 import domain.Audit;
 import domain.Company;
 import domain.Configuration;
 import domain.Curriculum;
-import domain.Rookie;
 import domain.Position;
 import domain.Problem;
+import domain.Rookie;
 import domain.SocialProfile;
 import forms.FormObjectCompany;
 import forms.FormObjectRookie;
@@ -375,6 +375,8 @@ public class AnonymousController extends AbstractController {
 		Company company = this.companyService.companyOfRespectivePosition(positionId);
 		Actor actor = this.positionService.getActorWithPosition(positionId);
 
+		Boolean score = true;
+
 		Actor loggedActor = this.actorService.loggedActor();
 		Boolean sameActorLogged;
 		socialProfiles = actor.getSocialProfiles();
@@ -389,6 +391,7 @@ public class AnonymousController extends AbstractController {
 		result = new ModelAndView("anonymous/company/listOne");
 		result.addObject("actor", company);
 		result.addObject("socialProfiles", socialProfiles);
+		result.addObject("score", score);
 		result.addObject("publicValue", publicValue);
 		result.addObject("sameActorLogged", sameActorLogged);
 		result.addObject("requestURI", "anonymous/company/listOne.do");
