@@ -24,6 +24,7 @@ import services.AuditorService;
 import services.CompanyService;
 import services.ConfigurationService;
 import services.HackerService;
+import services.ProviderService;
 import services.SocialProfileService;
 import domain.Actor;
 import domain.Admin;
@@ -31,11 +32,13 @@ import domain.Auditor;
 import domain.Company;
 import domain.Configuration;
 import domain.Hacker;
+import domain.Provider;
 import domain.SocialProfile;
 import forms.FormObjectEditAdmin;
 import forms.FormObjectEditAuditor;
 import forms.FormObjectEditCompany;
 import forms.FormObjectEditHacker;
+import forms.FormObjectEditProvider;
 
 @Controller
 @RequestMapping("/authenticated")
@@ -61,6 +64,9 @@ public class SocialProfileController extends AbstractController {
 
 	@Autowired
 	private AuditorService			auditorService;
+
+	@Autowired
+	private ProviderService			providerService;
 
 
 	// -------------------------------------------------------------------
@@ -214,6 +220,12 @@ public class SocialProfileController extends AbstractController {
 			FormObjectEditAuditor formAuditor = this.auditorService.getFormObjectEditAuditor(auditor);
 			formAuditor.setId(auditor.getId());
 			result = this.createEditModelAndView(formAuditor);
+		} else if (authorities.get(0).toString().equals("PROVIDER")) {
+			Provider provider = this.providerService.loggedProvider();
+			Assert.notNull(provider);
+			FormObjectEditProvider formProvider = this.providerService.getFormObjectEditProvider(provider);
+			formProvider.setId(provider.getId());
+			result = this.createEditModelAndView(formProvider);
 		}
 
 		if (result == null)
@@ -288,7 +300,7 @@ public class SocialProfileController extends AbstractController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/hacker/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView saveHacker(@Valid FormObjectEditHacker hackerForm, BindingResult binding) {
 		ModelAndView result;
@@ -344,6 +356,36 @@ public class SocialProfileController extends AbstractController {
 				result = new ModelAndView("redirect:/authenticated/showProfile.do");
 			} catch (Throwable oops) {
 				result = this.createEditModelAndView(auditorForm, "socialProfile.commit.error");
+				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
+			}
+
+		return result;
+	}
+
+	@RequestMapping(value = "/provider/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView saveProvider(@Valid FormObjectEditProvider providerForm, BindingResult binding) {
+		ModelAndView result;
+
+		Provider provider = this.providerService.reconstructAuditorPersonalData(providerForm, binding);
+		Configuration configuration = this.configurationService.getConfiguration();
+
+		String prefix = configuration.getSpainTelephoneCode();
+
+		if (binding.hasErrors()) {
+			result = this.createEditModelAndView(providerForm);
+			result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
+		} else
+			try {
+				if (provider.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$") || provider.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+					this.providerService.save(provider);
+				else if (provider.getPhone().matches("([0-9]{4,})$")) {
+					provider.setPhone(prefix + provider.getPhone());
+					this.providerService.save(provider);
+				} else
+					this.providerService.save(provider);
+				result = new ModelAndView("redirect:/authenticated/showProfile.do");
+			} catch (Throwable oops) {
+				result = this.createEditModelAndView(providerForm, "socialProfile.commit.error");
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
 			}
 
@@ -452,6 +494,26 @@ public class SocialProfileController extends AbstractController {
 
 		result = new ModelAndView("authenticated/edit");
 		result.addObject("formObjectEditAuditor", auditor);
+		result.addObject("message", messageCode);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(FormObjectEditProvider provider) {
+
+		ModelAndView result;
+
+		result = this.createEditModelAndView(provider, null);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(FormObjectEditProvider provider, String messageCode) {
+
+		ModelAndView result;
+
+		result = new ModelAndView("authenticated/edit");
+		result.addObject("formObjectEditProvider", provider);
 		result.addObject("message", messageCode);
 
 		return result;
