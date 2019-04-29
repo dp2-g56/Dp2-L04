@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import domain.Curriculum;
-import domain.Hacker;
+import domain.Rookie;
 import domain.PersonalData;
 import domain.PositionData;
 import repositories.PositionDataRepository;
@@ -22,7 +22,7 @@ public class PositionDataService {
 	@Autowired
 	private PositionDataRepository positionDataRepository;
 	@Autowired
-	private HackerService hackerService;
+	private RookieService rookieService;
 	@Autowired
 	private CurriculumService curriculumService;
 	
@@ -34,18 +34,18 @@ public class PositionDataService {
 		this.positionDataRepository.deleteInBatch(entities);
 	}
 
-	public void addOrUpdatePositionDataAsHacker(PositionData positionData, int curriculumId) {
-		Hacker hacker = this.hackerService.securityAndHacker();
+	public void addOrUpdatePositionDataAsRookie(PositionData positionData, int curriculumId) {
+		Rookie rookie = this.rookieService.securityAndRookie();
 		
 		if(positionData.getId()==0) {
-			Curriculum curriculum = this.curriculumService.getCurriculumOfHacker(hacker.getId(), curriculumId);
+			Curriculum curriculum = this.curriculumService.getCurriculumOfRookie(rookie.getId(), curriculumId);
 			Assert.notNull(curriculum);
 			List<PositionData> positionsData = curriculum.getPositionData();
 			positionsData.add(positionData);
 			this.curriculumService.save(curriculum);
 			this.curriculumService.flush();
 		} else {
-			Assert.notNull(this.positionDataRepository.getPositionDataOfHacker(hacker.getId(), positionData.getId()));
+			Assert.notNull(this.positionDataRepository.getPositionDataOfRookie(rookie.getId(), positionData.getId()));
 			this.save(positionData);
 			this.flush();
 		}
@@ -59,9 +59,9 @@ public class PositionDataService {
 		return this.positionDataRepository.findOne(positionDataId);
 	}
 
-	public void deletePositionDataAsHacker(int positionDataId) {
-		Hacker hacker = this.hackerService.securityAndHacker();
-		Assert.notNull(this.positionDataRepository.getPositionDataOfHacker(hacker.getId(), positionDataId));
+	public void deletePositionDataAsRookie(int positionDataId) {
+		Rookie rookie = this.rookieService.securityAndRookie();
+		Assert.notNull(this.positionDataRepository.getPositionDataOfRookie(rookie.getId(), positionDataId));
 		PositionData positionData = this.findOne(positionDataId);
 		Curriculum curriculum = this.curriculumService.getCurriculumOfPositionData(positionDataId);
 		List<PositionData> positionsData = curriculum.getPositionData();

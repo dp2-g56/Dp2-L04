@@ -45,7 +45,7 @@ function isEmpty(obj) {
  
 }
    </script>
-<form:form modelAttribute="formObjectHacker" action="anonymous/hacker/create.do">
+<form:form modelAttribute="formObjectRookie" action="anonymous/rookie/create.do">
 
 	<!-- ELECCIÓN DEL FORMATO DE LA FECHA -->
 	<jstl:if test="${locale =='EN'}">

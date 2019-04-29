@@ -23,7 +23,7 @@ import domain.Application;
 import domain.Company;
 import domain.CreditCard;
 import domain.Curriculum;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Message;
 import domain.Position;
 import domain.Problem;
@@ -417,11 +417,11 @@ public class CompanyService {
 
 		List<Application> applications = this.companyRepository.applicationsOfCompany(companyId);
 
-		List<Hacker> hackers = this.companyRepository.hackersOfCompany(companyId);
+		List<Rookie> rookies = this.companyRepository.rookiesOfCompany(companyId);
 
 		List<Curriculum> curriculums = this.companyRepository.curriculumsOfApplicationssOfCompany(companyId);
 
-		for (Hacker h : hackers) {
+		for (Rookie h : rookies) {
 			h.getApplications().removeAll(applications);
 		}
 

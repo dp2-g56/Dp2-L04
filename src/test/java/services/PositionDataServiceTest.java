@@ -31,18 +31,18 @@ public class PositionDataServiceTest extends AbstractTest {
 	@Autowired
 	private CurriculumService curriculumService;
 	@Autowired
-	private HackerService hackerService;
+	private RookieService rookieService;
 	@Autowired
 	private PositionDataService positionDataService;
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes deleting them.
 	 * 
 	 * Ratio of data coverage: 100%
-	 *  - Access as a hacker or not.
-	 *  - Delete a postion data that does belong to the hacker logged in or not.
+	 *  - Access as a rookie or not.
+	 *  - Delete a postion data that does belong to the rookie logged in or not.
 	 * 
 	 **/
 	@Test
@@ -51,13 +51,13 @@ public class PositionDataServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is deleting one of his position data
+				 * POSITIVE TEST: Rookie is deleting one of his position data
 				 **/
-				{ "hacker1", super.getEntityId("positionData1"), null},
+				{ "rookie1", super.getEntityId("positionData1"), null},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to delete a position data from other hacker
+				 * NEGATIVE TEST: Rookie is trying to delete a position data from other rookie
 				 **/
-				{ "hacker2", super.getEntityId("positionData1"), IllegalArgumentException.class},
+				{ "rookie2", super.getEntityId("positionData1"), IllegalArgumentException.class},
 				/**
 				 * NEGATIVE TEST: Another user is trying to delete a position data
 				 **/
@@ -69,15 +69,15 @@ public class PositionDataServiceTest extends AbstractTest {
 
 	}
 
-	private void deletePositionDataTemplate(String hacker, int positionDataId, Class<?> expected) {
+	private void deletePositionDataTemplate(String rookie, int positionDataId, Class<?> expected) {
 		
 		Class<?> caught = null;
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.positionDataService.deletePositionDataAsHacker(positionDataId);
+			this.positionDataService.deletePositionDataAsRookie(positionDataId);
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {
@@ -91,13 +91,13 @@ public class PositionDataServiceTest extends AbstractTest {
 	}
 	
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes creating them.
 	 * 
 	 * Ratio of data coverage: 4/7 = 57.14%
-	 * - Access as a hacker or not.
-	 * - Create a position data in a curriculum that does belongs to the hacker logged in or not.
+	 * - Access as a rookie or not.
+	 * - Create a position data in a curriculum that does belongs to the rookie logged in or not.
 	 * - 4 attributes with domain restrictions.
 	 * 
 	 **/
@@ -114,28 +114,28 @@ public class PositionDataServiceTest extends AbstractTest {
 		Object testingData[][] = {
 
 				/**
-				 * POSITIVE TEST: Hacker is creating a position data
+				 * POSITIVE TEST: Rookie is creating a position data
 				 **/
-				{ "hacker1", super.getEntityId("curriculum1"), "Title", "Description", fecha1, fecha2, null},
+				{ "rookie1", super.getEntityId("curriculum1"), "Title", "Description", fecha1, fecha2, null},
 				/**
 				 * NEGATIVE TEST: Another user is trying to create a position data
 				 **/
 				{ "company", super.getEntityId("curriculum1"), "Title", "Description", fecha1, fecha2, IllegalArgumentException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to create a position data in a curriculum of other hacker
+				 * NEGATIVE TEST: Rookie is trying to create a position data in a curriculum of other rookie
 				 **/
-				{ "hacker2", super.getEntityId("curriculum1"), "Title", "Description", fecha1, fecha2, IllegalArgumentException.class},
+				{ "rookie2", super.getEntityId("curriculum1"), "Title", "Description", fecha1, fecha2, IllegalArgumentException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is creating a position data with a title in blank
+				 * NEGATIVE TEST: Rookie is creating a position data with a title in blank
 				 **/
-				{ "hacker1", super.getEntityId("curriculum1"), "", "Description", fecha1, fecha2, ConstraintViolationException.class}
+				{ "rookie1", super.getEntityId("curriculum1"), "", "Description", fecha1, fecha2, ConstraintViolationException.class}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			this.createPositionDataTemplate((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Date) testingData[i][4], (Date) testingData[i][5], (Class<?>) testingData[i][6]);
 	}
 
-	private void createPositionDataTemplate(String hacker, Integer curriculumId, String title, String description, Date startDate, Date endDate, Class<?> expected) {
+	private void createPositionDataTemplate(String rookie, Integer curriculumId, String title, String description, Date startDate, Date endDate, Class<?> expected) {
 		
 		PositionData positionData = new PositionData();
 		positionData.setTitle(title);
@@ -147,9 +147,9 @@ public class PositionDataServiceTest extends AbstractTest {
 
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.positionDataService.addOrUpdatePositionDataAsHacker(positionData, curriculumId);
+			this.positionDataService.addOrUpdatePositionDataAsRookie(positionData, curriculumId);
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {
@@ -163,13 +163,13 @@ public class PositionDataServiceTest extends AbstractTest {
 	}
 
 	/**
-	 * R17. An actor who is authenticated as a hacker must be able to:
+	 * R17. An actor who is authenticated as a rookie must be able to:
 	 *
 	 * 1. Manage his or her curricula, which includes updating them.
 	 * 
 	 * Ratio of data coverage: 4/7 = 57.14%
-	 * - Access as a hacker or not.
-	 * - Edit a position data that does belongs to the hacker logged in or not.
+	 * - Access as a rookie or not.
+	 * - Edit a position data that does belongs to the rookie logged in or not.
 	 * - 4 attributes with domain restrictions.
 	 * 
 	 **/
@@ -186,28 +186,28 @@ public class PositionDataServiceTest extends AbstractTest {
 		Object testingData[][] = {
 	
 				/**
-				 * POSITIVE TEST: Hacker is updating a position data
+				 * POSITIVE TEST: Rookie is updating a position data
 				 **/
-				{ "hacker1", super.getEntityId("positionData1"), super.getEntityId("curriculum1"), "Title", "Description", fecha1, fecha2, null},
+				{ "rookie1", super.getEntityId("positionData1"), super.getEntityId("curriculum1"), "Title", "Description", fecha1, fecha2, null},
 				/**
 				 * NEGATIVE TEST: Another user is trying to update a position data
 				 **/
 				{ "company", super.getEntityId("positionData1"), super.getEntityId("curriculum1"), "Title", "Description", fecha1, fecha2, IllegalArgumentException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is trying to update a position data of other hacker
+				 * NEGATIVE TEST: Rookie is trying to update a position data of other rookie
 				 **/
-				{ "hacker2", super.getEntityId("positionData1"), super.getEntityId("curriculum3"), "Title", "Description", fecha1, fecha2, IllegalArgumentException.class},
+				{ "rookie2", super.getEntityId("positionData1"), super.getEntityId("curriculum3"), "Title", "Description", fecha1, fecha2, IllegalArgumentException.class},
 				/**
-				 * NEGATIVE TEST: Hacker is updating a position data with a title in blank
+				 * NEGATIVE TEST: Rookie is updating a position data with a title in blank
 				 **/
-				{ "hacker1", super.getEntityId("positionData1"), super.getEntityId("curriculum1"), "", "Description", fecha1, fecha2, ConstraintViolationException.class},
+				{ "rookie1", super.getEntityId("positionData1"), super.getEntityId("curriculum1"), "", "Description", fecha1, fecha2, ConstraintViolationException.class},
 		};
 	
 		for (int i = 0; i < testingData.length; i++)
 			this.updatePositionDataTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Integer) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (Date) testingData[i][5], (Date) testingData[i][6], (Class<?>) testingData[i][7]);
 	}
 	
-	private void updatePositionDataTemplate(String hacker, Integer positionDataId, Integer curriculumId, String title, String description, Date startDate, Date endDate, Class<?> expected) {
+	private void updatePositionDataTemplate(String rookie, Integer positionDataId, Integer curriculumId, String title, String description, Date startDate, Date endDate, Class<?> expected) {
 		
 		PositionData positionData = this.positionDataService.findOne(positionDataId);
 		positionData.setTitle(title);
@@ -219,9 +219,9 @@ public class PositionDataServiceTest extends AbstractTest {
 	
 		try {
 			super.startTransaction();
-			super.authenticate(hacker);
+			super.authenticate(rookie);
 			
-			this.positionDataService.addOrUpdatePositionDataAsHacker(positionData, curriculumId);
+			this.positionDataService.addOrUpdatePositionDataAsRookie(positionData, curriculumId);
 			
 			super.unauthenticate();
 		} catch (Throwable oops) {

@@ -25,7 +25,7 @@ import domain.Actor;
 import domain.Admin;
 import domain.Company;
 import domain.CreditCard;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Message;
 import domain.Position;
 import domain.SocialProfile;
@@ -262,10 +262,10 @@ public class AdminService {
 
 		List<Float> statistics = new ArrayList<Float>();
 
-		statistics.add(this.adminRepository.avgCurriculumPerHacker());
-		statistics.add(this.adminRepository.minCurriculumPerHacker());
-		statistics.add(this.adminRepository.maxCurriculumPerHacker());
-		statistics.add(this.adminRepository.stddevCurriculumPerHacker());
+		statistics.add(this.adminRepository.avgCurriculumPerRookie());
+		statistics.add(this.adminRepository.minCurriculumPerRookie());
+		statistics.add(this.adminRepository.maxCurriculumPerRookie());
+		statistics.add(this.adminRepository.stddevCurriculumPerRookie());
 
 		return statistics;
 	}
@@ -283,14 +283,14 @@ public class AdminService {
 
 	}
 
-	public List<Float> showStatisticsOfApplicationsPerHacker() {
+	public List<Float> showStatisticsOfApplicationsPerRookie() {
 
 		List<Float> statistics = new ArrayList<Float>();
 
-		statistics.add(this.adminRepository.avgApplicationsHacker());
-		statistics.add(this.adminRepository.minApplicationsHacker());
-		statistics.add(this.adminRepository.maxApplicationsHacker());
-		statistics.add(this.adminRepository.stddevApplicationsHacker());
+		statistics.add(this.adminRepository.avgApplicationsRookie());
+		statistics.add(this.adminRepository.minApplicationsRookie());
+		statistics.add(this.adminRepository.maxApplicationsRookie());
+		statistics.add(this.adminRepository.stddevApplicationsRookie());
 
 		return statistics;
 
@@ -313,8 +313,8 @@ public class AdminService {
 		return this.adminRepository.companiesMorePositions();
 	}
 
-	public List<Hacker> hackersMoreApplications() {
-		return this.adminRepository.hackersMoreApplications();
+	public List<Rookie> rookiesMoreApplications() {
+		return this.adminRepository.rookiesMoreApplications();
 	}
 
 	public List<Position> bestSalaryPositions() {

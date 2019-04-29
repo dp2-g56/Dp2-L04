@@ -93,23 +93,23 @@
 </table>
 <br />
 
-<spring:message code="statistics.statisticsApplicationsHacker" />	
+<spring:message code="statistics.statisticsApplicationsRookie" />	
 <table style="width: 100%">
 	<tr> 
 		<td><b><spring:message code="statistics.average" /></b></td> 
-		<td><jstl:out value="${statisticsApplicationsHacker.get(0)}" /> </td>
+		<td><jstl:out value="${statisticsApplicationsRookie.get(0)}" /> </td>
 	</tr>
 	<tr>
 		<td><b><spring:message code="statistics.minimum"/></b></td> 
-		<td><jstl:out value="${statisticsApplicationsHacker.get(1)}" /> </td>
+		<td><jstl:out value="${statisticsApplicationsRookie.get(1)}" /> </td>
 	</tr>
 	<tr>
 		<td><b><spring:message code="statistics.maximum"/></b></td> 
-		<td><jstl:out value="${statisticsApplicationsHacker.get(2)}" /> </td>
+		<td><jstl:out value="${statisticsApplicationsRookie.get(2)}" /> </td>
 	</tr>
 	<tr>
 		<td><b><spring:message code="statistics.standardDeviation"/></b></td> 
-		<td><jstl:out value="${statisticsApplicationsHacker.get(3)}" /> </td>
+		<td><jstl:out value="${statisticsApplicationsRookie.get(3)}" /> </td>
 	</tr>
 </table>
 <br />
@@ -149,11 +149,11 @@
 
 <table style="width: 100%">
 		<tr>
-			<td><b><spring:message code="statistics.hackersMoreApplications" />:</b></td>
+			<td><b><spring:message code="statistics.rookiesMoreApplications" />:</b></td>
 		</tr>
-		<jstl:forEach items="${hackersMoreApplications}" var="hacker">
+		<jstl:forEach items="${rookiesMoreApplications}" var="rookie">
 			<tr>
-				<td><jstl:out value="${hacker.name } ${hacker.surname}" /></td>
+				<td><jstl:out value="${rookie.name } ${rookie.surname}" /></td>
 			</tr>
 		</jstl:forEach>
 </table>

@@ -15,13 +15,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import repositories.CompanyRepository;
 import repositories.FinderRepository;
-import repositories.HackerRepository;
+import repositories.RookieRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
 import domain.Company;
 import domain.Finder;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Message;
 import domain.Position;
 import domain.Problem;
@@ -35,7 +35,7 @@ public class FinderService {
 	@Autowired
 	private ConfigurationService configurationService;
 	@Autowired
-	private HackerService hackerService;
+	private RookieService rookieService;
 	@Autowired
 	private PositionService positionService;
 	@Autowired
@@ -44,11 +44,11 @@ public class FinderService {
 	private Validator validator;
 
 	public List<Position> finderList(Finder finder) {
-		Hacker hacker = this.hackerService.securityAndHacker();
+		Rookie rookie = this.rookieService.securityAndRookie();
 		
 		Assert.notNull(finder);
 		Assert.isTrue(finder.getId()>0);
-		Assert.isTrue(hacker.getFinder().getId() == finder.getId());
+		Assert.isTrue(rookie.getFinder().getId() == finder.getId());
 		
 		List<Position> positions = new ArrayList<>();
 		List<Position> finderPositions = finder.getPositions();
@@ -85,11 +85,11 @@ public class FinderService {
 	}
 
 	public List<Position> getFinalPositionsAndCleanFinder(Finder finder) {
-		Hacker hacker = this.hackerService.securityAndHacker();
+		Rookie rookie = this.rookieService.securityAndRookie();
 		
 		Assert.notNull(finder);
 		Assert.isTrue(finder.getId()>0);
-		Assert.isTrue(hacker.getFinder().getId() == finder.getId());
+		Assert.isTrue(rookie.getFinder().getId() == finder.getId());
 		
 		List<Position> positions = this.positionService.getFinalPositions();
 		
@@ -132,11 +132,11 @@ public class FinderService {
 	}
 
 	public void filterPositionsByFinder(Finder finder) {
-		Hacker hacker = this.hackerService.securityAndHacker();
+		Rookie rookie = this.rookieService.securityAndRookie();
 		
 		Assert.notNull(finder);
 		Assert.isTrue(finder.getId()>0);
-		Assert.isTrue(hacker.getFinder().getId() == finder.getId());
+		Assert.isTrue(rookie.getFinder().getId() == finder.getId());
 		
 		List<Position> filter = new ArrayList<>();
 		List<Position> result = this.positionService.getFinalPositions();
@@ -171,8 +171,8 @@ public class FinderService {
 		finder.setPositions(result);
 		
 		Finder finderRes = this.finderRepository.save(finder);
-		hacker.setFinder(finderRes);
-		this.hackerService.save(hacker);
+		rookie.setFinder(finderRes);
+		this.rookieService.save(rookie);
 	}
 
 	public List<Finder> findAll() {
@@ -274,15 +274,15 @@ public class FinderService {
 		String requiredProfile = "%" + position.getRequiredProfile() + "%";
 		String ticker = "%" + position.getTicker() + "%";
 
-		List<Hacker> hackers = this.finderRepository.getHackersThatFinderKeyWordIsContaine(rs, rt, title, desription, requiredProfile, ticker);
+		List<Rookie> rookies = this.finderRepository.getRookiesThatFinderKeyWordIsContaine(rs, rt, title, desription, requiredProfile, ticker);
 
 		Message message2 = this.messageService.create("Nueva oferta / New offer", "Una nueva oferta concuerda con tu busqueda / A new offer matches your finder criteria", "STATUS, NOTIFICATION", "NOTIFICATION", "");
 
-		for (Hacker a : hackers) {
+		for (Rookie a : rookies) {
 
 			message2.setReceiver(a.getUserAccount().getUsername());
 			a.getMessages().add(message2);
-			this.hackerService.save(a);
+			this.rookieService.save(a);
 
 		}
 

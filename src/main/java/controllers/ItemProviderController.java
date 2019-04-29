@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import domain.Curriculum;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Item;
 import domain.PersonalData;
 import forms.FormObjectCurriculumPersonalData;
 import forms.FormObjectItem;
 import services.CurriculumService;
-import services.HackerService;
+import services.RookieService;
 import services.ItemService;
 import services.PersonalDataService;
 import services.ProviderService;

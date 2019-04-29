@@ -13,7 +13,7 @@ import org.springframework.validation.BindingResult;
 import repositories.CurriculumRepository;
 import domain.Curriculum;
 import domain.EducationData;
-import domain.Hacker;
+import domain.Rookie;
 import domain.MiscellaneousData;
 import domain.PersonalData;
 import domain.PositionData;
@@ -39,7 +39,7 @@ public class CurriculumService {
 	private EducationDataService educationDataService;
 
 	@Autowired
-	private HackerService hackerService;
+	private RookieService rookieService;
 
 	public Curriculum findOne(int id) {
 		return this.curriculumRepository.findOne(id);
@@ -106,24 +106,24 @@ public class CurriculumService {
 		return saved;
 	}
 
-	public List<Curriculum> getCurriculumsOfHacker(int hackerId) {
-		return this.curriculumRepository.getCurriculumsOfHacker(hackerId);
+	public List<Curriculum> getCurriculumsOfRookie(int rookieId) {
+		return this.curriculumRepository.getCurriculumsOfRookie(rookieId);
 	}
 
-	public List<Curriculum> getCurriculumsOfLoggedHacker() {
-		Hacker hacker = this.hackerService.securityAndHacker();
-		List<Curriculum> curriculums = this.getCurriculumsOfHacker(hacker.getId());
+	public List<Curriculum> getCurriculumsOfLoggedRookie() {
+		Rookie rookie = this.rookieService.securityAndRookie();
+		List<Curriculum> curriculums = this.getCurriculumsOfRookie(rookie.getId());
 
 		return curriculums;
 	}
 
-	public Curriculum getCurriculumOfHacker(int hackerId, int curriculumId) {
-		return this.curriculumRepository.getCurriculumOfHacker(hackerId, curriculumId);
+	public Curriculum getCurriculumOfRookie(int rookieId, int curriculumId) {
+		return this.curriculumRepository.getCurriculumOfRookie(rookieId, curriculumId);
 	}
 
-	public Curriculum getCurriculumOfLoggedHacker(int curriculumId) {
-		Hacker hacker = this.hackerService.securityAndHacker();
-		Curriculum curriculum = this.getCurriculumOfHacker(hacker.getId(), curriculumId);
+	public Curriculum getCurriculumOfLoggedRookie(int curriculumId) {
+		Rookie rookie = this.rookieService.securityAndRookie();
+		Curriculum curriculum = this.getCurriculumOfRookie(rookie.getId(), curriculumId);
 		Assert.notNull(curriculum);
 		return curriculum;
 	}
@@ -152,17 +152,17 @@ public class CurriculumService {
 		this.curriculumRepository.delete(curriculum);
 	}
 
-	public void deleteCurriculumAsHacker(int curriculumId) {
-		Hacker hacker = this.hackerService.securityAndHacker();
+	public void deleteCurriculumAsRookie(int curriculumId) {
+		Rookie rookie = this.rookieService.securityAndRookie();
 
-		Curriculum curriculum = this.getCurriculumOfHacker(hacker.getId(), curriculumId);
+		Curriculum curriculum = this.getCurriculumOfRookie(rookie.getId(), curriculumId);
 		Assert.notNull(curriculum);
 
-		List<Curriculum> curriculums = hacker.getCurriculums();
+		List<Curriculum> curriculums = rookie.getCurriculums();
 
 		curriculums.remove(curriculum);
-		hacker.setCurriculums(curriculums);
-		this.hackerService.save(hacker);
+		rookie.setCurriculums(curriculums);
+		this.rookieService.save(rookie);
 
 		this.delete(curriculum);
 	}
@@ -185,10 +185,10 @@ public class CurriculumService {
 
 	public String curriculumToStringExport() {
 		String res = "";
-		Hacker hacker = this.hackerService.loggedHacker();
+		Rookie rookie = this.rookieService.loggedRookie();
 		List<Curriculum> curriculums = new ArrayList<Curriculum>();
 		StringBuilder sb = new StringBuilder();
-		curriculums = hacker.getCurriculums();
+		curriculums = rookie.getCurriculums();
 
 		/*
 		 * + c.getTitle() + " EducationalData: " + c.getEducationData().toString() +
@@ -211,18 +211,18 @@ public class CurriculumService {
 					.append(System.getProperty("line.separator"));
 			sb.append(System.getProperty("line.separator"));
 
-			sb.append("Titles of Positions data: " + this.curriculumRepository.getTitlesOfPositionDatas(hacker))
+			sb.append("Titles of Positions data: " + this.curriculumRepository.getTitlesOfPositionDatas(rookie))
 					.append(System.getProperty("line.separator"));
 
 			sb.append(System.getProperty("line.separator"));
 
-			sb.append("Degrees of Educations data: " + this.curriculumRepository.getDegreesOfEducationalData(hacker))
+			sb.append("Degrees of Educations data: " + this.curriculumRepository.getDegreesOfEducationalData(rookie))
 					.append(System.getProperty("line.separator"));
 
 			sb.append(System.getProperty("line.separator"));
 
 			sb.append("Free texts of Miscellaneous data: "
-					+ this.curriculumRepository.getFreeTestOfMiscellaneousData(hacker))
+					+ this.curriculumRepository.getFreeTestOfMiscellaneousData(rookie))
 					.append(System.getProperty("line.separator"));
 
 			sb.append(System.getProperty("line.separator"));

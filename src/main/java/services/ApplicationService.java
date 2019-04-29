@@ -22,7 +22,7 @@ import domain.Actor;
 import domain.Application;
 import domain.Company;
 import domain.Curriculum;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Position;
 import domain.Problem;
 import domain.Status;
@@ -38,7 +38,7 @@ public class ApplicationService {
 	private ProblemService problemService;
 
 	@Autowired
-	private HackerService hackerService;
+	private RookieService rookieService;
 
 	@Autowired
 	private Validator validator;
@@ -56,22 +56,22 @@ public class ApplicationService {
 	private MessageService messageService;
 
 	public List<Application> findAll() {
-		Hacker hacker = this.hackerService.loggedHacker();
+		Rookie rookie = this.rookieService.loggedRookie();
 		List<Application> applications = new ArrayList<Application>();
 		applications = this.applicationRepository.findAll();
 		return applications;
 	}
 
-	public Collection<Application> getApplicationsByHacker(Hacker hacker) {
-		return this.applicationRepository.getApplicationsByHacker(hacker);
+	public Collection<Application> getApplicationsByRookie(Rookie rookie) {
+		return this.applicationRepository.getApplicationsByRookie(rookie);
 	}
 
-	public Collection<Application> getApplicationsByHackerAndStatus(Hacker hacker, Status status) {
-		return this.applicationRepository.getApplicationsByHackerAndStatus(hacker, status);
+	public Collection<Application> getApplicationsByRookieAndStatus(Rookie rookie, Status status) {
+		return this.applicationRepository.getApplicationsByRookieAndStatus(rookie, status);
 	}
 
 	public Application createApplication() {
-		this.hackerService.loggedAsHacker();
+		this.rookieService.loggedAsRookie();
 		Application application = new Application();
 
 		Date thisMoment = new Date();
@@ -118,7 +118,7 @@ public class ApplicationService {
 			result.setProblem(copy.getProblem());
 			result.setPosition(copy.getPosition());
 			result.setCurriculum(copy.getCurriculum());
-			result.setHacker(copy.getHacker());
+			result.setRookie(copy.getRookie());
 			result.setId(copy.getId());
 		}
 
@@ -204,34 +204,34 @@ public class ApplicationService {
 
 	public void deleteAllApplication() {
 
-		Hacker hacker = new Hacker();
+		Rookie rookie = new Rookie();
 
-		hacker = this.hackerService.loggedHacker();
+		rookie = this.rookieService.loggedRookie();
 
 		List<Application> applications = new ArrayList<Application>();
-		applications = hacker.getApplications();
+		applications = rookie.getApplications();
 
-		// Quitamos todos los applications de hacker
+		// Quitamos todos los applications de rookie
 
-		List<Curriculum> curriculumsToDelete = this.applicationRepository.getCopyCurriculumsOfApplications(hacker);
+		List<Curriculum> curriculumsToDelete = this.applicationRepository.getCopyCurriculumsOfApplications(rookie);
 
 		for (Application app : applications) {
 			Position pos = new Position();
 			pos = app.getPosition();
 			pos.getApplications().remove(app);
-			// app.setHacker(null);
+			// app.setRookie(null);
 			// app.setPosition(null);
 		}
 
-		// hacker.getApplications().removeAll(applications);
+		// rookie.getApplications().removeAll(applications);
 
 		/*
-		 * List<Position> allPositionsOfHacker = new ArrayList<Position>();
+		 * List<Position> allPositionsOfRookie = new ArrayList<Position>();
 		 * 
-		 * allPositionsOfHacker =
-		 * this.positionService.positionsOfApplicationOfHacker(hacker);
+		 * allPositionsOfRookie =
+		 * this.positionService.positionsOfApplicationOfRookie(rookie);
 		 * 
-		 * for (Position p : allPositionsOfHacker) if
+		 * for (Position p : allPositionsOfRookie) if
 		 * (Collections.disjoint(p.getApplications(), applications)) {
 		 * 
 		 * }

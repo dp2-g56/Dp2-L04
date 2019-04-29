@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import domain.Admin;
 import domain.Company;
-import domain.Hacker;
+import domain.Rookie;
 import domain.Position;
 
 @Repository
@@ -20,19 +20,19 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
 	public Admin getAdminByUsername(String username);
 
 	//The minimum, the maximum, the average, and the standard deviation of the
-	//number of curricula per hacker.
+	//number of curricula per rookie.
 
-	@Query("select max(h.curriculums.size) from Hacker h")
-	public Float maxCurriculumPerHacker();
+	@Query("select max(h.curriculums.size) from Rookie h")
+	public Float maxCurriculumPerRookie();
 
-	@Query("select min(h.curriculums.size) from Hacker h")
-	public Float minCurriculumPerHacker();
+	@Query("select min(h.curriculums.size) from Rookie h")
+	public Float minCurriculumPerRookie();
 
-	@Query("select avg(h.curriculums.size) from Hacker h")
-	public Float avgCurriculumPerHacker();
+	@Query("select avg(h.curriculums.size) from Rookie h")
+	public Float avgCurriculumPerRookie();
 
-	@Query("select stddev(h.curriculums.size) from Hacker h")
-	public Float stddevCurriculumPerHacker();
+	@Query("select stddev(h.curriculums.size) from Rookie h")
+	public Float stddevCurriculumPerRookie();
 
 	/*
 	 * The minimum, the maximum, the average, and the standard deviation of the
@@ -76,20 +76,20 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
 
 	/*
 	 * The minimum, the maximum, the average, and the standard deviation of the
-	 * number of applications per hacker.
+	 * number of applications per rookie.
 	 */
 
-	@Query("select min(a.applications.size) from Hacker a")
-	public Float minApplicationsHacker();
+	@Query("select min(a.applications.size) from Rookie a")
+	public Float minApplicationsRookie();
 
-	@Query("select max(a.applications.size) from Hacker a")
-	public Float maxApplicationsHacker();
+	@Query("select max(a.applications.size) from Rookie a")
+	public Float maxApplicationsRookie();
 
-	@Query("select avg(a.applications.size) from Hacker a")
-	public Float avgApplicationsHacker();
+	@Query("select avg(a.applications.size) from Rookie a")
+	public Float avgApplicationsRookie();
 
-	@Query("select stddev(a.applications.size) from Hacker a")
-	public Float stddevApplicationsHacker();
+	@Query("select stddev(a.applications.size) from Rookie a")
+	public Float stddevApplicationsRookie();
 
 	/*
 	 * Companies that have offered more positions.
@@ -99,11 +99,11 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
 	public List<Company> companiesMorePositions();
 
 	/*
-	 * Hackers who have made more applications.
+	 * Rookies who have made more applications.
 	 */
 
-	@Query("select b from Hacker b where b.applications.size = (select max(a.applications.size) from Hacker a)")
-	public List<Hacker> hackersMoreApplications();
+	@Query("select b from Rookie b where b.applications.size = (select max(a.applications.size) from Rookie a)")
+	public List<Rookie> rookiesMoreApplications();
 
 	/*
 	 * The minimum, the maximum, the average, and the standard deviation of the

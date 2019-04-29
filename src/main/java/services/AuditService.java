@@ -113,25 +113,25 @@ public class AuditService {
 		List<Audit> audits = new ArrayList<Audit>();
 		audits = auditor.getAudits();
 
-		// Quitamos todos los applications de hacker
+		// Quitamos todos los applications de rookie
 
 		for (Audit add : audits) {
 			Position pos = new Position();
 			pos = add.getPosition();
 			pos.getApplications().remove(add);
-			// app.setHacker(null);
+			// app.setRookie(null);
 			// app.setPosition(null);
 		}
 
-		// hacker.getApplications().removeAll(applications);
+		// rookie.getApplications().removeAll(applications);
 
 		/*
-		 * List<Position> allPositionsOfHacker = new ArrayList<Position>();
+		 * List<Position> allPositionsOfRookie = new ArrayList<Position>();
 		 * 
-		 * allPositionsOfHacker =
-		 * this.positionService.positionsOfApplicationOfHacker(hacker);
+		 * allPositionsOfRookie =
+		 * this.positionService.positionsOfApplicationOfRookie(rookie);
 		 * 
-		 * for (Position p : allPositionsOfHacker) if
+		 * for (Position p : allPositionsOfRookie) if
 		 * (Collections.disjoint(p.getApplications(), applications)) {
 		 * 
 		 * }
