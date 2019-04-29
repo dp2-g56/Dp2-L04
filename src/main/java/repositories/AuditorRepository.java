@@ -12,5 +12,4 @@ public interface AuditorRepository extends JpaRepository<Auditor, Integer> {
 
 	@Query("select m from Auditor m join m.userAccount u where u.username = ?1")
 	public Auditor getAuditorByUsername(String username);
-
 }

@@ -20,17 +20,20 @@ import security.LoginService;
 import security.UserAccount;
 import services.ActorService;
 import services.AdminService;
+import services.AuditorService;
 import services.CompanyService;
 import services.ConfigurationService;
 import services.HackerService;
 import services.SocialProfileService;
 import domain.Actor;
 import domain.Admin;
+import domain.Auditor;
 import domain.Company;
 import domain.Configuration;
 import domain.Hacker;
 import domain.SocialProfile;
 import forms.FormObjectEditAdmin;
+import forms.FormObjectEditAuditor;
 import forms.FormObjectEditCompany;
 import forms.FormObjectEditHacker;
 
@@ -39,22 +42,26 @@ import forms.FormObjectEditHacker;
 public class SocialProfileController extends AbstractController {
 
 	@Autowired
-	private ActorService actorService;
+	private ActorService			actorService;
 
 	@Autowired
-	private SocialProfileService socialProfileService;
+	private SocialProfileService	socialProfileService;
 
 	@Autowired
-	private CompanyService companyService;
+	private CompanyService			companyService;
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ConfigurationService	configurationService;
 
 	@Autowired
-	private AdminService adminService;
+	private AdminService			adminService;
 
 	@Autowired
-	private HackerService hackerService;
+	private HackerService			hackerService;
+
+	@Autowired
+	private AuditorService			auditorService;
+
 
 	// -------------------------------------------------------------------
 	// ---------------------------LIST
@@ -201,6 +208,12 @@ public class SocialProfileController extends AbstractController {
 			FormObjectEditHacker formHacker = this.hackerService.getFormObjectEditHacker(hacker);
 			formHacker.setId(hacker.getId());
 			result = this.createEditModelAndView(formHacker);
+		} else if (authorities.get(0).toString().equals("AUDITOR")) {
+			Auditor auditor = this.auditorService.loggedAuditor();
+			Assert.notNull(auditor);
+			FormObjectEditAuditor formAuditor = this.auditorService.getFormObjectEditAuditor(auditor);
+			formAuditor.setId(auditor.getId());
+			result = this.createEditModelAndView(formAuditor);
 		}
 
 		if (result == null)
@@ -210,7 +223,6 @@ public class SocialProfileController extends AbstractController {
 
 		return result;
 	}
-
 	// ---------------------------------------------------------------------
 	// ---------------------------SAVE PERSONAL DATA------------------------
 
@@ -308,6 +320,36 @@ public class SocialProfileController extends AbstractController {
 		return result;
 	}
 
+	@RequestMapping(value = "/auditor/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView saveAuditor(@Valid FormObjectEditAuditor auditorForm, BindingResult binding) {
+		ModelAndView result;
+
+		Auditor auditor = this.auditorService.reconstructAuditorPersonalData(auditorForm, binding);
+		Configuration configuration = this.configurationService.getConfiguration();
+
+		String prefix = configuration.getSpainTelephoneCode();
+
+		if (binding.hasErrors()) {
+			result = this.createEditModelAndView(auditorForm);
+			result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
+		} else
+			try {
+				if (auditor.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$") || auditor.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+					this.auditorService.save(auditor);
+				else if (auditor.getPhone().matches("([0-9]{4,})$")) {
+					auditor.setPhone(prefix + auditor.getPhone());
+					this.auditorService.save(auditor);
+				} else
+					this.auditorService.save(auditor);
+				result = new ModelAndView("redirect:/authenticated/showProfile.do");
+			} catch (Throwable oops) {
+				result = this.createEditModelAndView(auditorForm, "socialProfile.commit.error");
+				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
+			}
+
+		return result;
+	}
+
 	// ---------------------------------------------------------------------
 	// ---------------------------CREATEEDITMODELANDVIEW--------------------
 
@@ -374,7 +416,7 @@ public class SocialProfileController extends AbstractController {
 
 		return result;
 	}
-	
+
 	protected ModelAndView createEditModelAndView(FormObjectEditHacker hacker) {
 
 		ModelAndView result;
@@ -390,6 +432,26 @@ public class SocialProfileController extends AbstractController {
 
 		result = new ModelAndView("authenticated/edit");
 		result.addObject("formObjectEditHacker", hacker);
+		result.addObject("message", messageCode);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(FormObjectEditAuditor auditor) {
+
+		ModelAndView result;
+
+		result = this.createEditModelAndView(auditor, null);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(FormObjectEditAuditor auditor, String messageCode) {
+
+		ModelAndView result;
+
+		result = new ModelAndView("authenticated/edit");
+		result.addObject("formObjectEditAuditor", auditor);
 		result.addObject("message", messageCode);
 
 		return result;

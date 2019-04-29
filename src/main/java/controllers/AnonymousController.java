@@ -32,6 +32,7 @@ import domain.Curriculum;
 import domain.Hacker;
 import domain.Position;
 import domain.Problem;
+import domain.SocialProfile;
 import forms.FormObjectCompany;
 import forms.FormObjectHacker;
 
@@ -369,12 +370,14 @@ public class AnonymousController extends AbstractController {
 	public ModelAndView listCompany(@RequestParam int positionId) {
 
 		ModelAndView result;
+		List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
 
 		Company company = this.companyService.companyOfRespectivePosition(positionId);
 		Actor actor = this.positionService.getActorWithPosition(positionId);
 
 		Actor loggedActor = this.actorService.loggedActor();
 		Boolean sameActorLogged;
+		socialProfiles = actor.getSocialProfiles();
 
 		if (loggedActor.equals(actor))
 			sameActorLogged = true;
@@ -385,6 +388,7 @@ public class AnonymousController extends AbstractController {
 
 		result = new ModelAndView("anonymous/company/listOne");
 		result.addObject("actor", company);
+		result.addObject("socialProfiles", socialProfiles);
 		result.addObject("publicValue", publicValue);
 		result.addObject("sameActorLogged", sameActorLogged);
 		result.addObject("requestURI", "anonymous/company/listOne.do");
