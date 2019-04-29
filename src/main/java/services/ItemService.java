@@ -70,8 +70,6 @@ public class ItemService {
 			Item itemDB = this.getItemOfProvider(item.getId(), loggProvider.getId());
 			Assert.notNull(itemDB);
 			this.save(item);
-
-			System.out.println("PASA SAVE");
 		} else {
 			Item savedItem = this.save(item);
 			items.add(savedItem);

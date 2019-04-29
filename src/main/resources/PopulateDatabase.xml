@@ -253,7 +253,7 @@
 			<list>
 				<bean class="security.Authority">
 					<property name="authority" value="PROVIDER" />
-        </bean>
+        		</bean>
 			</list>
 		</property>
 		<property name="isNotLocked" value="True" />
@@ -3069,5 +3069,301 @@
 		</property>
 	</bean>
 	
+	<!-- MORE PROVIDERS POR TESTING -->
+	<!-- PROVIDER3 -->
+	<bean id="userAccount200" class="security.UserAccount">
+		<property name="username" value="provider3" />
+		<property name="password"
+			value="a575bf1b9ca7d068cef7bbc8fa7f43e1" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<bean id="provider3" class="domain.Provider">
+		<property name="name" value="Provider3" />
+		<property name="make" value="provider3" />
+		<property name="surname" value="P Surname" />
+		<property name="VATNumber" value="SE193654321" />
+		<property name="creditCard" ref="creditCard200" />
+		<property name="photo" value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="provider3@gmail.com" />
+		<property name="phone" value="+34609235522" />
+		<property name="address" value="provider3House" />
+		<property name="userAccount" ref="userAccount200" />
+	</bean>
+	
+	<bean id="creditCard200" class="domain.CreditCard">
+		<property name="holderName" value="David" />
+		<property name="brandName" value="VISA" />
+		<property name="number" value="4593930285819531" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="24" />
+		<property name="cvvCode" value="193" />
+	</bean>
+	
+	<!-- PROVIDER4 -->
+	<bean id="userAccount201" class="security.UserAccount">
+		<property name="username" value="provider4" />
+		<property name="password"
+			value="5d35a7d891c4aae477f56ebf807fbd0a" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<bean id="provider4" class="domain.Provider">
+		<property name="name" value="Provider4" />
+		<property name="make" value="provider4" />
+		<property name="surname" value="P Surname" />
+		<property name="VATNumber" value="SE193654321" />
+		<property name="creditCard" ref="creditCard201" />
+		<property name="photo" value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="provider4@gmail.com" />
+		<property name="phone" value="+34609235522" />
+		<property name="address" value="provider3House" />
+		<property name="userAccount" ref="userAccount201" />
+	</bean>
+	
+	<bean id="creditCard201" class="domain.CreditCard">
+		<property name="holderName" value="David" />
+		<property name="brandName" value="VISA" />
+		<property name="number" value="4593930285819531" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="24" />
+		<property name="cvvCode" value="193" />
+	</bean>
+	
+	<!-- PROVIDER5 -->
+	<bean id="userAccount202" class="security.UserAccount">
+		<property name="username" value="provider5" />
+		<property name="password"
+			value="bd19ee25be71cfc77f532c4b26b4a54e" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<bean id="provider5" class="domain.Provider">
+		<property name="name" value="Provider5" />
+		<property name="make" value="provider5" />
+		<property name="surname" value="P Surname" />
+		<property name="VATNumber" value="SE193654321" />
+		<property name="creditCard" ref="creditCard202" />
+		<property name="photo" value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="provider5@gmail.com" />
+		<property name="phone" value="+34609235522" />
+		<property name="address" value="provider5House" />
+		<property name="userAccount" ref="userAccount202" />
+	</bean>
+	
+	<bean id="creditCard202" class="domain.CreditCard">
+		<property name="holderName" value="David" />
+		<property name="brandName" value="VISA" />
+		<property name="number" value="4593930285819531" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="24" />
+		<property name="cvvCode" value="193" />
+	</bean>
+	
+	<!-- PROVIDER6 -->
+	<bean id="userAccount203" class="security.UserAccount">
+		<property name="username" value="provider6" />
+		<property name="password"
+			value="85202849e05dc23e4b80f2af8be3650c" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<bean id="provider6" class="domain.Provider">
+		<property name="name" value="Provider6" />
+		<property name="make" value="provider6" />
+		<property name="surname" value="P Surname" />
+		<property name="VATNumber" value="SE193654321" />
+		<property name="creditCard" ref="creditCard203" />
+		<property name="photo" value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="provider6@gmail.com" />
+		<property name="phone" value="+34609235522" />
+		<property name="address" value="provider6House" />
+		<property name="userAccount" ref="userAccount203" />
+	</bean>
+	
+	<bean id="creditCard203" class="domain.CreditCard">
+		<property name="holderName" value="David" />
+		<property name="brandName" value="VISA" />
+		<property name="number" value="4593930285819531" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="24" />
+		<property name="cvvCode" value="193" />
+	</bean>
+	
+	<!-- PROVIDER7 -->
+	<bean id="userAccount204" class="security.UserAccount">
+		<property name="username" value="provider7" />
+		<property name="password"
+			value="081695deabc539ca794c3437d1937158" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<bean id="provider7" class="domain.Provider">
+		<property name="name" value="Provider7" />
+		<property name="make" value="provider7" />
+		<property name="surname" value="P Surname" />
+		<property name="VATNumber" value="SE193654321" />
+		<property name="creditCard" ref="creditCard204" />
+		<property name="photo" value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="provider7@gmail.com" />
+		<property name="phone" value="+34609235522" />
+		<property name="address" value="provider7House" />
+		<property name="userAccount" ref="userAccount204" />
+	</bean>
+	
+	<bean id="creditCard204" class="domain.CreditCard">
+		<property name="holderName" value="David" />
+		<property name="brandName" value="VISA" />
+		<property name="number" value="4593930285819531" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="24" />
+		<property name="cvvCode" value="193" />
+	</bean>
+	
+	<!-- PROVIDER8 -->
+	<bean id="userAccount205" class="security.UserAccount">
+		<property name="username" value="provider8" />
+		<property name="password"
+			value="cbfad803a31165e7449a6c1633ab4f4e" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<bean id="provider8" class="domain.Provider">
+		<property name="name" value="Provider8" />
+		<property name="make" value="provider8" />
+		<property name="surname" value="P Surname" />
+		<property name="VATNumber" value="SE193654321" />
+		<property name="creditCard" ref="creditCard205" />
+		<property name="photo" value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="provider8@gmail.com" />
+		<property name="phone" value="+34609235522" />
+		<property name="address" value="provider8House" />
+		<property name="userAccount" ref="userAccount205" />
+	</bean>
+	
+	<bean id="creditCard205" class="domain.CreditCard">
+		<property name="holderName" value="David" />
+		<property name="brandName" value="VISA" />
+		<property name="number" value="4593930285819531" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="24" />
+		<property name="cvvCode" value="193" />
+	</bean>
+	
+	<!-- PROVIDER9 -->
+	<bean id="userAccount206" class="security.UserAccount">
+		<property name="username" value="provider9" />
+		<property name="password"
+			value="f1e8c5669cca265538f0ea1ea66d99e0" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<bean id="provider9" class="domain.Provider">
+		<property name="name" value="Provider9" />
+		<property name="make" value="provider9" />
+		<property name="surname" value="P Surname" />
+		<property name="VATNumber" value="SE193654321" />
+		<property name="creditCard" ref="creditCard206" />
+		<property name="photo" value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="provider9@gmail.com" />
+		<property name="phone" value="+34609235522" />
+		<property name="address" value="provider9House" />
+		<property name="userAccount" ref="userAccount206" />
+	</bean>
+	
+	<bean id="creditCard206" class="domain.CreditCard">
+		<property name="holderName" value="David" />
+		<property name="brandName" value="VISA" />
+		<property name="number" value="4593930285819531" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="24" />
+		<property name="cvvCode" value="193" />
+	</bean>
+	
+		<!-- PROVIDER10 -->
+	<bean id="userAccount207" class="security.UserAccount">
+		<property name="username" value="provider10" />
+		<property name="password"
+			value="947bf0ada3428bc94b6770b617e727d5" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="PROVIDER" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<bean id="provider10" class="domain.Provider">
+		<property name="name" value="Provider10" />
+		<property name="make" value="provider10" />
+		<property name="surname" value="P Surname" />
+		<property name="VATNumber" value="SE193654321" />
+		<property name="creditCard" ref="creditCard207" />
+		<property name="photo" value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="provider10@gmail.com" />
+		<property name="phone" value="+34609235522" />
+		<property name="address" value="provider10House" />
+		<property name="userAccount" ref="userAccount207" />
+	</bean>
+	
+	<bean id="creditCard207" class="domain.CreditCard">
+		<property name="holderName" value="David" />
+		<property name="brandName" value="VISA" />
+		<property name="number" value="4593930285819531" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="24" />
+		<property name="cvvCode" value="193" />
+	</bean>
 
 </beans>
