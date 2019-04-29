@@ -25,6 +25,7 @@
 			<spring:url var="createUrl0"
 				value="/anonymous/problem/list.do?positionId={positionId}">
 				<spring:param name="positionId" value="${row.id}" />
+				<spring:param name="assignable" value="${false}" />
 			</spring:url>
 			<a href="${createUrl0}"><spring:message
 				code="annonymous.problems" /></a>
@@ -34,6 +35,7 @@
 
        		<spring:url var="applicationsUrl" value="/anonymous/application/list.do?positionId={positionId}">
             	<spring:param name="positionId" value="${row.id}"/>
+            	<spring:param name="assignable" value="${false}" />
         	</spring:url>
         	
         	<a href="${applicationsUrl}">
@@ -47,6 +49,7 @@
 
        		<spring:url var="auditsUrl" value="/anonymous/audit/list.do?positionId={positionId}">
             	<spring:param name="positionId" value="${row.id}"/>
+            	<spring:param name="assignable" value="${false}" />
         	</spring:url>
         	
         	<a href="${applicationsUrl}">
@@ -61,6 +64,8 @@
 			<spring:url var="createUrl1"
 				value="/anonymous/company/listOne.do?positionId={positionId}">
 				<spring:param name="positionId" value="${row.id}" />
+				<spring:param name="assignable" value="${false}" />
+				
 			</spring:url>
 			<a href="${createUrl1}"><spring:message
 				code="annonymous.company" /></a>

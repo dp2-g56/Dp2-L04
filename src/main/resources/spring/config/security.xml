@@ -71,6 +71,8 @@
 		
 		<!-- AUDITOR -->
 		<security:intercept-url pattern="/export/auditor.do" access="hasRole('AUDITOR')" /> 
+		<security:intercept-url pattern="/position/auditor/**" access="hasRole('AUDITOR')" />
+		<security:intercept-url pattern="/audit/auditor/**" access="hasRole('AUDITOR')" /> 
 
 		<!-- AUTHENTICATED -->
 		<security:intercept-url pattern="/authenticated/**" access="isAuthenticated()" />
