@@ -4,7 +4,9 @@ package services;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -149,6 +151,10 @@ public class ItemService {
 		this.delete(item);
 
 	}
+	
+	public List<Item> getItemsFromProvider(int providerId){
+		return this.itemRepository.getItemsFromProvider(providerId);
+	}
 
 	private Item getItemOfProvider(int itemId, int providerId) {
 		return this.itemRepository.getItemOfProvider(itemId, providerId);
@@ -166,6 +172,19 @@ public class ItemService {
 
 	public void deleteInBatch(Iterable<Item> lista) {
 		this.itemRepository.deleteInBatch(lista);
+	}
+	
+	public Provider geProviderByItem(int itemId) {
+		return this.itemRepository.getProviderByItem(itemId);
+	}
+	
+	public Map<Item, Provider> getProvidersByItem(List<Item> items){
+		
+		Map<Item, Provider> res = new HashMap<Item, Provider>();
+		for(Item i: items) {
+			res.put(i, this.geProviderByItem(i.getId()));
+		}
+		return res;
 	}
 
 	public Boolean isUrl(String url) {
