@@ -18,6 +18,8 @@
 		<display:column titleKey="item.links">
 			<spring:url var="links" value="/anonymous/item/listLinks.do">
 				<spring:param name="itemId" value="${row.id}"/>
+				<spring:param name="back" value="itemList"/>
+				<spring:param name="providerId" value="${param.providerId}"/>
 			</spring:url>
 			<a href="${links}">
 				<spring:message code="item.links.show" var ="show" />
@@ -28,6 +30,8 @@
 		<display:column titleKey="item.pictures">
 			<spring:url var="pictures" value="/anonymous/item/listPictures.do">
 				<spring:param name="itemId" value="${row.id}"/>
+				<spring:param name="back" value="itemList"/>
+				<spring:param name="providerId" value="${param.providerId}"/>
 			</spring:url>
 			<a href="${pictures}">
 				<spring:message code="item.pictures.show" var ="show" />
