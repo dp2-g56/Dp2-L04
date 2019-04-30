@@ -47,7 +47,13 @@
 		<jstl:if test="${score}">
 		<tr>
 			<td><spring:message code="actor.score" /></td>
-			<td><jstl:out value="${actor.score}" /></td>
+				<jstl:choose>
+					<jstl:when test="${actor.score == null}">
+						<td><spring:message code="actor.nil" /></td>
+					</jstl:when><jstl:otherwise>
+						<td><jstl:out value="${actor.score}" /></td>
+					</jstl:otherwise>
+				</jstl:choose>
 		</tr>
 	</jstl:if> 
 	</table>

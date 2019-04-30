@@ -52,7 +52,7 @@
             	<spring:param name="assignable" value="${true}" />
         	</spring:url>
         	
-        	<a href="${applicationsUrl}">
+        	<a href="${auditsUrl}">
               <spring:message var ="viewAudits" code="position.viewAudits" />
              <jstl:out value="${viewAudits}" />   
         	</a>

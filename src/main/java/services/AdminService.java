@@ -56,6 +56,9 @@ public class AdminService {
 	private ActorService			actorService;
 
 	@Autowired
+	private CompanyService			companyService;
+
+	@Autowired
 	private Validator				validator;
 
 
@@ -534,4 +537,15 @@ public class AdminService {
 
 	}
 
+	public void computeScore() {
+		this.loggedAsAdmin();
+
+		List<Double> scores = this.adminRepository.computeScore();
+		List<Company> companies = this.companyService.findAll();
+		Assert.isTrue(companies.size() == scores.size());
+
+		for (Company c : companies) {
+			c.setScore(scores.get(companies.indexOf(c)));
+		}
+	}
 }

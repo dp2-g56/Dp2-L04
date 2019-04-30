@@ -58,6 +58,17 @@ public class AdministratorController extends AbstractController {
 		super();
 	}
 
+	@RequestMapping(value = "/administrator/computeScore", method = RequestMethod.GET)
+	public ModelAndView computeScore() {
+		ModelAndView result;
+
+		this.adminService.computeScore();
+
+		result = new ModelAndView("redirect:/");
+
+		return result;
+	}
+
 	@RequestMapping(value = "/administrator/create", method = RequestMethod.GET)
 	public ModelAndView createAdmin() {
 		ModelAndView result;
