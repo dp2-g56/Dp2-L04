@@ -11,8 +11,7 @@
 
 
 <br/>
-
-
+	<!-- Actor Data -->
 	<table>
 		<tr>
 			<td><spring:message code="actor.fullName" /></td>
@@ -51,10 +50,9 @@
 			<td><jstl:out value="${actor.score}" /></td>
 		</tr>
 	</jstl:if> 
-
-
-
 	</table>
+	
+	<!-- Export Data -->
 
 	<security:authorize access="hasAnyRole('ADMIN')">
 	<jstl:if test="${sameActorLogged || trueValue}">
@@ -91,6 +89,8 @@
 	</jstl:if> 	
 	</security:authorize>
 
+
+	<!-- Social Profiles -->
 	<h2>
 		<spring:message code="socialProfile.mySocialProfiles" />
 	</h2>
@@ -107,7 +107,7 @@
 			titleKey="socialProfile.profileLink" />
 			
 			
-<security:authorize access="isAuthenticated()">		
+	<security:authorize access="isAuthenticated()">		
 		
 		<jstl:if test="${trueValue}">
  	
@@ -122,7 +122,7 @@
 		
 		</jstl:if> 	
 		
-</security:authorize>		
+	</security:authorize>		
 		
 	</display:table>
 	
@@ -136,6 +136,46 @@
 	<br/>
   
   <br/>
+  
+  	<!-- Provider's Items -->
+	
+	<jstl:if test="${itemValues}">
+	
+	<display:table pagesize="5" name="items" id="row" class="displaytag" >
+			
+		<display:column property="name" titleKey="item.name" />
+		
+		<display:column property="description" titleKey="item.description" />
+		
+		<display:column titleKey="item.links">
+			<spring:url var="links" value="/anonymous/item/listLinks.do">
+				<spring:param name="itemId" value="${row.id}"/>
+			</spring:url>
+			<a href="${links}">
+				<spring:message code="item.links.show" var ="show" />
+				<jstl:out value="${show} (${row.links.size()})"/>
+			</a>
+		</display:column>
+		
+		<display:column titleKey="item.pictures">
+			<spring:url var="pictures" value="/anonymous/item/listPictures.do">
+				<spring:param name="itemId" value="${row.id}"/>
+			</spring:url>
+			<a href="${pictures}">
+				<spring:message code="item.pictures.show" var ="show" />
+				<jstl:out value="${show} (${row.pictures.size()})"/>
+			</a>
+		</display:column>
+	
+	</display:table>
+	
+	  <a href="anonymous/item/list.do"><spring:message code="position.backToPublicData" /></a>
+	
+	
+	</jstl:if>
+	
+	
+	<!-- Backs -->
   
   <jstl:if test="${publicValue && !assignable}">
   <a href="anonymous/position/list.do"><spring:message code="position.backToPublicData" /></a>

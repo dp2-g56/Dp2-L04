@@ -16,7 +16,7 @@
 		<display:column property="description" titleKey="item.description" />
 		
 		<display:column titleKey="item.links">
-			<spring:url var="links" value="/item/anonymous/listLinks.do">
+			<spring:url var="links" value="/anonymous/item/listLinks.do">
 				<spring:param name="itemId" value="${row.id}"/>
 			</spring:url>
 			<a href="${links}">
@@ -26,7 +26,7 @@
 		</display:column>
 		
 		<display:column titleKey="item.pictures">
-			<spring:url var="pictures" value="/item/anonymous/listPictures.do">
+			<spring:url var="pictures" value="/anonymous/item/listPictures.do">
 				<spring:param name="itemId" value="${row.id}"/>
 			</spring:url>
 			<a href="${pictures}">
@@ -37,11 +37,11 @@
 		
 		
 		<display:column titleKey="item.provider">
-			<spring:url var="provider" value="/provider/anonymous/show.do">
+			<spring:url var="provider" value="/anonymous/provider/listOne.do">
 				<spring:param name="providerId" value="${providersByItem.get(row).id}"/>
 			</spring:url>
 			<a href="${provider}">
-				<spring:message code="item.provider.show" var ="show" />
+				<spring:message code="provider.viewProviderProfile" var ="show" />
 				<jstl:out value="${show}"/>
 			</a>
 		</display:column>

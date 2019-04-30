@@ -16,4 +16,4 @@
 	
 	</display:table>
 	
-	<acme:cancel url="anonymous/item/list.do" code="provider.back" /> 
+	<acme:cancel url="anonymous/item/list.do" code="provider.backToTheItemList" /> 
