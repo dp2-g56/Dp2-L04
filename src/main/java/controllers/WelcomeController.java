@@ -47,6 +47,7 @@ public class WelcomeController extends AbstractController {
 		ModelAndView result;
 		SimpleDateFormat formatter;
 		String moment;
+		Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 
 		formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		moment = formatter.format(new Date());
@@ -68,15 +69,15 @@ public class WelcomeController extends AbstractController {
 		request.getSession().setAttribute("imageURL", imageURL);
 
 		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
-		if (locale.equals("EN")) {
+		if (locale.equals("EN"))
 			welcomeMessage = this.configurationService.getConfiguration().getWelcomeMessageEnglish();
-		} else {
+		else
 			welcomeMessage = this.configurationService.getConfiguration().getWelcomeMessageSpanish();
-		}
 
 		result = new ModelAndView("welcome/index");
 		result.addObject("name", name);
 		result.addObject("username", username);
+		result.addObject("isMessageBroadcasted", isMessageBroadcasted);
 		result.addObject("moment", moment);
 		result.addObject("welcomeMessage", welcomeMessage);
 		result.addObject("systemName", systemName);

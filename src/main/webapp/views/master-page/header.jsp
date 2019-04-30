@@ -12,6 +12,7 @@
 
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div>
 	<a href="#"><img src="${imageURL}" height= 150px width= 500px alt="Acme Rookie Co., Inc." /></a>
@@ -29,6 +30,11 @@
 					<li><a href="statistics/administrator/show.do"><spring:message code="master.page.administrator.statistics" /></a></li>
 					<li><a href="configuration/administrator/list.do"><spring:message code="master.page.administrator.configuration" /></a></li>
 					<li><a href="broadcast/administrator/send.do"><spring:message code="master.page.administrator.broadcast" /></a></li>
+					
+					<jstl:if test="${!isMessageBroadcasted}">
+					<li><a href="broadcast/administrator/sendRebranding.do"><spring:message code="master.page.administrator.broadcastRebranding" /></a></li>
+					</jstl:if>
+					
 					<li><a href="administrator/suspicious/list.do"><spring:message code="master.page.administrator.banUnban" /></a></li>
 				</ul>
 			</li>
@@ -60,6 +66,16 @@
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="item/provider/list.do"><spring:message code="master.page.provider.items" /></a></li>
+					<li><a href="sponsorship/provider/list.do"><spring:message code="master.page.provider.sponsorship" /></a></li>
+				</ul>
+			</li>
+		</security:authorize>
+		
+		<security:authorize access="hasRole('AUDITOR')">
+			<li><a class="fNiv"><spring:message	code="master.page.auditor" /></a>
+				<ul>
+					<li class="arrow"></li>
+					<li><a href="position/auditor/listAssignablePositions.do"><spring:message code="master.page.assignablePositions" /></a></li>
 				</ul>
 			</li>
 		</security:authorize>
