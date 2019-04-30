@@ -110,13 +110,14 @@ public class SponsorshipService {
 			Sponsorship spo2 = this.findOne(formObject.getId());
 
 			spo = new Sponsorship();
-			spo.setPosition(spo2.getPosition());
+			spo.setPosition(formObject.getPosition());
 			spo.setVersion(spo2.getVersion());
 			spo.setId(spo2.getId());
 
 			spo.setBanner(formObject.getBanner());
 			spo.setTargetUrl(formObject.getTargetURL());
 			spo.setCreditCard(creditCard);
+			spo.setProvider(provider);
 		}
 		// this.validator.validate(spo, binding);
 
