@@ -108,6 +108,8 @@
 			
 			<li><a href="anonymous/position/list.do"><spring:message code="master.page.publicPositions" /></a></li>
 			<li><a href="anonymous/company/list.do"><spring:message code="master.page.publicCompanies" /></a></li>
+			<li><a href="anonymous/provider/list.do"><spring:message code="master.page.publicProviders" /></a></li>
+			<li><a href="anonymous/item/list.do"><spring:message code="master.page.provider.items" /></a></li>
 			
 			<li><a class="fNiv"><spring:message	code="master.page.termsAndConditions" /></a>
 				<ul>

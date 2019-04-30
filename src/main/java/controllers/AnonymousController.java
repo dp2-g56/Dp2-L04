@@ -2,7 +2,9 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -20,8 +22,10 @@ import services.ApplicationService;
 import services.AuditService;
 import services.CompanyService;
 import services.ConfigurationService;
+import services.ItemService;
 import services.PositionService;
 import services.ProblemService;
+import services.ProviderService;
 import services.RookieService;
 import domain.Actor;
 import domain.Application;
@@ -29,8 +33,10 @@ import domain.Audit;
 import domain.Company;
 import domain.Configuration;
 import domain.Curriculum;
+import domain.Item;
 import domain.Position;
 import domain.Problem;
+import domain.Provider;
 import domain.Rookie;
 import domain.SocialProfile;
 import forms.FormObjectCompany;
@@ -63,6 +69,13 @@ public class AnonymousController extends AbstractController {
 
 	@Autowired
 	private AuditService			auditService;
+	
+	@Autowired
+	private ProviderService			providerService;
+	
+	@Autowired
+	private ItemService				itemService;
+
 
 
 	public AnonymousController() {
@@ -463,4 +476,101 @@ public class AnonymousController extends AbstractController {
 
 		return result;
 	}
+	
+	//PROVIDERS
+	@RequestMapping(value = "/provider/list", method = RequestMethod.GET)
+	public ModelAndView listProviders() {
+
+		ModelAndView result;
+
+		List<Provider> providers = this.providerService.findAll();
+
+		result = new ModelAndView("anonymous/provider/list");
+		result.addObject("providers", providers);
+		result.addObject("requestURI", "anonymous/provider/list.do");
+
+		return result;
+	}
+	
+	//Items
+	@RequestMapping(value = "/item/list", method = RequestMethod.GET)
+	public ModelAndView itemList(@RequestParam(required=false) Integer providerId) {
+
+		ModelAndView result;
+		List<Item> items;
+		
+		if(providerId==null) {
+			items = this.itemService.findAll();
+		}else {
+			items = this.itemService.getItemsFromProvider(providerId);
+		}
+		
+		Map<Item, Provider> providersByItem = this.itemService.getProvidersByItem(items);
+
+		result = new ModelAndView("anonymous/item/list");
+		result.addObject("items", items);
+		result.addObject("providersByItem", providersByItem);
+		result.addObject("requestURI", "anonymous/item/list.do");
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/item/listLinks", method = RequestMethod.GET)
+	public ModelAndView listLinks(@RequestParam int itemId) {
+		ModelAndView result;
+
+			List<String> links = this.itemService.findOne(itemId).getLinks();
+
+			result = new ModelAndView("anonymous/item/listLinks");
+			result.addObject("links", links);
+
+
+		return result;
+	}
+
+	@RequestMapping(value = "/item/listPictures", method = RequestMethod.GET)
+	public ModelAndView listPictures(@RequestParam int itemId) {
+		ModelAndView result;
+
+
+		List<String> pictures = this.itemService.findOne(itemId).getPictures();
+
+		result = new ModelAndView("anonymous/item/listPictures");
+		result.addObject("pictures", pictures);
+
+		return result;
+	}
+
+	@RequestMapping(value = "/provider/listOne", method = RequestMethod.GET)
+	public ModelAndView listProvider(@RequestParam int providerId) {
+
+		ModelAndView result;
+		List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
+
+		Provider provider = this.providerService.findOne(providerId);
+		List<Item> items = provider.getItems();
+
+		Actor loggedActor = this.actorService.loggedActor();
+		Boolean sameActorLogged;
+		socialProfiles = provider.getSocialProfiles();
+
+		if (loggedActor.equals((Actor) provider))
+			sameActorLogged = true;
+		else
+			sameActorLogged = false;
+
+		Boolean itemValues = true;
+
+		result = new ModelAndView("anonymous/provider/listOne");
+		result.addObject("actor", provider);
+		result.addObject("socialProfiles", socialProfiles);
+		result.addObject("itemValues", itemValues);
+		result.addObject("sameActorLogged", sameActorLogged);
+		result.addObject("items", items);
+		result.addObject("requestURI", "anonymous/provider/listOne.do");
+
+		return result;
+	}
+	
+	
 }

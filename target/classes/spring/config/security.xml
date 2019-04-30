@@ -55,15 +55,22 @@
 		
 		<security:intercept-url pattern="/export/company.do" access="hasRole('COMPANY')" /> 
 
-		<!-- HACKER -->
-		<security:intercept-url pattern="/finder/hacker/**" access="hasRole('HACKER')" /> 
-		<security:intercept-url pattern="/curriculum/hacker/**" access="hasRole('HACKER')" /> 
-		<security:intercept-url pattern="/miscellaneousData/hacker/**" access="hasRole('HACKER')" />
-		<security:intercept-url pattern="/application/hacker/**" access="hasRole('HACKER')" /> 
-		<security:intercept-url pattern="/positionData/hacker/**" access="hasRole('HACKER')" /> 
-		<security:intercept-url pattern="/educationData/hacker/**" access="hasRole('HACKER')" /> 
-		<security:intercept-url pattern="/export/hacker.do" access="hasRole('HACKER')" /> 
-		<security:intercept-url pattern="/position/hacker/**" access="hasRole('HACKER')" /> 
+		<!-- ROOKIE -->
+		<security:intercept-url pattern="/finder/rookie/**" access="hasRole('ROOKIE')" /> 
+		<security:intercept-url pattern="/curriculum/rookie/**" access="hasRole('ROOKIE')" /> 
+		<security:intercept-url pattern="/miscellaneousData/rookie/**" access="hasRole('ROOKIE')" />
+		<security:intercept-url pattern="/application/rookie/**" access="hasRole('ROOKIE')" /> 
+		<security:intercept-url pattern="/positionData/rookie/**" access="hasRole('ROOKIE')" /> 
+		<security:intercept-url pattern="/educationData/rookie/**" access="hasRole('ROOKIE')" /> 
+		<security:intercept-url pattern="/export/rookie.do" access="hasRole('ROOKIE')" /> 
+		<security:intercept-url pattern="/position/rookie/**" access="hasRole('ROOKIE')" /> 
+		
+		<!-- PROVIDER -->
+		<security:intercept-url pattern="/item/provider/**" access="hasRole('PROVIDER')" /> 
+		<security:intercept-url pattern="/export/provider.do" access="hasRole('PROVIDER')" /> 
+		
+		<!-- AUDITOR -->
+		<security:intercept-url pattern="/export/auditor.do" access="hasRole('AUDITOR')" /> 
 
 		<!-- AUTHENTICATED -->
 		<security:intercept-url pattern="/authenticated/**" access="isAuthenticated()" />
