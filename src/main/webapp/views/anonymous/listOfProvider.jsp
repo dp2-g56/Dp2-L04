@@ -8,7 +8,8 @@
 <%@taglib prefix="acme"  tagdir="/WEB-INF/tags"%>
 
 	
-	<display:table name="providers" id="row">
+	<display:table name="providers" id="row" pagesize="5" class="displaytag" 
+					requestURI="/anonymous/provider/list.do">
 	
 		<display:column property="make" titleKey="provider.make" /> 
 		<display:column property="name" titleKey="companies.name" /> 
