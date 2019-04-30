@@ -14,7 +14,7 @@
 
 <security:authorize access="hasRole('ADMIN')">
 
-<form:form modelAttribute="messageSend" action="broadcast/administrator/send.do">
+<form:form modelAttribute="messageSend" action="${targetUri}">
 
 	<form:hidden path="id"/>
 	<form:hidden path="version"/>
@@ -25,7 +25,11 @@
 
 	<acme:textarea code="broadcast.message" path="body"/>
 	
-	<acme:submit name="send" code="broadcast.send"/>
+
+ 	  		<acme:submit name="send" code="broadcast.send"/>
+ 	  
+	
+		
 		
 </form:form>
 

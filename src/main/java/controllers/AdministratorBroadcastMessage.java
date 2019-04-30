@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.AdminService;
+import services.ConfigurationService;
 import services.MessageService;
 import domain.Message;
 
@@ -18,10 +19,13 @@ import domain.Message;
 public class AdministratorBroadcastMessage extends AbstractController {
 
 	@Autowired
-	private AdminService	adminService;
+	private AdminService			adminService;
 
 	@Autowired
-	private MessageService	messageService;
+	private MessageService			messageService;
+
+	@Autowired
+	private ConfigurationService	configurationService;
 
 
 	public AdministratorBroadcastMessage() {
@@ -38,6 +42,7 @@ public class AdministratorBroadcastMessage extends AbstractController {
 		message.setTags("SYSTEM");
 		result = new ModelAndView("broadcast/administrator/send");
 		result.addObject("messageSend", message);
+		result.addObject("targetUri", "broadcast/administrator/send.do");
 
 		return result;
 	}
@@ -49,17 +54,16 @@ public class AdministratorBroadcastMessage extends AbstractController {
 
 		message = this.adminService.reconstruct(message, binding);
 
-		if (binding.hasErrors()) {
+		if (binding.hasErrors())
 			result = this.createEditModelAndView(message);
-		} else {
+		else
 			try {
 				this.adminService.broadcastMessage(message);
-				result = new ModelAndView("redirect:send.do");
+				result = new ModelAndView("redirect:/");
 
 			} catch (Throwable oops) {
 				result = this.createEditModelAndView(message, "company.commit.error");
 			}
-		}
 		return result;
 	}
 	protected ModelAndView createEditModelAndView(Message message) {
@@ -74,6 +78,68 @@ public class AdministratorBroadcastMessage extends AbstractController {
 		ModelAndView result;
 
 		result = new ModelAndView("broadcast/administrator/send");
+
+		result.addObject("targetUri", "broadcast/administrator/send.do");
+		result.addObject("messageSend", message);
+		result.addObject("message", messageCode);
+
+		return result;
+	}
+
+	@RequestMapping(value = "/sendRebranding", method = RequestMethod.GET)
+	public ModelAndView createRebranding() {
+
+		/*
+		 * if (this.configurationService.isRebrandingBroadcasted()) {
+		 * 
+		 * }
+		 */
+
+		ModelAndView result;
+		Message message;
+
+		message = this.messageService.create();
+		message.setBody("We inform that we changed our name from 'Acme-Hacker-Rank' to 'Acme-Rookie' for legal reasons/ Se informa que nuestra empresa ha pasado de llamarse 'Acme-Hacker-Rank' a 'Acme-Rookie' por temas legales.");
+		message.setSubject("REBRANDING NOTIFICATION / NOTIFICACION DE CAMBIO DE NOMBRE");
+		message.setTags("NOTIFICATION, SYSTEM, IMPORTANT");
+
+		result = this.createEditModelAndViewRebranding(message);
+
+		return result;
+	}
+	@RequestMapping(value = "/sendRebranding", method = RequestMethod.POST, params = "send")
+	public ModelAndView sendRebranding(@ModelAttribute("messageSend") Message message, BindingResult binding) {
+		ModelAndView result;
+
+		message = this.adminService.reconstruct(message, binding);
+
+		if (binding.hasErrors())
+			result = this.createEditModelAndViewRebranding(message);
+		else
+			try {
+				this.adminService.broadcastMessageRebranding(message);
+				result = new ModelAndView("redirect:/");
+
+			} catch (Throwable oops) {
+				result = this.createEditModelAndViewRebranding(message, "company.commit.error");
+			}
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndViewRebranding(Message message) {
+		ModelAndView result;
+
+		result = this.createEditModelAndViewRebranding(message, null);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndViewRebranding(Message message, String messageCode) {
+		ModelAndView result;
+
+		result = new ModelAndView("broadcast/administrator/sendRebranding");
+
+		result.addObject("targetUri", "broadcast/administrator/sendRebranding.do");
 		result.addObject("messageSend", message);
 		result.addObject("message", messageCode);
 

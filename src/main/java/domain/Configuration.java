@@ -42,6 +42,8 @@ public class Configuration extends DomainEntity {
 	private Float			fare;
 	private List<String>	cardType;
 
+	private Boolean			isRebrandingBroadcasted;
+
 
 	@Valid
 	@ElementCollection(targetClass = String.class)
@@ -59,7 +61,7 @@ public class Configuration extends DomainEntity {
 		return this.priorityLvl;
 	}
 
-	public void setPriorityLvl(final List<String> priorityLvl) {
+	public void setPriorityLvl(List<String> priorityLvl) {
 		this.priorityLvl = priorityLvl;
 	}
 
@@ -72,7 +74,7 @@ public class Configuration extends DomainEntity {
 		return this.imageURL;
 	}
 
-	public void setImageURL(final String imageURL) {
+	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
 	}
 
@@ -81,7 +83,7 @@ public class Configuration extends DomainEntity {
 		return this.systemName;
 	}
 
-	public void setSystemName(final String systemName) {
+	public void setSystemName(String systemName) {
 		this.systemName = systemName;
 	}
 
@@ -90,7 +92,7 @@ public class Configuration extends DomainEntity {
 		return this.welcomeMessageEnglish;
 	}
 
-	public void setWelcomeMessageEnglish(final String welcomeMessageEnglish) {
+	public void setWelcomeMessageEnglish(String welcomeMessageEnglish) {
 		this.welcomeMessageEnglish = welcomeMessageEnglish;
 	}
 
@@ -99,7 +101,7 @@ public class Configuration extends DomainEntity {
 		return this.welcomeMessageSpanish;
 	}
 
-	public void setWelcomeMessageSpanish(final String welcomeMessageSpanish) {
+	public void setWelcomeMessageSpanish(String welcomeMessageSpanish) {
 		this.welcomeMessageSpanish = welcomeMessageSpanish;
 	}
 
@@ -108,7 +110,7 @@ public class Configuration extends DomainEntity {
 		return this.maxFinderResults;
 	}
 
-	public void setmaxFinderResults(final Integer maxFinderResults) {
+	public void setmaxFinderResults(Integer maxFinderResults) {
 		this.maxFinderResults = maxFinderResults;
 	}
 
@@ -117,7 +119,7 @@ public class Configuration extends DomainEntity {
 		return this.minTimeFinder;
 	}
 
-	public void setMinTimeFinder(final Integer minTimeFinder) {
+	public void setMinTimeFinder(Integer minTimeFinder) {
 		this.minTimeFinder = minTimeFinder;
 	}
 
@@ -126,7 +128,7 @@ public class Configuration extends DomainEntity {
 		return this.maxTimeFinder;
 	}
 
-	public void setMaxTimeFinder(final Integer maxTimeFinder) {
+	public void setMaxTimeFinder(Integer maxTimeFinder) {
 		this.maxTimeFinder = maxTimeFinder;
 	}
 
@@ -135,7 +137,7 @@ public class Configuration extends DomainEntity {
 		return this.minFinderResults;
 	}
 
-	public void setMinFinderResults(final Integer minFinderResults) {
+	public void setMinFinderResults(Integer minFinderResults) {
 		this.minFinderResults = minFinderResults;
 	}
 
@@ -144,7 +146,7 @@ public class Configuration extends DomainEntity {
 		return this.spamWords;
 	}
 
-	public void setSpamWords(final List<String> spamWords) {
+	public void setSpamWords(List<String> spamWords) {
 		this.spamWords = spamWords;
 	}
 
@@ -153,7 +155,7 @@ public class Configuration extends DomainEntity {
 		return this.spainTelephoneCode;
 	}
 
-	public void setSpainTelephoneCode(final String spainTelephoneCode) {
+	public void setSpainTelephoneCode(String spainTelephoneCode) {
 		this.spainTelephoneCode = spainTelephoneCode;
 	}
 
@@ -162,7 +164,7 @@ public class Configuration extends DomainEntity {
 		return this.goodWords;
 	}
 
-	public void setGoodWords(final String goodWords) {
+	public void setGoodWords(String goodWords) {
 		this.goodWords = goodWords;
 	}
 
@@ -171,7 +173,7 @@ public class Configuration extends DomainEntity {
 		return this.badWords;
 	}
 
-	public void setBadWords(final String badWords) {
+	public void setBadWords(String badWords) {
 		this.badWords = badWords;
 	}
 
@@ -180,7 +182,7 @@ public class Configuration extends DomainEntity {
 		return this.finderResult;
 	}
 
-	public void setFinderResult(final Integer finderResult) {
+	public void setFinderResult(Integer finderResult) {
 		this.finderResult = finderResult;
 	}
 
@@ -189,7 +191,7 @@ public class Configuration extends DomainEntity {
 		return this.timeFinder;
 	}
 
-	public void setTimeFinder(final Integer timeFinder) {
+	public void setTimeFinder(Integer timeFinder) {
 		this.timeFinder = timeFinder;
 	}
 
@@ -220,6 +222,15 @@ public class Configuration extends DomainEntity {
 
 	public void setCardType(List<String> cardType) {
 		this.cardType = cardType;
+	}
+
+	@NotNull
+	public Boolean getIsRebrandingBroadcasted() {
+		return this.isRebrandingBroadcasted;
+	}
+
+	public void setIsRebrandingBroadcasted(Boolean isRebrandingBroadcasted) {
+		this.isRebrandingBroadcasted = isRebrandingBroadcasted;
 	}
 
 }

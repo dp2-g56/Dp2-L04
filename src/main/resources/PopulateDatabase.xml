@@ -75,6 +75,8 @@
 		<property name="VAT" value="21" />
 		<property name="fare" value="1" />
 		
+		<property name="isRebrandingBroadcasted" value="false" />
+		
 	</bean>
 
 	<!-- USER ACCOUNT -->
@@ -646,7 +648,7 @@
 		<property name="email" value="company1@gmail.com" />
 		<property name="phone" value="+34609235639" />
 		<property name="address" value="CompanyLand" />
-		<property name="score" value="0" />
+		<property name="score" value="1" />
 		<property name="socialProfiles">
 			<list>
 				<ref bean="socialProfile5" />
@@ -3375,6 +3377,7 @@
 		<property name="position" ref="position1" />
 		<property name="provider" ref="provider1" />
 	</bean>
+
 	
 	<!-- AUDITS -->
 		<!-- AUDIT1 -->
@@ -3387,5 +3390,6 @@
 		<property name="isDraftMode" value="true" />
 		<property name="momentCreation" value="11/11/2018 11:30" />
 	</bean>
+
 
 </beans>
