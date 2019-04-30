@@ -464,4 +464,8 @@ public class CompanyService {
 	public List<Position> positionsOfCompanyInFinalNotCancelled(int idCompany) {
 		return this.companyRepository.positionsOfCompanyInFinalNotCancelled(idCompany);
 	}
+
+	public List<Company> findAll() {
+		return this.companyRepository.findAll();
+	}
 }
