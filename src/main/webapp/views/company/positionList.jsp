@@ -117,6 +117,20 @@
         	
     </display:column>
     
+    <display:column titleKey="position.audits">
+
+       		<spring:url var="auditsUrl" value="/anonymous/audit/list.do?positionId={positionId}">
+            	<spring:param name="positionId" value="${row.id}"/>
+            	<spring:param name="assignable" value="${true}" />
+        	</spring:url>
+        	
+        	<a href="${auditsUrl}">
+              <spring:message var ="viewAudits" code="position.viewAudits" />
+             <jstl:out value="${viewAudits}" />   
+        	</a>
+        	
+        </display:column>
+    
       <security:authorize access="hasRole('COMPANY')">
 
 	<display:column>

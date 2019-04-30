@@ -27,7 +27,23 @@
 <br />
 
 <br />
-  <a href="anonymous/position/list.do"><spring:message code="position.backToPublicData" /></a>
+	<jstl:choose>
+		<jstl:when test="${!assignable}">
+			<a href="anonymous/position/list.do"><spring:message code="position.backToPublicData" /></a>
+		</jstl:when>
+		
+    	<jstl:otherwise>
+    		<security:authorize access="hasAnyRole('AUDITOR')">
+  				<a href="position/auditor/listAssignablePositions.do"><spring:message code="position.backToPositions" /></a>
+  			</security:authorize>
+  			<security:authorize access="hasAnyRole('ROOKIE')">
+  				<a href="finder/rookie/list.do"><spring:message code="position.backToPositions" /></a>
+  			</security:authorize>
+  			<security:authorize access="hasAnyRole('COMPANY')">
+  				<a href="position/company/list.do"><spring:message code="position.backToPositions" /></a>
+  			</security:authorize>
+  		</jstl:otherwise>
+	</jstl:choose>
 
 
 
