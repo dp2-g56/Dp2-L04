@@ -77,6 +77,26 @@ public class SponsorshipController {
 
 		return result;
 	}
+	
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(@RequestParam int sponsorshipId) {
+		ModelAndView result;
+
+		Sponsorship sponsorship = this.sponsorshipService.findOne(sponsorshipId);
+		
+		List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
+
+		FormObjectSponsorshipCreditCard formObject = new FormObjectSponsorshipCreditCard();
+
+		formObject.setId(sponsorship.getId());
+		formObject.setBanner(sponsorship.getBanner());
+		formObject.setTargetURL(sponsorship.getTargetUrl());
+
+		result = this.createEditModelAndView("sponsorship/edit", formObject);
+		result.addObject("positions", positions);
+
+		return result;
+	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@ModelAttribute("formObject") @Valid FormObjectSponsorshipCreditCard formObject,
