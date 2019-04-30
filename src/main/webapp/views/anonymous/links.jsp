@@ -16,6 +16,27 @@
 		</display:column> 
 	
 	</display:table>
+
+	<jstl:choose>
 	
-	<acme:cancel url="anonymous/item/list.do" code="provider.backToTheItemList" /> 
+		<jstl:when test="${param.back=='itemList'}">
+		
+		<spring:url var="back" value="anonymous/item/list.do">
+			<spring:param name="providerId" value="${param.providerId}"/>
+		</spring:url>
+			
+		<acme:cancel url="${back}" code="provider.backToTheItemList" />
+		</jstl:when>
+		
+		<jstl:when test="${param.back=='providerProfile'}">
+		<spring:url var="back" value="anonymous/provider/listOne.do">
+			<spring:param name="providerId" value="${param.providerId}"/>
+		</spring:url>
+		
+		<acme:cancel url="${back}" code="provider.backToTheProviderProfile" />
+		</jstl:when>
+	
+	
+	</jstl:choose>
+ 
 
