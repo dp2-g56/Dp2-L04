@@ -7,8 +7,10 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
 
 import domain.CreditCard;
+import forms.FormObjectSponsorshipCreditCard;
 
 @Service
 @Transactional
@@ -64,6 +66,21 @@ public class CreditCardService {
 
 	public boolean validateCvvCreditCard(CreditCard creditCard) {
 		return creditCard.getCvvCode() >= 100 && creditCard.getCvvCode() <= 999;
+	}
+	
+	public CreditCard reconstruct(FormObjectSponsorshipCreditCard formObject, BindingResult binding) {
+		CreditCard card = new CreditCard();
+
+		card.setBrandName(formObject.getBrandName());
+		card.setHolderName(formObject.getHolderName());
+		card.setNumber(formObject.getNumber());
+		card.setExpirationMonth(formObject.getExpirationMonth());
+		card.setExpirationYear(formObject.getExpirationYear());
+		card.setCvvCode(formObject.getCvvCode());
+
+		// this.validator.validate(card, binding);
+
+		return card;
 	}
 
 }
