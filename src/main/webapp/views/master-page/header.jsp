@@ -70,6 +70,7 @@
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="position/auditor/listAssignablePositions.do"><spring:message code="master.page.assignablePositions" /></a></li>
+					<li><a href="audit/auditor/list.do"><spring:message code="master.page.listAudits" /></a></li>
 				</ul>
 			</li>
 		</security:authorize>

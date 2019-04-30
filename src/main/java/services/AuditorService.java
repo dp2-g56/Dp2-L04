@@ -32,19 +32,22 @@ import forms.FormObjectEditAuditor;
 public class AuditorService {
 
 	@Autowired
-	private AuditorRepository	auditorRepository;
+	private AuditorRepository		auditorRepository;
 
 	@Autowired
-	private AuditService		auditService;
+	private AuditService			auditService;
 
 	@Autowired
-	CreditCardService			creditCardService;
+	private CreditCardService		creditCardService;
 
 	@Autowired
-	ConfigurationService		configurationService;
+	private ConfigurationService	configurationService;
 
 	@Autowired
-	AdminService				adminService;
+	private AdminService			adminService;
+
+	@Autowired
+	private PositionService			positionService;
 
 
 	//-----------------------------------------SECURITY-----------------------------
@@ -80,9 +83,7 @@ public class AuditorService {
 		Assert.isTrue(a.getId() == 0);
 		Assert.isTrue(this.auditorRepository.getAssignablePositions(loggedAuditor.getId()).contains(a.getPosition()));
 
-		Audit audit = this.auditService.save(a);
-		loggedAuditor.getAudits().add(audit);
-		this.save(loggedAuditor);
+		this.auditService.save(a);
 	}
 
 	public Auditor createAuditor() {
@@ -359,4 +360,10 @@ public class AuditorService {
 		return this.auditorRepository.getAssignablePositions(auditor.getId());
 	}
 
+	public void updateAudit(Audit audit) {
+		Auditor auditor = this.loggedAuditor();
+		Assert.isTrue(auditor.getAudits().contains(audit) && this.auditService.findOne(audit.getId()).getIsDraftMode());
+		this.auditService.save(audit);
+
+	}
 }

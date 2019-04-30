@@ -92,7 +92,7 @@ public class AuditController extends AbstractController {
 	}
 
 	//SAVE AUDIT
-	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(Audit audit, BindingResult binding) {
 		ModelAndView result;
 
@@ -112,6 +112,30 @@ public class AuditController extends AbstractController {
 				result = new ModelAndView("position/auditor/listAssignablePositions");
 				result.addObject("positions", positions);
 				result.addObject("requestURI", "position/auditor/listAssignablePositions.do");
+			} catch (Throwable oops) {
+				result = this.createEditModelAndView(audit, "commit.error");
+			}
+		}
+
+		return result;
+	}
+
+	//EDIT AUDIT
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "edit")
+	public ModelAndView edit(Audit audit, BindingResult binding) {
+		ModelAndView result;
+
+		Audit a = new Audit();
+
+		a = this.auditService.reconstruct(audit, binding);
+
+		if (binding.hasErrors()) {
+			result = this.createEditModelAndView(audit);
+		} else {
+			try {
+				this.auditorService.updateAudit(a);
+
+				result = new ModelAndView("redirect:list.do");
 			} catch (Throwable oops) {
 				result = this.createEditModelAndView(audit, "commit.error");
 			}
