@@ -77,13 +77,13 @@ public class SponsorshipController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam int sponsorshipId) {
 		ModelAndView result;
 
 		Sponsorship sponsorship = this.sponsorshipService.findOne(sponsorshipId);
-		
+
 		List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
 
 		FormObjectSponsorshipCreditCard formObject = new FormObjectSponsorshipCreditCard();
@@ -157,6 +157,21 @@ public class SponsorshipController {
 				result = this.createEditModelAndView("sponsorship/create", formObject, "sponsorship.commit.error");
 				result.addObject("positions", positions);
 			}
+		}
+
+		return result;
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public ModelAndView delete(@RequestParam int sponsorshipId) {
+		ModelAndView result;
+
+		try {
+			this.sponsorshipService.deleteSponsorship(sponsorshipId);
+			result = new ModelAndView("redirect:list.do");
+		} catch (Throwable oops) {
+			result = this.list();
+			result.addObject("message", "sponsorship.delete.error");
 		}
 
 		return result;

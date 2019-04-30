@@ -152,4 +152,15 @@ public class SponsorshipService {
 
 		return result;
 	}
+
+	public void deleteSponsorship(int sponsorshipId) {
+		Sponsorship sponsorship = this.findOne(sponsorshipId);
+		Provider p = this.providerService.loggedProvider();
+		List<Sponsorship> lp = p.getSponsorships();
+		Assert.isTrue(lp.contains(sponsorship));
+		lp.remove(sponsorship);
+		p.setSponsorships(lp);
+		this.providerService.save(p);
+		this.delete(sponsorship);
+	}
 }
