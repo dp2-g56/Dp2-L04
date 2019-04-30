@@ -28,4 +28,7 @@ public interface ConfigurationRepository extends JpaRepository<Configuration, In
 	@Query("select m from Actor a join a.messages m join a.userAccount u where a.id = ?1 and m.sender = u.username")
 	public List<Message> messagesSendedByActor(int actorId);
 
+	@Query("select c.isRebrandingBroadcasted from Configuration c")
+	public Boolean isRebrandingBroadcasted();
+
 }
