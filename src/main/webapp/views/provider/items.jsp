@@ -40,6 +40,13 @@
 			<spring:url var="deleteUrl" value="/item/provider/delete.do">
 				<spring:param name="itemId" value="${row.id}"/>
 			</spring:url>
+			<spring:url var="editUrl" value="/item/provider/edit.do">
+				<spring:param name="itemId" value="${row.id}"/>
+			</spring:url>
+			<a href="${editUrl}">
+				<spring:message code="item.edit" var = "editMessage" />
+				<jstl:out value="${editMessage}"/>
+			</a> / 
 			<a href="${deleteUrl}" onclick="return confirm('<spring:message code="item.delete.confirmation" />')">
 				<spring:message code="item.delete" var = "deleteMessage" />
 				<jstl:out value="${deleteMessage}"/>

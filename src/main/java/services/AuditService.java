@@ -48,8 +48,6 @@ public class AuditService {
 	public Audit create(Position position) {
 		Audit audit = new Audit();
 
-		Assert.isTrue(!position.getIsDraftMode());
-
 		audit.setAuditor(null);
 		audit.setFreeText("");
 		audit.setIsDraftMode(true);
@@ -62,15 +60,16 @@ public class AuditService {
 
 	public Audit reconstruct(Audit audit, BindingResult binding) {
 		this.auditorService.loggedAsAuditor();
+		Auditor auditor = this.auditorService.loggedAuditor();
 		Audit result = new Audit();
 
 		if (audit.getId() == 0) {
 			result = audit;
-			result.setAuditor(this.auditorService.loggedAuditor());
+			result.setAuditor(auditor);
 
 			Date thisMoment = new Date();
 			thisMoment.setTime(thisMoment.getTime() - 1);
-			result.setPosition(audit.getPosition());
+
 			result.setMomentCreation(thisMoment);
 
 		} else {
@@ -80,9 +79,9 @@ public class AuditService {
 			result.setIsDraftMode(audit.getIsDraftMode());
 			result.setScore(audit.getScore());
 
-			result.setPosition(audit.getPosition());
-			result.setMomentCreation(audit.getMomentCreation());
-			result.setAuditor(audit.getAuditor());
+			result.setPosition(copy.getPosition());
+			result.setMomentCreation(copy.getMomentCreation());
+			result.setAuditor(copy.getAuditor());
 
 			result.setId(copy.getId());
 			result.setVersion(copy.getVersion());
@@ -96,9 +95,7 @@ public class AuditService {
 		Auditor loggedAuditor = this.auditorService.loggedAuditor();
 
 		Assert.isTrue(loggedAuditor.getAudits().contains(audit));
-		Assert.isTrue(audit.getIsDraftMode());
-
-		loggedAuditor.getAudits().remove(audit);
+		Assert.isTrue(this.findOne(audit.getId()).getIsDraftMode());
 
 		this.auditRepository.delete(audit);
 

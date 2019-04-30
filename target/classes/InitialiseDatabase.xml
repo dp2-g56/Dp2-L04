@@ -74,10 +74,10 @@
 		<property name="timeFinder" value="1"/>
 
 		
-		<property name="welcomeMessageEnglish" value="Welcome to Acme hacker Rank!We´re IT hacker´s favourite job marketplace!" />
-		<property name="welcomeMessageSpanish" value="¡Bienvenidos a Acme Hacker Rank! ¡Somos el mercado de trabajo favorito de los profesionales de las TICs!" />
+		<property name="welcomeMessageEnglish" value="Welcome to Acme rookie !We´re IT rookie´s favourite job marketplace!" />
+		<property name="welcomeMessageSpanish" value="¡Bienvenidos a Acme Rookie ! ¡Somos el mercado de trabajo favorito de los profesionales de las TICs!" />
 		
-		<property name="systemName" value="Acme Hacker Rank" />
+		<property name="systemName" value="Acme Rookie " />
 		<property name="imageURL" value="https://i.imgur.com/7b8lu4b.pngby" />
 
 		<property name="VAT" value="21" />

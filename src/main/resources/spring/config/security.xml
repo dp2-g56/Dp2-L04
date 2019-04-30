@@ -67,10 +67,13 @@
 		
 		<!-- PROVIDER -->
 		<security:intercept-url pattern="/item/provider/**" access="hasRole('PROVIDER')" /> 
+		<security:intercept-url pattern="/sponsorship/provider/**" access="hasRole('PROVIDER')" /> 
 		<security:intercept-url pattern="/export/provider.do" access="hasRole('PROVIDER')" /> 
 		
 		<!-- AUDITOR -->
 		<security:intercept-url pattern="/export/auditor.do" access="hasRole('AUDITOR')" /> 
+		<security:intercept-url pattern="/position/auditor/**" access="hasRole('AUDITOR')" />
+		<security:intercept-url pattern="/audit/auditor/**" access="hasRole('AUDITOR')" /> 
 
 		<!-- AUTHENTICATED -->
 		<security:intercept-url pattern="/authenticated/**" access="isAuthenticated()" />

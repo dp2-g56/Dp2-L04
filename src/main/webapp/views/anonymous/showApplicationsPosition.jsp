@@ -33,6 +33,7 @@
 						
 			<spring:url var="curriculumUrl" value="/anonymous/curriculum/list.do?applicationId={applicationId}">
             	<spring:param name="applicationId" value="${row.id}"/>
+            	<spring:param name="assignable" value="${assignable}" />
         	</spring:url>
         	
         	<a href="${curriculumUrl}">
@@ -79,7 +80,16 @@
 </security:authorize>
 
 <br />
-  <a href="anonymous/position/list.do"><spring:message code="position.backToPublicData" /></a>
+
+	<jstl:if test="${!assignable}">
+		<a href="anonymous/position/list.do"><spring:message code="position.backToPublicData" /></a>
+	</jstl:if> 
+  <security:authorize access="hasAnyRole('AUDITOR')">
+    <jstl:if test="${assignable}">
+  <a href="position/auditor/listAssignablePositions.do"><spring:message code="position.backToAssignablePositions" /></a>
+  </jstl:if> 
+  
+  </security:authorize>
 
 
 

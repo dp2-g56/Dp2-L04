@@ -76,6 +76,8 @@
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="position/auditor/listAssignablePositions.do"><spring:message code="master.page.assignablePositions" /></a></li>
+					<li><a href="audit/auditor/list.do"><spring:message code="master.page.listAudits" /></a></li>
+
 				</ul>
 			</li>
 		</security:authorize>
@@ -86,7 +88,8 @@
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="anonymous/rookie/create.do"><spring:message code="master.page.createRookie" /></a></li>	
-					<li><a href="anonymous/company/create.do"><spring:message code="master.page.createCompany" /></a></li>			
+					<li><a href="anonymous/company/create.do"><spring:message code="master.page.createCompany" /></a></li>
+					<li><a href="anonymous/provider/create.do"><spring:message code="master.page.createProvider" /></a></li>				
 				</ul>
 			</li>
 			
@@ -114,6 +117,8 @@
 			
 			<li><a href="anonymous/position/list.do"><spring:message code="master.page.publicPositions" /></a></li>
 			<li><a href="anonymous/company/list.do"><spring:message code="master.page.publicCompanies" /></a></li>
+			<li><a href="anonymous/provider/list.do"><spring:message code="master.page.publicProviders" /></a></li>
+			<li><a href="anonymous/item/list.do"><spring:message code="master.page.provider.items" /></a></li>
 			
 			<li><a class="fNiv"><spring:message	code="master.page.termsAndConditions" /></a>
 				<ul>
