@@ -70,7 +70,7 @@
 		<property name="welcomeMessageSpanish" value="¡Bienvenidos a Acme Rookie ! ¡Somos el mercado de trabajo favorito de los profesionales de las TICs!" />
 		
 		<property name="systemName" value="Acme Rookies" />
-		<property name="imageURL" value="https://i.imgur.com/7b8lu4b.pngby" />
+		<property name="imageURL" value="https://i.imgur.com/PX5WdRH.png" />
 
 		<property name="VAT" value="21" />
 		<property name="fare" value="1" />
