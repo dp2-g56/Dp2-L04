@@ -48,12 +48,13 @@ public class AuditService {
 	public Audit create(Position position) {
 		Audit audit = new Audit();
 
-		Assert.isTrue(!position.getIsDraftMode());
+		Date thisMoment = new Date();
+		thisMoment.setTime(thisMoment.getTime() - 1);
 
 		audit.setAuditor(null);
 		audit.setFreeText("");
 		audit.setIsDraftMode(true);
-		audit.setMomentCreation(null);
+		audit.setMomentCreation(thisMoment);
 		audit.setPosition(position);
 		audit.setScore(0);
 
@@ -67,11 +68,6 @@ public class AuditService {
 		if (audit.getId() == 0) {
 			result = audit;
 			result.setAuditor(this.auditorService.loggedAuditor());
-
-			Date thisMoment = new Date();
-			thisMoment.setTime(thisMoment.getTime() - 1);
-			result.setPosition(audit.getPosition());
-			result.setMomentCreation(thisMoment);
 
 		} else {
 			Audit copy = this.findOne(audit.getId());

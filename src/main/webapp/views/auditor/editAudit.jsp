@@ -25,11 +25,11 @@
 		<acme:boolean code="position.isDraftMode" trueCode="position.true" falseCode="position.false" path="isDraftMode"/>	
 		<br />
 		<acme:selectNumber max="10" min="0" code="audit.score" path="score"/>
-		<acme:submit name="edit" code="hacker.edit" />
+		<acme:submit name="edit" code="rookie.edit" />
 
 
 	</form:form>
 
-	<acme:cancel url="/position/auditor/listAssignablePositions.do" code="hacker.cancel" />
+	<acme:cancel url="/position/auditor/listAssignablePositions.do" code="rookie.cancel" />
 
 </security:authorize>
