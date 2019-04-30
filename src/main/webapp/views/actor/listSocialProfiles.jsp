@@ -150,6 +150,8 @@
 		<display:column titleKey="item.links">
 			<spring:url var="links" value="/anonymous/item/listLinks.do">
 				<spring:param name="itemId" value="${row.id}"/>
+				<spring:param name="providerId" value="${actor.id}"/>
+				<spring:param name="back" value="providerProfile"/>
 			</spring:url>
 			<a href="${links}">
 				<spring:message code="item.links.show" var ="show" />
@@ -160,6 +162,8 @@
 		<display:column titleKey="item.pictures">
 			<spring:url var="pictures" value="/anonymous/item/listPictures.do">
 				<spring:param name="itemId" value="${row.id}"/>
+				<spring:param name="providerId" value="${actor.id}"/>
+				<spring:param name="back" value="providerProfile"/>
 			</spring:url>
 			<a href="${pictures}">
 				<spring:message code="item.pictures.show" var ="show" />
@@ -169,7 +173,10 @@
 	
 	</display:table>
 	
-	  <a href="anonymous/item/list.do"><spring:message code="position.backToPublicData" /></a>
+	
+	<spring:url var="backPublicData" value="anonymous/item/list.do"/>
+	
+	  <a href="${backPublicData}"><spring:message code="position.backToPublicData" /></a>
 	
 	
 	</jstl:if>
