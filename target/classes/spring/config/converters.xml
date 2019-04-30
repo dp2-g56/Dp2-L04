@@ -49,8 +49,8 @@
 		<bean class="converters.FinderToStringConverter" />
 		<bean class="converters.StringToFinderConverter" />
 		
-		<bean class="converters.HackerToStringConverter" />
-		<bean class="converters.StringToHackerConverter" />
+		<bean class="converters.RookieToStringConverter" />
+		<bean class="converters.StringToRookieConverter" />
 		
 		<bean class="converters.ItemToStringConverter" />
 		<bean class="converters.StringToItemConverter" />

@@ -104,8 +104,15 @@
   </security:authorize>  
   
   <br />
-  <jstl:if test="${publicData}">
+  <jstl:if test="${publicData && !assignable}">
   <a href="anonymous/filtered/create.do"><spring:message code="position.backToPublicData" /></a>
  </jstl:if>
+ 
+ <security:authorize access="hasAnyRole('AUDITOR')">
+    <jstl:if test="${assignable}">
+  <a href="position/auditor/listAssignablePositions.do"><spring:message code="position.backToAssignablePositions" /></a>
+  </jstl:if>
+  
+  </security:authorize>
     
     

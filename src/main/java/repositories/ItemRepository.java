@@ -24,5 +24,10 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	@Query("select i from Provider p join p.items i where i.id = ?1 and p.id = ?2")
 	Item getItemOfProvider(int itemId, int providerId);
+	
+	@Query("select p.items from Provider p where p.id = ?1")
+	List<Item> getItemsFromProvider(int providerId);
 
+	@Query("select p from Provider p join p.items i where i.id = ?1")
+	Provider getProviderByItem(int itemId);
 }

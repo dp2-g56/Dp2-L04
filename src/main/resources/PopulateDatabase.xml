@@ -70,7 +70,7 @@
 		<property name="welcomeMessageSpanish" value="¡Bienvenidos a Acme Rookie ! ¡Somos el mercado de trabajo favorito de los profesionales de las TICs!" />
 		
 		<property name="systemName" value="Acme Rookies" />
-		<property name="imageURL" value="https://i.imgur.com/7b8lu4b.pngby" />
+		<property name="imageURL" value="https://i.imgur.com/PX5WdRH.png" />
 
 		<property name="VAT" value="21" />
 		<property name="fare" value="1" />
@@ -332,6 +332,7 @@
 				</property>
 				<property name="audits">
 					<list>
+					<ref bean="audit1"/>
 					</list>
 				</property>
 				<property name="userAccount" ref="userAccount15" />
@@ -1504,6 +1505,7 @@
 		</property>
 		<property name="audits">
 			<list>
+			<ref bean="audit1" />
 			</list>
 		</property>
 	</bean>
@@ -3375,5 +3377,19 @@
 		<property name="position" ref="position1" />
 		<property name="provider" ref="provider1" />
 	</bean>
+
+	
+	<!-- AUDITS -->
+		<!-- AUDIT1 -->
+		
+	<bean id="audit1" class="domain.Audit">
+		<property name="auditor" ref="auditor1" />
+		<property name="position" ref="position2" />
+		<property name="freeText" value="freetext1" />
+		<property name="score" value="9" />
+		<property name="isDraftMode" value="true" />
+		<property name="momentCreation" value="11/11/2018 11:30" />
+	</bean>
+
 
 </beans>

@@ -29,6 +29,11 @@
 		<put-attribute name="body" value="/views/anonymous/createRookie.jsp" />
 	</definition>
 	
+	<definition name="anonymous/provider/create" extends="master.page">	
+		<put-attribute name="title" value="Register as provider" />
+		<put-attribute name="body" value="/views/anonymous/createProvider.jsp" />
+	</definition>
+	
 	<definition name="anonymous/position/list" extends="master.page">	
 		<put-attribute name="title" value="Public positions" />
 		<put-attribute name="body" value="/views/anonymous/filteredPositions.jsp" />
@@ -88,6 +93,32 @@
 		<put-attribute name="title" value="Audits" />
 		<put-attribute name="body" value="/views/anonymous/showAuditsPosition.jsp" />
 	</definition>
+	
+	<definition name="anonymous/provider/list" extends="master.page">	
+		<put-attribute name="title" value="Providers" />
+		<put-attribute name="body" value="/views/anonymous/listOfProvider.jsp" />
+	</definition>
+
+	<definition name="anonymous/item/list" extends="master.page">	
+		<put-attribute name="title" value="Items" />
+		<put-attribute name="body" value="/views/anonymous/listOfItems.jsp" />
+	</definition>
+	
+	<definition name="anonymous/item/listLinks" extends="master.page">	
+		<put-attribute name="title" value="Item's Links" />
+		<put-attribute name="body" value="/views/anonymous/links.jsp" />
+	</definition>
+	
+		<definition name="anonymous/item/listPictures" extends="master.page">	
+		<put-attribute name="title" value="Item's Pictures" />
+		<put-attribute name="body" value="/views/anonymous/pictures.jsp" />
+	</definition>
+	
+	<definition name="anonymous/provider/listOne" extends="master.page">	
+		<put-attribute name="title" value="Provider" />
+		<put-attribute name="body" value="/views/actor/listSocialProfiles.jsp" />
+	</definition>
+	
 	
 </tiles-definitions>
 
