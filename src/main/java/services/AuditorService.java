@@ -22,6 +22,7 @@ import domain.Audit;
 import domain.Auditor;
 import domain.CreditCard;
 import domain.Message;
+import domain.Position;
 import domain.SocialProfile;
 import forms.FormObjectAuditor;
 import forms.FormObjectEditAuditor;
@@ -330,4 +331,19 @@ public class AuditorService {
 
 		this.auditorRepository.delete(auditor);
 	}
+
+	public List<Position> showAssignablePositions() {
+		this.loggedAsAuditor();
+		Auditor auditor = this.loggedAuditor();
+		return this.auditorRepository.getAssignablePositions(auditor.getId());
+	}
+
+	public void assignPosition(Audit audit) {
+		this.loggedAsAuditor();
+		Auditor auditor = this.loggedAuditor();
+		Assert.isTrue(this.auditorRepository.getAssignablePositions(auditor.getId()).contains(audit.getPosition()));
+		auditor.getAudits().add(audit);
+	}
+
+
 }

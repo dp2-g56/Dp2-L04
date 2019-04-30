@@ -264,7 +264,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/curriculum/list", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam int applicationId) {
+	public ModelAndView show(@RequestParam int applicationId, @RequestParam boolean assignable) {
 		ModelAndView result;
 
 		try {
@@ -275,6 +275,7 @@ public class AnonymousController extends AbstractController {
 			Boolean publicData = true;
 
 			result = new ModelAndView("anonymous/curriculum/list");
+			result.addObject("assignable", assignable);
 			result.addObject("curriculum", curriculum);
 			result.addObject("publicData", publicData);
 			result.addObject("personalData", curriculum.getPersonalData());
@@ -290,7 +291,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
-	public ModelAndView listProblems(@RequestParam int positionId) {
+	public ModelAndView listProblems(@RequestParam int positionId, @RequestParam boolean assignable) {
 		ModelAndView result;
 
 		List<Problem> allProblems = new ArrayList<>();
@@ -313,6 +314,7 @@ public class AnonymousController extends AbstractController {
 		result.addObject("sameActorLogged", sameActorLogged);
 		result.addObject("requestURI", "anonymous/problem/list.do");
 		result.addObject("positionId", positionId);
+		result.addObject("assignable", assignable);
 
 		return result;
 	}
@@ -338,7 +340,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
-	public ModelAndView listAplications(@RequestParam int positionId) {
+	public ModelAndView listAplications(@RequestParam int positionId, @RequestParam boolean assignable) {
 		ModelAndView result;
 
 		List<Application> allApplications = new ArrayList<Application>();
@@ -359,12 +361,13 @@ public class AnonymousController extends AbstractController {
 		result.addObject("sameActorLogged", sameActorLogged);
 		result.addObject("requestURI", "anonymous/application/list.do");
 		result.addObject("positionId", positionId);
+		result.addObject("assignable", assignable);
 
 		return result;
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
-	public ModelAndView listAudits(@RequestParam int positionId) {
+	public ModelAndView listAudits(@RequestParam int positionId, @RequestParam boolean assignable) {
 		ModelAndView result;
 
 		List<Audit> finalAudits = new ArrayList<Audit>();
@@ -375,12 +378,13 @@ public class AnonymousController extends AbstractController {
 		result.addObject("finalAudits", finalAudits);
 		result.addObject("requestURI", "anonymous/audit/list.do");
 		result.addObject("positionId", positionId);
+		result.addObject("assignable", assignable);
 
 		return result;
 	}
 
 	@RequestMapping(value = "/company/listOne", method = RequestMethod.GET)
-	public ModelAndView listCompany(@RequestParam int positionId) {
+	public ModelAndView listCompany(@RequestParam int positionId, @RequestParam boolean assignable) {
 
 		ModelAndView result;
 		List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
@@ -408,6 +412,7 @@ public class AnonymousController extends AbstractController {
 		result.addObject("publicValue", publicValue);
 		result.addObject("sameActorLogged", sameActorLogged);
 		result.addObject("requestURI", "anonymous/company/listOne.do");
+		result.addObject("assignable", assignable);
 
 		return result;
 	}

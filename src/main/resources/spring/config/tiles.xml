@@ -31,6 +31,7 @@
 		<value>/views/rookie/tiles.xml</value>
 		<value>/views/message/tiles.xml</value>
 		<value>/views/provider/tiles.xml</value>
+		<value>/views/auditor/tiles.xml</value>
 		
 	</util:list>
 
