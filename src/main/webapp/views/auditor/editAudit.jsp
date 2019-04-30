@@ -21,15 +21,34 @@
 		<form:hidden path="position"/>
 
 
+
 		<acme:textarea code="audit.freeText" path="freeText" />
 		<acme:boolean code="position.isDraftMode" trueCode="position.true" falseCode="position.false" path="isDraftMode"/>	
 		<br />
 		<acme:selectNumber max="10" min="0" code="audit.score" path="score"/>
-		<acme:submit name="edit" code="rookie.edit" />
+		
+		<jstl:choose>
+			<jstl:when test="${audit.id == 0}">
+				<acme:submit name="save" code="rookie.save" />
+			</jstl:when>
+			<jstl:otherwise>
+				<acme:submit name="edit" code="rookie.edit" />
+				<acme:submit name="delete" code="rookie.delete" />
+			</jstl:otherwise>
+		</jstl:choose>
 
 
 	</form:form>
-
-	<acme:cancel url="/position/auditor/listAssignablePositions.do" code="rookie.cancel" />
+	
+	<jstl:choose>
+		<jstl:when test="${audit.id == 0}">
+			<acme:cancel url="/position/auditor/listAssignablePositions.do" code="rookie.cancel" />
+		</jstl:when>
+		<jstl:otherwise>
+			<acme:cancel url="/audit/auditor/list.do" code="rookie.cancel" />
+		</jstl:otherwise>
+	</jstl:choose>
+	
+	
 
 </security:authorize>
