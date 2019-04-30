@@ -24,10 +24,11 @@ import security.UserAccount;
 import domain.Actor;
 import domain.Admin;
 import domain.Company;
+import domain.Configuration;
 import domain.CreditCard;
-import domain.Rookie;
 import domain.Message;
 import domain.Position;
+import domain.Rookie;
 import domain.SocialProfile;
 import forms.FormObjectAdmin;
 import forms.FormObjectEditAdmin;
@@ -499,6 +500,37 @@ public class AdminService {
 
 	public void flush() {
 		this.adminRepository.flush();
+
+	}
+
+	public void broadcastMessageRebranding(Message message) {
+
+		Boolean verification = this.configurationService.isRebrandingBroadcasted();
+		Assert.isTrue(!verification);
+		Admin sender = this.loggedAdmin();
+		Configuration configuration;
+
+		String username = sender.getUserAccount().getUsername();
+
+		List<Actor> actors = new ArrayList<Actor>();
+		actors = this.actorService.allActorsExceptOne(username);
+
+		Message message2 = this.messageService.createCopy(message.getSubject(), message.getBody(), message.getTags(), "BROADCAST");
+
+		for (Actor a : actors) {
+
+			message.setReceiver(a.getUserAccount().getUsername());
+			a.getMessages().add(message);
+			this.actorService.save(a);
+
+		}
+		sender.getMessages().add(message2);
+
+		configuration = this.configurationService.getConfiguration();
+		configuration.setIsRebrandingBroadcasted(true);
+		this.configurationService.save(configuration);
+
+		this.save(sender);
 
 	}
 

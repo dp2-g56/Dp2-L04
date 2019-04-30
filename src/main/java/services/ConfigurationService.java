@@ -280,4 +280,8 @@ public class ConfigurationService {
 		Assert.isTrue(authorities.get(0).toString().equals("ADMIN"));
 	}
 
+	public Boolean isRebrandingBroadcasted() {
+		return this.configurationRepository.isRebrandingBroadcasted();
+	}
+
 }

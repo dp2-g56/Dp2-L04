@@ -19,9 +19,8 @@ import org.hibernate.validator.constraints.NotBlank;
 public class Company extends Actor {
 
 
-	private String companyName;
-	private Double score;
-
+	private String			companyName;
+	private Double			score;
 	private List<Problem> problems;
 	private List<Position> positions;
 
@@ -55,7 +54,7 @@ public class Company extends Actor {
 	}
 
 	@NotNull
-	@Min(-1)
+	@Min(0)
 	@Max(1)
 	public Double getScore() {
 		return this.score;
