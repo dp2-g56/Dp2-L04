@@ -40,6 +40,7 @@ import domain.Provider;
 import domain.Rookie;
 import domain.SocialProfile;
 import forms.FormObjectCompany;
+import forms.FormObjectProvider;
 import forms.FormObjectRookie;
 
 @Controller
@@ -246,6 +247,79 @@ public class AnonymousController extends AbstractController {
 	}
 
 	//END OF CREATE COMPANY-----------------------------------------------------------------------
+	
+	//CREATE PROVIDER-----------------------------------------------------------------------------
+	
+	@RequestMapping(value = "/provider/create", method = RequestMethod.GET)
+	public ModelAndView createProvider() {
+		ModelAndView result;
+
+		FormObjectProvider formObjectProvider = new FormObjectProvider();
+		formObjectProvider.setTermsAndConditions(false);
+
+		result = new ModelAndView("anonymous/provider/create");
+
+		result = this.createEditModelAndView(formObjectProvider);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/provider/create", method = RequestMethod.POST, params = "save")
+	public ModelAndView save(@Valid FormObjectProvider formObjectProvider, BindingResult binding) {
+
+		ModelAndView result;
+
+		Provider provider = new Provider();
+		provider = this.providerService.create();
+
+		Configuration configuration = this.configurationService.getConfiguration();
+		String prefix = configuration.getSpainTelephoneCode();
+
+		//Reconstruccion
+		provider = this.providerService.reconstruct(formObjectProvider, binding);
+
+		if (binding.hasErrors())
+			result = this.createEditModelAndView(formObjectProvider);
+		else
+			try {
+
+				if (provider.getPhone().matches("([0-9]{4,})$"))
+					provider.setPhone(prefix + provider.getPhone());
+				this.providerService.save(provider);
+
+				result = new ModelAndView("redirect:/");
+
+			} catch (Throwable oops) {
+				result = this.createEditModelAndView(formObjectProvider, "company.commit.error");
+
+			}
+		return result;
+	}
+	
+	protected ModelAndView createEditModelAndView(FormObjectProvider formObjectProvider) {
+		ModelAndView result;
+
+		result = this.createEditModelAndView(formObjectProvider, null);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(FormObjectProvider formObjectProvider, String messageCode) {
+		ModelAndView result;
+
+		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
+		List<String> cardType = this.configurationService.getConfiguration().getCardType();
+
+		result = new ModelAndView("anonymous/provider/create");
+		result.addObject("formObjectProvider", formObjectProvider);
+		result.addObject("message", messageCode);
+		result.addObject("locale", locale);
+		result.addObject("cardType", cardType);
+
+		return result;
+	}
+	
+	//--END CREATE PROVIDER --------------------------------------------------------------------
 
 	@RequestMapping(value = "/position/list", method = RequestMethod.GET)
 	public ModelAndView listPositions() {

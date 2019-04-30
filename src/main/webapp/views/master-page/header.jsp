@@ -81,7 +81,8 @@
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="anonymous/rookie/create.do"><spring:message code="master.page.createRookie" /></a></li>	
-					<li><a href="anonymous/company/create.do"><spring:message code="master.page.createCompany" /></a></li>			
+					<li><a href="anonymous/company/create.do"><spring:message code="master.page.createCompany" /></a></li>
+					<li><a href="anonymous/provider/create.do"><spring:message code="master.page.createProvider" /></a></li>				
 				</ul>
 			</li>
 			
