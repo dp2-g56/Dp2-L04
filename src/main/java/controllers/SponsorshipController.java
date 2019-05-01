@@ -68,6 +68,8 @@ public class SponsorshipController {
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
 		ModelAndView result;
+		
+		this.providerService.loggedAsProvider();
 		FormObjectSponsorshipCreditCard formObject = new FormObjectSponsorshipCreditCard();
 
 		List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
@@ -81,6 +83,8 @@ public class SponsorshipController {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam int sponsorshipId) {
 		ModelAndView result;
+		
+		this.providerService.loggedAsProvider();
 
 		Sponsorship sponsorship = this.sponsorshipService.findOne(sponsorshipId);
 
@@ -102,6 +106,8 @@ public class SponsorshipController {
 	public ModelAndView save(@ModelAttribute("formObject") @Valid FormObjectSponsorshipCreditCard formObject,
 			BindingResult binding, @RequestParam Position position) {
 		ModelAndView result;
+		
+		this.providerService.loggedAsProvider();
 
 		Sponsorship sponsorship = new Sponsorship();
 		CreditCard creditCard = new CreditCard();
@@ -165,6 +171,7 @@ public class SponsorshipController {
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@RequestParam int sponsorshipId) {
 		ModelAndView result;
+		this.providerService.loggedAsProvider();
 
 		try {
 			this.sponsorshipService.deleteSponsorship(sponsorshipId);

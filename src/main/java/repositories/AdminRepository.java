@@ -131,5 +131,8 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
 
 	@Query("select b from Position b where b.offeredSalary = (select min(a.offeredSalary) from Position a)")
 	public List<Position> worstSalaryPositions();
+	
+	@Query("select a from Admin a join a.userAccount u where u.username = 'system'")
+	public Admin getSystem();
 
 }
