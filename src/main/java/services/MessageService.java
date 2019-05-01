@@ -18,6 +18,8 @@ import security.LoginService;
 import security.UserAccount;
 import domain.Actor;
 import domain.Application;
+import domain.Audit;
+import domain.Company;
 import domain.Message;
 
 @Service
@@ -25,19 +27,23 @@ import domain.Message;
 public class MessageService {
 
 	@Autowired
-	private MessageRepository messageRepository;
+	private MessageRepository		messageRepository;
 
 	@Autowired
-	private ActorService actorService;
+	private ActorService			actorService;
 
 	@Autowired
-	private Validator validator;
+	private Validator				validator;
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ConfigurationService	configurationService;
 
 	@Autowired
-	private ApplicationService applicationService;
+	private ApplicationService		applicationService;
+
+	@Autowired
+	private CompanyService			companyService;
+
 
 	public Message findOne(int messageId) {
 		return this.messageRepository.findOne(messageId);
@@ -162,16 +168,12 @@ public class MessageService {
 		spamWords = this.configurationService.getSpamWords();
 
 		Message messageSaved = this.messageRepository.save(message);
-		Message messageCopy = this.createCopy(messageSaved.getSubject(), messageSaved.getBody(), message.getTags(),
-				messageSaved.getReceiver());
+		Message messageCopy = this.createCopy(messageSaved.getSubject(), messageSaved.getBody(), message.getTags(), messageSaved.getReceiver());
 
-		Boolean hasSpam = this.configurationService.isStringSpam(message.getBody(), spamWords)
-				|| this.configurationService.isStringSpam(message.getSubject(), spamWords)
-				|| this.configurationService.isStringSpam(message.getTags(), spamWords);
+		Boolean hasSpam = this.configurationService.isStringSpam(message.getBody(), spamWords) || this.configurationService.isStringSpam(message.getSubject(), spamWords) || this.configurationService.isStringSpam(message.getTags(), spamWords);
 
-		if (hasSpam) {
+		if (hasSpam)
 			messageCopy.setTags("SPAM");
-		}
 
 		Message messageSavedCopy = this.messageRepository.save(messageCopy);
 
@@ -182,9 +184,8 @@ public class MessageService {
 		this.actorService.save(receiver);
 
 		this.flush();
-		if (hasSpam) {
+		if (hasSpam)
 			this.actorService.updateActorSpam(loggedActor);
-		}
 
 		return messageSaved;
 	}
@@ -200,16 +201,12 @@ public class MessageService {
 		spamWords = this.configurationService.getSpamWords();
 
 		Message messageSaved = this.messageRepository.save(message);
-		Message messageCopy = this.createCopy(messageSaved.getSubject(), messageSaved.getBody(), message.getTags(),
-				messageSaved.getReceiver());
+		Message messageCopy = this.createCopy(messageSaved.getSubject(), messageSaved.getBody(), message.getTags(), messageSaved.getReceiver());
 
-		Boolean hasSpam = this.configurationService.isStringSpam(message.getBody(), spamWords)
-				|| this.configurationService.isStringSpam(message.getSubject(), spamWords)
-				|| this.configurationService.isStringSpam(message.getTags(), spamWords);
+		Boolean hasSpam = this.configurationService.isStringSpam(message.getBody(), spamWords) || this.configurationService.isStringSpam(message.getSubject(), spamWords) || this.configurationService.isStringSpam(message.getTags(), spamWords);
 
-		if (hasSpam) {
+		if (hasSpam)
 			messageCopy.setTags("SPAM");
-		}
 
 		Message messageSavedCopy = this.messageRepository.save(messageCopy);
 
@@ -220,9 +217,8 @@ public class MessageService {
 		this.actorService.save(receiver);
 
 		this.flush();
-		if (hasSpam) {
+		if (hasSpam)
 			this.actorService.updateActorSpam(loggedActor);
-		}
 	}
 
 	public void notificationStatusApplicationSubmitted(Application app) {
@@ -230,39 +226,43 @@ public class MessageService {
 		Actor sender = app.getRookie();
 		Actor receiver = this.applicationService.getCompanyByApplicationId(app.getId());
 
-		Message company = this.create("Status change",
-				"The application " + app.getProblem().getTitle() + " has changed its status to submitted by the rookie "
-						+ sender.getName() + ". / La aplicacion " + app.getProblem().getTitle()
-						+ " ha cambiado su estado a entregada por el rookie " + sender.getName() + ".",
-				"Notificacion / Notification", sender.getName(), receiver.getName());
+		Message company = this.create("Status change", "The application " + app.getProblem().getTitle() + " has changed its status to submitted by the rookie " + sender.getName() + ". / La aplicacion " + app.getProblem().getTitle()
+			+ " ha cambiado su estado a entregada por el rookie " + sender.getName() + ".", "Notificacion / Notification", sender.getName(), receiver.getName());
 
 		this.sendMessageWithActors(company, sender, receiver);
 	}
-	
+
+	public void notificationAuditDeleted(Audit audit) {
+		this.companyService.loggedAsCompany();
+		Company loggedCompany = this.companyService.loggedCompany();
+
+		Actor sender = loggedCompany;
+		Actor receiver = audit.getAuditor();
+
+		Message company = this.create("Audit deleted", "The audit " + audit.getFreeText() + " has been deleted due to the cancellation of its respecting position" + "./ La auditoria " + audit.getFreeText()
+			+ " ha sido borrada porque su position asociada ha sido cancelada", "Notification / Notificacion", receiver.getUserAccount().getUsername(), sender.getUserAccount().getUsername());
+
+		this.sendMessageWithActors(company, receiver, sender);
+	}
+
 	public void notificationStatusApplicationAccepted(Application app) {
 
 		Actor sender = app.getRookie();
 		Actor receiver = this.applicationService.getCompanyByApplicationId(app.getId());
 
-		Message company = this.create("Status change",
-				"The application " + app.getProblem().getTitle() + " has changed its status to accepted by the company "
-						+ receiver.getName() + ". / La aplicacion " + app.getProblem().getTitle()
-						+ " ha cambiado su estado a aceptada por la compania " + receiver.getName() + ".",
-				"Notificacion / Notification", receiver.getName(), sender.getName());
+		Message company = this.create("Status change", "The application " + app.getProblem().getTitle() + " has changed its status to accepted by the company " + receiver.getName() + ". / La aplicacion " + app.getProblem().getTitle()
+			+ " ha cambiado su estado a aceptada por la compania " + receiver.getName() + ".", "Notificacion / Notification", receiver.getName(), sender.getName());
 
 		this.sendMessageWithActors(company, receiver, sender);
 	}
-	
+
 	public void notificationStatusApplicationRejected(Application app) {
 
 		Actor sender = app.getRookie();
 		Actor receiver = this.applicationService.getCompanyByApplicationId(app.getId());
 
-		Message company = this.create("Status change",
-				"The application " + app.getProblem().getTitle() + " has changed its status to rejected by the company "
-						+ receiver.getName() + ". / La aplicacion " + app.getProblem().getTitle()
-						+ " ha cambiado su estado a rechazada por la compania " + receiver.getName() + ".",
-				"Notificacion / Notification", receiver.getName(), sender.getName());
+		Message company = this.create("Status change", "The application " + app.getProblem().getTitle() + " has changed its status to rejected by the company " + receiver.getName() + ". / La aplicacion " + app.getProblem().getTitle()
+			+ " ha cambiado su estado a rechazada por la compania " + receiver.getName() + ".", "Notificacion / Notification", receiver.getName(), sender.getName());
 
 		this.sendMessageWithActors(company, receiver, sender);
 	}
