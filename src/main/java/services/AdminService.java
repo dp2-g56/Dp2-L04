@@ -536,6 +536,10 @@ public class AdminService {
 		this.save(sender);
 
 	}
+	
+	public Admin getSystem() {
+		return this.adminRepository.getSystem();
+	}
 
 	public void computeScore() {
 		this.loggedAsAdmin();

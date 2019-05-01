@@ -305,6 +305,20 @@
 		</property>
 		<property name="isNotLocked" value="True" />
 	</bean>
+	
+	<bean id="userAccount16" class="security.UserAccount">
+		<property name="username" value="system" />
+		<property name="password"
+			value="54b53072540eeeb8f8e9343e71f28176" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="ADMIN" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
 
 	<!-- FIN USER ACCOUNT -->
 
@@ -485,6 +499,27 @@
 			</list>
 		</property>
 		<property name="userAccount" ref="userAccount2" />
+	</bean>
+	
+	<bean id="system" class="domain.Admin">
+		<property name="name" value="system" />
+		<property name="surname" value="system system" />
+		<property name="VATNumber" value="SE987654322" />
+		<property name="creditCard" ref="creditCard2" />
+		<property name="photo"
+			value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="system@gmail.com" />
+		<property name="phone" value="+34609237221" />
+		<property name="address" value="system" />
+		<property name="socialProfiles">
+			<list>
+			</list>
+		</property>
+		<property name="messages">
+			<list>
+			</list>
+		</property>
+		<property name="userAccount" ref="userAccount16" />
 	</bean>
 
 	<!-- ROOKIE -->
@@ -3374,8 +3409,8 @@
 	
 	<bean id="sponsorship1" class="domain.Sponsorship">
 		<property name="creditCard" ref="creditCard11" />
-		<property name="banner" value="http://www.banner.com" />
-		<property name="targetUrl" value="http://www.example.com" />
+		<property name="banner" value="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
+		<property name="targetUrl" value="http://www.github.com" />
 		<property name="position" ref="position1" />
 		<property name="provider" ref="provider1" />
 	</bean>

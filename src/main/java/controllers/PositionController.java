@@ -27,12 +27,14 @@ import services.MessageService;
 
 import services.PositionService;
 import services.ProblemService;
+import services.SponsorshipService;
 import domain.Actor;
 import domain.Application;
 import domain.Company;
 import domain.Curriculum;
 import domain.Position;
 import domain.Problem;
+import domain.Sponsorship;
 import domain.Status;
 import forms.FormObjectPositionProblemCheckbox;
 
@@ -61,6 +63,9 @@ public class PositionController extends AbstractController {
 
 	@Autowired
 	private CurriculumService	curriculumService;
+	
+	@Autowired
+	private SponsorshipService sponsorshipService;
 
 
 	public PositionController() {
@@ -80,8 +85,16 @@ public class PositionController extends AbstractController {
 		Company loggedCompany = this.companyService.loggedCompany();
 
 		positions = loggedCompany.getPositions();
+		
+		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
+		for (Position p : positions) {
+			Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+			//this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+			randomSpo.put(p.getId(), spo);
+		}
 
 		result = new ModelAndView("position/company/list");
+		result.addObject("randomSpo", randomSpo);
 		result.addObject("positions", positions);
 		result.addObject("requestURI", "position/company/list.do");
 
