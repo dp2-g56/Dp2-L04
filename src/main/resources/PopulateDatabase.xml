@@ -373,6 +373,7 @@
 				</property>
 				<property name="audits">
 					<list>
+						<ref bean="audit2"/>
 					</list>
 				</property>
 				<property name="userAccount" ref="userAccount13" />
@@ -1644,6 +1645,7 @@
 		</property>
 		<property name="audits">
 			<list>
+				<ref bean="audit2" />
 			</list>
 		</property>
 	</bean>
@@ -3417,14 +3419,24 @@
 	<!-- AUDITS -->
 		<!-- AUDIT1 -->
 		
-	<bean id="audit1" class="domain.Audit">
-		<property name="auditor" ref="auditor1" />
-		<property name="position" ref="position2" />
-		<property name="freeText" value="freetext1" />
-		<property name="score" value="9" />
-		<property name="isDraftMode" value="true" />
-		<property name="momentCreation" value="11/11/2018 11:30" />
-	</bean>
+		<bean id="audit1" class="domain.Audit">
+			<property name="auditor" ref="auditor1" />
+			<property name="position" ref="position2" />
+			<property name="freeText" value="freetext1" />
+			<property name="score" value="9" />
+			<property name="isDraftMode" value="true" />
+			<property name="momentCreation" value="11/11/2018 11:30" />
+		</bean>
+		
+		<!-- AUDIT2 -->
+		<bean id="audit2" class="domain.Audit">
+			<property name="auditor" ref="auditor2" />
+			<property name="position" ref="position5" />
+			<property name="freeText" value="freetext2" />
+			<property name="score" value="5" />
+			<property name="isDraftMode" value="false" />
+			<property name="momentCreation" value="11/11/2016 11:30" />
+		</bean>
 
 
 </beans>

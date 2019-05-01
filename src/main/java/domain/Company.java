@@ -53,7 +53,7 @@ public class Company extends Actor {
 		this.positions = positions;
 	}
 
-	@NotNull
+	@Valid
 	@Min(0)
 	@Max(1)
 	public Double getScore() {

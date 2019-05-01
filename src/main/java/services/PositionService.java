@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import repositories.PositionRepository;
 import domain.Actor;
 import domain.Application;
+import domain.Audit;
 import domain.Company;
 import domain.Position;
 import domain.Problem;
@@ -30,19 +31,23 @@ import forms.FormObjectPositionProblemCheckbox;
 public class PositionService {
 
 	@Autowired
-	private PositionRepository positionRepository;
+	private PositionRepository	positionRepository;
 
 	@Autowired
-	private CompanyService companyService;
+	private CompanyService		companyService;
 
 	@Autowired
-	private ProblemService problemService;
+	private ProblemService		problemService;
 
 	@Autowired
-	private ApplicationService applicationService;
+	private ApplicationService	applicationService;
 
 	@Autowired
-	private RookieService rookieService;
+	private RookieService		rookieService;
+
+	@Autowired
+	private AuditService		auditService;
+
 
 	public List<Position> findAll() {
 		return this.positionRepository.findAll();
@@ -98,14 +103,13 @@ public class PositionService {
 
 		String companyName = loggedCompany.getCompanyName();
 
-		if (companyName.length() >= 4) {
+		if (companyName.length() >= 4)
 			res = companyName.substring(0, 4) + "-";
-		} else {
+		else {
 			int numberOfX = 4 - companyName.length();
 			res = companyName;
-			for (int i = 1; i <= numberOfX; i++) {
+			for (int i = 1; i <= numberOfX; i++)
 				res = res + "X";
-			}
 			res = res + "-";
 		}
 
@@ -123,20 +127,16 @@ public class PositionService {
 
 		List<Position> lc = this.positionRepository.findAll();
 
-		for (Position c : lc) {
-			if (c.getTicker() == res) {
+		for (Position c : lc)
+			if (c.getTicker() == res)
 				return this.generateTicker();
-			}
-		}
 		return res;
 	}
 
 	// ---------------------------------------EDIT---------------------------
 	// ----------------------------------------------------------------------
 
-	public Position edit(Position position, Date deadline, String description, Boolean isDraftMode,
-			Double offeredSalary, List<Problem> problems, String requiredProfile, List<String> requiredSkills,
-			List<String> requiredTecnologies) {
+	public Position edit(Position position, Date deadline, String description, Boolean isDraftMode, Double offeredSalary, List<Problem> problems, String requiredProfile, List<String> requiredSkills, List<String> requiredTecnologies) {
 		// Security
 		Company loggedCompany = this.companyService.loggedCompany();
 		Assert.isTrue(loggedCompany.getPositions().contains(position));
@@ -201,13 +201,19 @@ public class PositionService {
 
 		positions.remove(position);
 
-		List<Application> submittedApplication = this.applicationService
-				.getSubmittedApplicationCompany(position.getId());
+		List<Audit> draftAudits = this.auditService.getDraftAuditsByPosition(position.getId());
 
+		List<Application> submittedApplication = this.applicationService.getSubmittedApplicationCompany(position.getId());
+
+		//Rechaza todas las applications en SUBMITTED
 		for (Application a : submittedApplication) {
 			a.setStatus(Status.REJECTED);
 			this.applicationService.save(a);
 		}
+
+		//Borra todos los audits en Draft Mode
+		for (Audit audit : draftAudits)
+			this.auditService.delete(audit);
 
 		position.setIsCancelled(true);
 		Position saved = this.save(position);
@@ -232,9 +238,8 @@ public class PositionService {
 		FormObjectPositionProblemCheckbox result = new FormObjectPositionProblemCheckbox();
 
 		List<Integer> problems = new ArrayList<>();
-		for (Problem f : position.getProblems()) {
+		for (Problem f : position.getProblems())
 			problems.add(f.getId());
-		}
 
 		result.setDeadline(position.getDeadline());
 		result.setDescription(position.getDescription());
@@ -245,15 +250,13 @@ public class PositionService {
 		result.setRequiredProfile(position.getRequiredProfile());
 
 		String requiredSkills = "";
-		for (String skill : position.getRequiredSkills()) {
+		for (String skill : position.getRequiredSkills())
 			requiredSkills = requiredSkills + skill + ",";
-		}
 		result.setRequiredSkills(requiredSkills);
 
 		String requiredTecnologies = "";
-		for (String tech : position.getRequiredTecnologies()) {
+		for (String tech : position.getRequiredTecnologies())
 			requiredTecnologies = requiredTecnologies + tech + ",";
-		}
 		result.setRequiredTecnologies(requiredTecnologies);
 		result.setTitle(position.getTitle());
 
@@ -268,22 +271,19 @@ public class PositionService {
 
 		Map<Integer, String> map = new HashMap<>();
 
-		for (Problem problem : problems) {
+		for (Problem problem : problems)
 			map.put(problem.getId(), problem.getTitle());
-		}
 
 		return map;
 	}
 
-	public Position reconstructCheckBox(FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox,
-			BindingResult binding) {
+	public Position reconstructCheckBox(FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox, BindingResult binding) {
 		Position result = new Position();
 
-		if (formObjectPositionProblemCheckbox.getId() == 0) {
+		if (formObjectPositionProblemCheckbox.getId() == 0)
 			result.setTicker(this.generateTicker());
-		} else {
+		else
 			result = this.positionRepository.findOne(formObjectPositionProblemCheckbox.getId());
-		}
 		Position result2 = this.createPosition();
 		result2.setId(result.getId());
 		result2.setVersion(result.getVersion());
@@ -315,18 +315,16 @@ public class PositionService {
 
 		Company loggedCompany = this.companyService.loggedCompany();
 
-		for (Problem f : problems) {
+		for (Problem f : problems)
 			Assert.isTrue(loggedCompany.getProblems().contains(f) && f.getId() > 0);
-		}
 
 		if (position.getId() > 0) {
 			Position positionFounded = this.findOne(position.getId());
 			Assert.isTrue(positionFounded.getIsDraftMode() && loggedCompany.getPositions().contains(positionFounded));
 		}
 
-		if (!position.getIsDraftMode()) {
+		if (!position.getIsDraftMode())
 			Assert.isTrue(problems.size() >= 2);
-		}
 
 		position.setProblems(problems);
 		Position saved = new Position();
@@ -368,11 +366,9 @@ public class PositionService {
 
 	public List<Position> getFinalPositionsAndNotCancelled() {
 		List<Position> res = new ArrayList<Position>();
-		for (Position p : this.positionRepository.getFinalPositions()) {
-			if (p.getIsCancelled().equals(false)) {
+		for (Position p : this.positionRepository.getFinalPositions())
+			if (p.getIsCancelled().equals(false))
 				res.add(p);
-			}
-		}
 		return res;
 	}
 

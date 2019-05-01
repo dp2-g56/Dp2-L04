@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import domain.Admin;
 import domain.Company;
-import domain.Rookie;
 import domain.Position;
+import domain.Rookie;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Integer> {
@@ -134,5 +134,8 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
 	
 	@Query("select a from Admin a join a.userAccount u where u.username = 'system'")
 	public Admin getSystem();
+
+	@Query("select ((select round(avg(l.score),1) from Company c join c.positions p join p.audits l where c = d and l.isDraftMode = false)/10) from Company d")
+	public List<Double> computeScore();
 
 }

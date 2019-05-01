@@ -8,14 +8,24 @@
 <%@taglib prefix="acme"  tagdir="/WEB-INF/tags"%>
 
 	
-	<display:table name="companies" id="row">
+	<display:table pagesize="5"  name="companies" id="row" requestURI="${requestURI}" >
 	
 		<display:column property="name" titleKey="companies.name" /> 
 		<display:column property="VATNumber" titleKey="companies.VATNumber" /> 
 		<display:column property="photo" titleKey="companies.photo" /> 
 		<display:column property="email" titleKey="companies.email" /> 
 		<display:column property="phone" titleKey="companies.phone" /> 
-		<display:column property="address" titleKey="companies.address" /> 
+		<display:column property="address" titleKey="companies.address" />
+		
+		<display:column  titleKey="actor.score" >
+			<jstl:choose>
+				<jstl:when test="${row.score == null}">
+					<spring:message code="actor.nil" />
+				</jstl:when><jstl:otherwise>
+					<jstl:out value="${row.score}"></jstl:out>
+				</jstl:otherwise>
+			</jstl:choose>
+		</display:column>  
 		
 		<display:column titleKey="companies.positions">
     

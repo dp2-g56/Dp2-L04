@@ -89,8 +89,4 @@
 
 		</display:column>
 	</security:authorize>
-
-
-
-
 </display:table>
