@@ -70,14 +70,5 @@
 			<a href="${createUrl1}"><spring:message
 				code="annonymous.company" /></a>
 		</display:column>
-		
-		<security:authorize access="hasRole('AUDITOR')">
-			<display:column titleKey="position.createAudit">
-				
-			</display:column>
-		</security:authorize>
-        	
-        	
   
-	
 	</display:table>
