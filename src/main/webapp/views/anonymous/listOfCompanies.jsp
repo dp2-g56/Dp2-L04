@@ -8,7 +8,7 @@
 <%@taglib prefix="acme"  tagdir="/WEB-INF/tags"%>
 
 	
-	<display:table name="companies" id="row">
+	<display:table pagesize="5"  name="companies" id="row" requestURI="${requestURI}" >
 	
 		<display:column property="name" titleKey="companies.name" /> 
 		<display:column property="VATNumber" titleKey="companies.VATNumber" /> 
