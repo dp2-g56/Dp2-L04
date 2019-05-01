@@ -84,7 +84,7 @@ public class ItemService {
 
 	public FormObjectItem prepareFormObject(int itemId) {
 		Provider provider = this.providerService.securityAndProvider();
-		Item item = this.getItemOfProvider(itemId, provider.getId());
+		Item item = this.findOne(itemId);
 		Assert.notNull(item);
 
 		FormObjectItem res = new FormObjectItem();
