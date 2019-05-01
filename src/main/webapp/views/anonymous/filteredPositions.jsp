@@ -20,8 +20,8 @@
 	<acme:cancel url="/anonymous/position/list.do"
 			code="annonymous.listAll" />
 	
-	
-	<display:table name="publicPositions" id="row">
+		
+	<display:table pagesize="5" name="publicPositions" id="row" requestURI="${requestURI}" >
 			
 		<display:column property="title" titleKey="possition.title" /> 
 		<display:column property="description" titleKey="possition.description" /> 
