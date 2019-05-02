@@ -55,5 +55,10 @@
 		<put-attribute name="title" value="Crear patrocinio" />
 		<put-attribute name="body" value="/views/provider/createSponsorship.jsp" />
 	</definition>
+	
+	<definition name="provider/troll" extends="master.page">	
+		<put-attribute name="title" value="Oops" />
+		<put-attribute name="body" value="/views/provider/troll.jsp" />
+	</definition>
 
 </tiles-definitions>
