@@ -382,12 +382,12 @@ public class SocialProfileController extends AbstractController {
 		} else
 			try {
 				if (provider.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$") || provider.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
-					this.providerService.save(provider);
+					this.providerService.updateProvider(provider);
 				else if (provider.getPhone().matches("([0-9]{4,})$")) {
 					provider.setPhone(prefix + provider.getPhone());
-					this.providerService.save(provider);
+					this.providerService.updateProvider(provider);
 				} else
-					this.providerService.save(provider);
+					this.providerService.updateProvider(provider);
 				result = new ModelAndView("redirect:/authenticated/showProfile.do");
 			} catch (Throwable oops) {
 				result = this.createEditModelAndView(providerForm, "socialProfile.commit.error");
