@@ -86,6 +86,15 @@
         	</a>
         	
         </display:column>
+        
+        <display:column titleKey="position.sponsorship">
+		<jstl:if test="${randomSpo.get(row.id).id>0}">
+			<a href="${randomSpo.get(row.id).targetUrl}"><img
+				src="${randomSpo.get(row.id).banner}"
+				style="width: auto; height: 50px;"
+				alt="<spring:message code='position.sponsorship'/>" /></a>
+		</jstl:if>
+		</display:column>
 		
 		<security:authorize access="hasRole('AUDITOR')">
 			<display:column>
