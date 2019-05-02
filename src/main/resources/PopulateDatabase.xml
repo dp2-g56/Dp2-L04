@@ -426,6 +426,11 @@
 				<ref bean="item3" />
 			</list>
 		</property>
+		<property name="sponsorships">
+			<list>
+			<ref bean="sponsorship1" />
+			</list>
+		</property>
 	</bean>	
 	
 		<bean id="provider2" class="domain.Provider">
@@ -1505,6 +1510,11 @@
 		</property>
 		<property name="audits">
 			<list>
+			</list>
+		</property>
+		<property name="sponsorships">
+			<list>
+			<ref bean="sponsorship1" />
 			</list>
 		</property>
 	</bean>
