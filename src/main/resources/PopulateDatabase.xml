@@ -3179,7 +3179,7 @@
 		<property name="surname" value="P Surname" />
 		<property name="VATNumber" value="SE193654321" />
 		<property name="creditCard" ref="creditCard201" />
-		<property name="photo" value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="photo" value="" />
 		<property name="email" value="provider4@gmail.com" />
 		<property name="phone" value="+34609235522" />
 		<property name="address" value="provider3House" />
