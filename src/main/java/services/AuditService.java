@@ -31,6 +31,9 @@ public class AuditService {
 	@Autowired
 	private Validator		validator;
 
+	@Autowired
+	private MessageService	messageService;
+
 
 	public List<Audit> getFinalAuditsByPosition(int positionId) {
 		return this.auditRepository.getFinalAuditsByPosition(positionId);
@@ -42,6 +45,10 @@ public class AuditService {
 
 	public Audit findOne(int auditId) {
 		return this.auditRepository.findOne(auditId);
+	}
+
+	public List<Audit> getDraftAuditsByPosition(int positionId) {
+		return this.auditRepository.getDraftAuditsByPosition(positionId);
 	}
 
 	//CREATE
@@ -59,6 +66,7 @@ public class AuditService {
 	}
 
 	public Audit reconstruct(Audit audit, BindingResult binding) {
+		Assert.isTrue(audit.getIsDraftMode());
 		this.auditorService.loggedAsAuditor();
 		Auditor auditor = this.auditorService.loggedAuditor();
 		Audit result = new Audit();
@@ -97,6 +105,12 @@ public class AuditService {
 		Assert.isTrue(loggedAuditor.getAudits().contains(audit));
 		Assert.isTrue(this.findOne(audit.getId()).getIsDraftMode());
 
+		this.auditRepository.delete(audit);
+
+	}
+
+	public void delete(Audit audit) {
+		this.messageService.notificationAuditDeleted(audit);
 		this.auditRepository.delete(audit);
 
 	}

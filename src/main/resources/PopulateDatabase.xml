@@ -305,6 +305,20 @@
 		</property>
 		<property name="isNotLocked" value="True" />
 	</bean>
+	
+	<bean id="userAccount16" class="security.UserAccount">
+		<property name="username" value="system" />
+		<property name="password"
+			value="54b53072540eeeb8f8e9343e71f28176" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="ADMIN" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
 
 	<!-- FIN USER ACCOUNT -->
 
@@ -359,6 +373,7 @@
 				</property>
 				<property name="audits">
 					<list>
+						<ref bean="audit2"/>
 					</list>
 				</property>
 				<property name="userAccount" ref="userAccount13" />
@@ -484,6 +499,27 @@
 			</list>
 		</property>
 		<property name="userAccount" ref="userAccount2" />
+	</bean>
+	
+	<bean id="system" class="domain.Admin">
+		<property name="name" value="system" />
+		<property name="surname" value="system system" />
+		<property name="VATNumber" value="SE987654322" />
+		<property name="creditCard" ref="creditCard2" />
+		<property name="photo"
+			value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="email" value="system@gmail.com" />
+		<property name="phone" value="+34609237221" />
+		<property name="address" value="system" />
+		<property name="socialProfiles">
+			<list>
+			</list>
+		</property>
+		<property name="messages">
+			<list>
+			</list>
+		</property>
+		<property name="userAccount" ref="userAccount16" />
 	</bean>
 
 	<!-- ROOKIE -->
@@ -1609,6 +1645,7 @@
 		</property>
 		<property name="audits">
 			<list>
+				<ref bean="audit2" />
 			</list>
 		</property>
 	</bean>
@@ -3372,8 +3409,8 @@
 	
 	<bean id="sponsorship1" class="domain.Sponsorship">
 		<property name="creditCard" ref="creditCard11" />
-		<property name="banner" value="http://www.banner.com" />
-		<property name="targetUrl" value="http://www.example.com" />
+		<property name="banner" value="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
+		<property name="targetUrl" value="http://www.github.com" />
 		<property name="position" ref="position1" />
 		<property name="provider" ref="provider1" />
 	</bean>
@@ -3382,14 +3419,24 @@
 	<!-- AUDITS -->
 		<!-- AUDIT1 -->
 		
-	<bean id="audit1" class="domain.Audit">
-		<property name="auditor" ref="auditor1" />
-		<property name="position" ref="position2" />
-		<property name="freeText" value="freetext1" />
-		<property name="score" value="9" />
-		<property name="isDraftMode" value="true" />
-		<property name="momentCreation" value="11/11/2018 11:30" />
-	</bean>
+		<bean id="audit1" class="domain.Audit">
+			<property name="auditor" ref="auditor1" />
+			<property name="position" ref="position2" />
+			<property name="freeText" value="freetext1" />
+			<property name="score" value="9" />
+			<property name="isDraftMode" value="true" />
+			<property name="momentCreation" value="11/11/2018 11:30" />
+		</bean>
+		
+		<!-- AUDIT2 -->
+		<bean id="audit2" class="domain.Audit">
+			<property name="auditor" ref="auditor2" />
+			<property name="position" ref="position5" />
+			<property name="freeText" value="freetext2" />
+			<property name="score" value="5" />
+			<property name="isDraftMode" value="false" />
+			<property name="momentCreation" value="11/11/2016 11:30" />
+		</bean>
 
 
 </beans>

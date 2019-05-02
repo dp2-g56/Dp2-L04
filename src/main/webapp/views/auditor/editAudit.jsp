@@ -32,7 +32,7 @@
 				<acme:submit name="save" code="rookie.save" />
 			</jstl:when>
 			<jstl:otherwise>
-				<acme:submit name="edit" code="rookie.edit" />
+				<acme:submit name="save" code="rookie.edit" />
 				<acme:submit name="delete" code="rookie.delete" />
 			</jstl:otherwise>
 		</jstl:choose>

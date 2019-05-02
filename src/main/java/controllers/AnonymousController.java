@@ -27,6 +27,7 @@ import services.PositionService;
 import services.ProblemService;
 import services.ProviderService;
 import services.RookieService;
+import services.SponsorshipService;
 import domain.Actor;
 import domain.Application;
 import domain.Audit;
@@ -39,6 +40,7 @@ import domain.Problem;
 import domain.Provider;
 import domain.Rookie;
 import domain.SocialProfile;
+import domain.Sponsorship;
 import forms.FormObjectCompany;
 import forms.FormObjectProvider;
 import forms.FormObjectRookie;
@@ -48,36 +50,37 @@ import forms.FormObjectRookie;
 public class AnonymousController extends AbstractController {
 
 	@Autowired
-	private RookieService			rookieService;
+	private RookieService rookieService;
 
 	@Autowired
-	private ConfigurationService	configurationService;
+	private ConfigurationService configurationService;
 
 	@Autowired
-	private CompanyService			companyService;
+	private CompanyService companyService;
 
 	@Autowired
-	private PositionService			positionService;
+	private PositionService positionService;
 
 	@Autowired
-	private ApplicationService		applicationService;
+	private ApplicationService applicationService;
 
 	@Autowired
-	private ProblemService			problemService;
+	private ProblemService problemService;
 
 	@Autowired
-	private ActorService			actorService;
+	private ActorService actorService;
 
 	@Autowired
-	private AuditService			auditService;
-	
-	@Autowired
-	private ProviderService			providerService;
-	
-	@Autowired
-	private ItemService				itemService;
+	private AuditService auditService;
 
+	@Autowired
+	private ProviderService providerService;
 
+	@Autowired
+	private ItemService itemService;
+
+	@Autowired
+	private SponsorshipService sponsorshipService;
 
 	public AnonymousController() {
 		super();
@@ -102,7 +105,8 @@ public class AnonymousController extends AbstractController {
 		return result;
 	}
 
-	//CREATE ROOKIE-----------------------------------------------------------------------
+	// CREATE
+	// ROOKIE-----------------------------------------------------------------------
 
 	@RequestMapping(value = "/rookie/create", method = RequestMethod.GET)
 	public ModelAndView createAdmin() {
@@ -129,7 +133,7 @@ public class AnonymousController extends AbstractController {
 		Configuration configuration = this.configurationService.getConfiguration();
 		String prefix = configuration.getSpainTelephoneCode();
 
-		//Reconstruccion
+		// Reconstruccion
 		rookie = this.rookieService.reconstruct(formObjectRookie, binding);
 
 		if (binding.hasErrors())
@@ -173,9 +177,11 @@ public class AnonymousController extends AbstractController {
 		return result;
 	}
 
-	//END OF CREATE ROOKIE-----------------------------------------------------------------------
+	// END OF CREATE
+	// ROOKIE-----------------------------------------------------------------------
 
-	//CREATE COMPANY-----------------------------------------------------------------------
+	// CREATE
+	// COMPANY-----------------------------------------------------------------------
 
 	@RequestMapping(value = "/company/create", method = RequestMethod.GET)
 	public ModelAndView createCompany() {
@@ -202,7 +208,7 @@ public class AnonymousController extends AbstractController {
 		Configuration configuration = this.configurationService.getConfiguration();
 		String prefix = configuration.getSpainTelephoneCode();
 
-		//Reconstruccion
+		// Reconstruccion
 		company = this.companyService.reconstruct(formObjectCompany, binding);
 
 		if (binding.hasErrors())
@@ -246,10 +252,12 @@ public class AnonymousController extends AbstractController {
 		return result;
 	}
 
-	//END OF CREATE COMPANY-----------------------------------------------------------------------
-	
-	//CREATE PROVIDER-----------------------------------------------------------------------------
-	
+	// END OF CREATE
+	// COMPANY-----------------------------------------------------------------------
+
+	// CREATE
+	// PROVIDER-----------------------------------------------------------------------------
+
 	@RequestMapping(value = "/provider/create", method = RequestMethod.GET)
 	public ModelAndView createProvider() {
 		ModelAndView result;
@@ -263,7 +271,7 @@ public class AnonymousController extends AbstractController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/provider/create", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@Valid FormObjectProvider formObjectProvider, BindingResult binding) {
 
@@ -275,7 +283,7 @@ public class AnonymousController extends AbstractController {
 		Configuration configuration = this.configurationService.getConfiguration();
 		String prefix = configuration.getSpainTelephoneCode();
 
-		//Reconstruccion
+		// Reconstruccion
 		provider = this.providerService.reconstruct(formObjectProvider, binding);
 
 		if (binding.hasErrors())
@@ -295,7 +303,7 @@ public class AnonymousController extends AbstractController {
 			}
 		return result;
 	}
-	
+
 	protected ModelAndView createEditModelAndView(FormObjectProvider formObjectProvider) {
 		ModelAndView result;
 
@@ -318,8 +326,9 @@ public class AnonymousController extends AbstractController {
 
 		return result;
 	}
-	
-	//--END CREATE PROVIDER --------------------------------------------------------------------
+
+	// --END CREATE PROVIDER
+	// --------------------------------------------------------------------
 
 	@RequestMapping(value = "/position/list", method = RequestMethod.GET)
 	public ModelAndView listPositions() {
@@ -330,7 +339,15 @@ public class AnonymousController extends AbstractController {
 
 		publicPositions = this.companyService.AllPositionsInFinal();
 
+		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
+		for (Position p : publicPositions) {
+			Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+			//this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+			randomSpo.put(p.getId(), spo);
+		}
+
 		result = new ModelAndView("anonymous/position/list");
+		result.addObject("randomSpo", randomSpo);
 		result.addObject("publicPositions", publicPositions);
 		result.addObject("requestURI", "anonymous/position/list.do");
 
@@ -491,7 +508,7 @@ public class AnonymousController extends AbstractController {
 		return result;
 	}
 
-	//SIGUIENTE DESPLEGABLE
+	// SIGUIENTE DESPLEGABLE
 
 	@RequestMapping(value = "/company/list", method = RequestMethod.GET)
 	public ModelAndView listCompanies() {
@@ -550,8 +567,8 @@ public class AnonymousController extends AbstractController {
 
 		return result;
 	}
-	
-	//PROVIDERS
+
+	// PROVIDERS
 	@RequestMapping(value = "/provider/list", method = RequestMethod.GET)
 	public ModelAndView listProviders() {
 
@@ -565,20 +582,20 @@ public class AnonymousController extends AbstractController {
 
 		return result;
 	}
-	
-	//Items
+
+	// Items
 	@RequestMapping(value = "/item/list", method = RequestMethod.GET)
-	public ModelAndView itemList(@RequestParam(required=false) Integer providerId) {
+	public ModelAndView itemList(@RequestParam(required = false) Integer providerId) {
 
 		ModelAndView result;
 		List<Item> items;
-		
-		if(providerId==null) {
+
+		if (providerId == null) {
 			items = this.itemService.findAll();
-		}else {
+		} else {
 			items = this.itemService.getItemsFromProvider(providerId);
 		}
-		
+
 		Map<Item, Provider> providersByItem = this.itemService.getProvidersByItem(items);
 
 		result = new ModelAndView("anonymous/item/list");
@@ -588,16 +605,15 @@ public class AnonymousController extends AbstractController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/item/listLinks", method = RequestMethod.GET)
 	public ModelAndView listLinks(@RequestParam int itemId) {
 		ModelAndView result;
 
-			List<String> links = this.itemService.findOne(itemId).getLinks();
+		List<String> links = this.itemService.findOne(itemId).getLinks();
 
-			result = new ModelAndView("anonymous/item/listLinks");
-			result.addObject("links", links);
-
+		result = new ModelAndView("anonymous/item/listLinks");
+		result.addObject("links", links);
 
 		return result;
 	}
@@ -605,7 +621,6 @@ public class AnonymousController extends AbstractController {
 	@RequestMapping(value = "/item/listPictures", method = RequestMethod.GET)
 	public ModelAndView listPictures(@RequestParam int itemId) {
 		ModelAndView result;
-
 
 		List<String> pictures = this.itemService.findOne(itemId).getPictures();
 
@@ -645,6 +660,5 @@ public class AnonymousController extends AbstractController {
 
 		return result;
 	}
-	
-	
+
 }

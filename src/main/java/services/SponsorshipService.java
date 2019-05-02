@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -12,7 +13,9 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 
 import repositories.SponsorshipRepository;
+import domain.Admin;
 import domain.CreditCard;
+import domain.Message;
 import domain.Position;
 import domain.Provider;
 import domain.Sponsorship;
@@ -33,6 +36,12 @@ public class SponsorshipService {
 
 	@Autowired
 	private CreditCardService creditCardService;
+
+	@Autowired
+	private MessageService messageService;
+
+	@Autowired
+	private AdminService adminService;
 
 	public List<Sponsorship> findAll() {
 		return this.sponsorshipRepository.findAll();
@@ -162,5 +171,55 @@ public class SponsorshipService {
 		p.setSponsorships(lp);
 		this.providerService.save(p);
 		this.delete(sponsorship);
+	}
+
+	public List<Sponsorship> getActivatedSponsorshipsOfPosition(int positionId) {
+		return this.sponsorshipRepository.getActivatedSponsorshipsOfPosition(positionId);
+	}
+
+	public Sponsorship getRandomSponsorship(int positionId) {
+		List<Sponsorship> sponsorships = this.getActivatedSponsorshipsOfPosition(positionId);
+
+		Random random = new Random();
+		if (sponsorships.size() == 0)
+			return this.createSponsorship();
+		else
+			return sponsorships.get(random.nextInt(sponsorships.size()));
+	}
+
+	public Sponsorship createSponsorship() {
+		Sponsorship spo = new Sponsorship();
+
+		spo.setBanner("");
+		spo.setTargetUrl("");
+
+		CreditCard card = new CreditCard();
+
+		card.setHolderName("");
+		card.setBrandName("");
+
+		spo.setCreditCard(card);
+
+		return spo;
+	}
+
+	public void sendMessageToProvider(Provider provider) {
+		java.lang.Float amount = this.configurationService.getConfiguration().getFare()
+				+ this.configurationService.getConfiguration().getFare()
+						* this.configurationService.getConfiguration().getVAT() / 100;
+		
+		Admin system = this.adminService.getSystem();
+
+		String subject = "New charge for advertising / Nuevo cargo por publicidad";
+
+		String body = "You have paid: " + amount.toString()
+				+ " euros for advertising one of your sponsorship / Has pagado: " + amount.toString()
+				+ " euros por publicitar uno de tus patrocinios";
+
+		Message message = this.messageService.create(subject, body, "Notification, Sponsorship",
+				this.adminService.getSystem().getUserAccount().getUsername(), provider.getUserAccount().getUsername());
+
+		this.messageService.sendMessageWithActors(message, system, provider);
+
 	}
 }

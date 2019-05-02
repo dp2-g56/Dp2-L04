@@ -60,7 +60,7 @@ public class ItemProviderController extends AbstractController {
 			result = new ModelAndView("provider/links");
 			result.addObject("links", links);
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:list.do");
+			result = new ModelAndView("redirect:/");
 		}
 
 		return result;
@@ -76,7 +76,7 @@ public class ItemProviderController extends AbstractController {
 			result = new ModelAndView("provider/pictures");
 			result.addObject("pictures", pictures);
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:list.do");
+			result = new ModelAndView("redirect:/");
 		}
 
 		return result;
@@ -90,7 +90,7 @@ public class ItemProviderController extends AbstractController {
 			this.itemService.deleteItem(itemId);
 			result = new ModelAndView("redirect:list.do");
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:list.do");
+			result = new ModelAndView("redirect:/");
 		}
 
 		return result;
