@@ -100,6 +100,23 @@ public class MessageService {
 		return message;
 	}
 
+	public Message createPublicData() {
+
+		Date thisMoment = new Date();
+		thisMoment.setTime(thisMoment.getTime() - 1000);
+
+		Message message = new Message();
+
+		message.setMoment(thisMoment);
+		message.setSubject("");
+		message.setBody("");
+		message.setReceiver("");
+		message.setTags("");
+		message.setSender(null);
+
+		return message;
+	}
+
 	public Message createCopy(String Subject, String body, String tags, String recipient) {
 
 		this.actorService.loggedAsActor();
