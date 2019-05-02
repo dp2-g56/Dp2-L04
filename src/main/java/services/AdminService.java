@@ -38,29 +38,28 @@ import forms.FormObjectEditAdmin;
 public class AdminService {
 
 	@Autowired
-	private AdminRepository			adminRepository;
+	private AdminRepository adminRepository;
 
 	@Autowired
-	private CreditCardService		creditCardService;
+	private CreditCardService creditCardService;
 
 	@Autowired
-	private ConfigurationService	configurationService;
+	private ConfigurationService configurationService;
 
 	@Autowired
-	private FinderService			finderService;
+	private FinderService finderService;
 
 	@Autowired
-	private MessageService			messageService;
+	private MessageService messageService;
 
 	@Autowired
-	private ActorService			actorService;
+	private ActorService actorService;
 
 	@Autowired
-	private CompanyService			companyService;
+	private CompanyService companyService;
 
 	@Autowired
-	private Validator				validator;
-
+	private Validator validator;
 
 	// ----------------------------------------CRUD
 	// METHODS--------------------------
@@ -187,38 +186,50 @@ public class AdminService {
 		// Confirmacion contrasena
 		if (!formObjectAdmin.getPassword().equals(formObjectAdmin.getConfirmPassword()))
 			if (locale.contains("ES"))
-				binding.addError(new FieldError("formObjectAdmin", "password", formObjectAdmin.getPassword(), false, null, null, "Las contrasenas no coinciden"));
+				binding.addError(new FieldError("formObjectAdmin", "password", formObjectAdmin.getPassword(), false,
+						null, null, "Las contrasenas no coinciden"));
 			else
-				binding.addError(new FieldError("formObjectAdmin", "password", formObjectAdmin.getPassword(), false, null, null, "Passwords don't match"));
+				binding.addError(new FieldError("formObjectAdmin", "password", formObjectAdmin.getPassword(), false,
+						null, null, "Passwords don't match"));
 
 		// Confirmacion terminos y condiciones
 		if (!formObjectAdmin.getTermsAndConditions())
 			if (locale.contains("ES"))
-				binding.addError(new FieldError("formObjectAdmin", "termsAndConditions", formObjectAdmin.getTermsAndConditions(), false, null, null, "Debe aceptar los terminos y condiciones"));
+				binding.addError(
+						new FieldError("formObjectAdmin", "termsAndConditions", formObjectAdmin.getTermsAndConditions(),
+								false, null, null, "Debe aceptar los terminos y condiciones"));
 			else
-				binding.addError(new FieldError("formObjectAdmin", "termsAndConditions", formObjectAdmin.getTermsAndConditions(), false, null, null, "You must accept the terms and conditions"));
+				binding.addError(
+						new FieldError("formObjectAdmin", "termsAndConditions", formObjectAdmin.getTermsAndConditions(),
+								false, null, null, "You must accept the terms and conditions"));
 
 		if (card.getNumber() != null)
 			if (!this.creditCardService.validateNumberCreditCard(card))
 				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "number", formObjectAdmin.getNumber(), false, null, null, "El numero de la tarjeta es invalido"));
+					binding.addError(new FieldError("formObject", "number", formObjectAdmin.getNumber(), false, null,
+							null, "El numero de la tarjeta es invalido"));
 				else
-					binding.addError(new FieldError("formObject", "number", formObjectAdmin.getNumber(), false, null, null, "The card number is invalid"));
+					binding.addError(new FieldError("formObject", "number", formObjectAdmin.getNumber(), false, null,
+							null, "The card number is invalid"));
 
 		if (card.getExpirationMonth() != null && card.getExpirationYear() != null)
 			if (!this.creditCardService.validateDateCreditCard(card))
 				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false, null, null, "La tarjeta no puede estar caducada"));
+					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
+							null, null, "La tarjeta no puede estar caducada"));
 				else
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false, null, null, "The credit card can not be expired"));
+					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
+							null, null, "The credit card can not be expired"));
 
 		List<String> cardType = this.configurationService.getConfiguration().getCardType();
 
 		if (!cardType.contains(result.getCreditCard().getBrandName()))
 			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null, "Tarjeta no admitida"));
+				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null,
+						"Tarjeta no admitida"));
 			else
-				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null, "The credit card is not accepted"));
+				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null,
+						"The credit card is not accepted"));
 
 		return result;
 	}
@@ -337,12 +348,15 @@ public class AdminService {
 		List<Actor> actors = new ArrayList<Actor>();
 		actors = this.actorService.allActorsExceptOne(username);
 
-		Message message2 = this.messageService.createCopy(message.getSubject(), message.getBody(), message.getTags(), "BROADCAST");
+		Message message2 = this.messageService.createCopy(message.getSubject(), message.getBody(), message.getTags(),
+				"BROADCAST");
 
 		List<String> spamWords = new ArrayList<String>();
 		spamWords = this.configurationService.getSpamWords();
 
-		Boolean hasSpam = this.configurationService.isStringSpam(message.getBody(), spamWords) || this.configurationService.isStringSpam(message.getSubject(), spamWords) || this.configurationService.isStringSpam(message.getTags(), spamWords);
+		Boolean hasSpam = this.configurationService.isStringSpam(message.getBody(), spamWords)
+				|| this.configurationService.isStringSpam(message.getSubject(), spamWords)
+				|| this.configurationService.isStringSpam(message.getTags(), spamWords);
 
 		if (hasSpam)
 			message.setTags("SPAM");
@@ -398,7 +412,7 @@ public class AdminService {
 
 		FormObjectEditAdmin res = new FormObjectEditAdmin();
 
-		//Company
+		// Company
 		res.setAddress(admin.getAddress());
 		res.setName(admin.getName());
 		res.setVATNumber(admin.getVATNumber());
@@ -408,7 +422,7 @@ public class AdminService {
 		res.setSurname(admin.getSurname());
 		res.setPhone(admin.getPhone());
 
-		//Credit Card
+		// Credit Card
 		CreditCard c = admin.getCreditCard();
 
 		res.setHolderName(c.getHolderName());
@@ -429,7 +443,7 @@ public class AdminService {
 
 		CreditCard card = new CreditCard();
 
-		//Credit Card
+		// Credit Card
 		card.setBrandName(formObjectAdmin.getBrandName());
 		card.setCvvCode(formObjectAdmin.getCvvCode());
 		card.setExpirationMonth(formObjectAdmin.getExpirationMonth());
@@ -456,24 +470,30 @@ public class AdminService {
 		if (card.getNumber() != null)
 			if (!this.creditCardService.validateNumberCreditCard(card))
 				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "number", formObjectAdmin.getNumber(), false, null, null, "El numero de la tarjeta es invalido"));
+					binding.addError(new FieldError("formObject", "number", formObjectAdmin.getNumber(), false, null,
+							null, "El numero de la tarjeta es invalido"));
 				else
-					binding.addError(new FieldError("formObject", "number", formObjectAdmin.getNumber(), false, null, null, "The card number is invalid"));
+					binding.addError(new FieldError("formObject", "number", formObjectAdmin.getNumber(), false, null,
+							null, "The card number is invalid"));
 
 		if (card.getExpirationMonth() != null && card.getExpirationYear() != null)
 			if (!this.creditCardService.validateDateCreditCard(card))
 				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false, null, null, "La tarjeta no puede estar caducada"));
+					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
+							null, null, "La tarjeta no puede estar caducada"));
 				else
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false, null, null, "The credit card can not be expired"));
+					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
+							null, null, "The credit card can not be expired"));
 
 		List<String> cardType = this.configurationService.getConfiguration().getCardType();
 
 		if (!cardType.contains(res.getCreditCard().getBrandName()))
 			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null, "Tarjeta no admitida"));
+				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null,
+						"Tarjeta no admitida"));
 			else
-				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null, "The credit card is not accepted"));
+				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null,
+						"The credit card is not accepted"));
 
 		return res;
 
@@ -483,8 +503,8 @@ public class AdminService {
 		return this.adminRepository.findOne(id);
 	}
 
-	//----------------------------------------------BAN/UNBAN---------------------------------
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------BAN/UNBAN---------------------------------
+	// ----------------------------------------------------------------------------------------
 	public void unBanSuspiciousActor(Actor a) {
 		this.loggedAsAdmin();
 
@@ -518,7 +538,8 @@ public class AdminService {
 		List<Actor> actors = new ArrayList<Actor>();
 		actors = this.actorService.allActorsExceptOne(username);
 
-		Message message2 = this.messageService.createCopy(message.getSubject(), message.getBody(), message.getTags(), "BROADCAST");
+		Message message2 = this.messageService.createCopy(message.getSubject(), message.getBody(), message.getTags(),
+				"BROADCAST");
 
 		for (Actor a : actors) {
 
@@ -536,7 +557,7 @@ public class AdminService {
 		this.save(sender);
 
 	}
-	
+
 	public Admin getSystem() {
 		return this.adminRepository.getSystem();
 	}

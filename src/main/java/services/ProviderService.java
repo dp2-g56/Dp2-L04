@@ -18,6 +18,7 @@ import repositories.ProviderRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
+import domain.Company;
 import domain.CreditCard;
 import domain.Finder;
 import domain.Item;
@@ -360,5 +361,12 @@ public class ProviderService {
 
 	public void flush() {
 		this.providerRepository.flush();
+	}
+
+	public void updateProvider(Provider provider) {
+		this.loggedAsProvider();
+		Assert.isTrue(provider.getId() == this.loggedProvider().getId());
+
+		this.save(provider);
 	}
 }

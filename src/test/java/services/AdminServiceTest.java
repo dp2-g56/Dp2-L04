@@ -21,31 +21,32 @@ import domain.Actor;
 import domain.Admin;
 import domain.Company;
 import domain.CreditCard;
+import domain.Message;
 import domain.Rookie;
 import domain.Position;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-	"classpath:spring/junit.xml"
-})
+@ContextConfiguration(locations = { "classpath:spring/junit.xml" })
 @Transactional
 public class AdminServiceTest extends AbstractTest {
 
 	@Autowired
-	private AdminService			adminService;
+	private AdminService adminService;
 
 	@Autowired
-	private AdminRepository			adminRepository;
+	private AdminRepository adminRepository;
 
 	@Autowired
-	private ConfigurationService	configurationService;
+	private ConfigurationService configurationService;
 
 	@Autowired
-	private ActorService			actorService;
+	private ActorService actorService;
 
 	@Autowired
-	private CreditCardService		creditCardService;
+	private CreditCardService creditCardService;
 
+	@Autowired
+	private MessageService messageService;
 
 	/**
 	 * We are going to test Requirement 24.3
@@ -59,26 +60,19 @@ public class AdminServiceTest extends AbstractTest {
 	@Test
 	public void driverBan() {
 		Object testingData[][] = {
-			/**
-			 * Positive test: an admin bans an actor with the spammer flag
-			 */
-			{
-				"rookie1", "admin1", null
-			},
-			/**
-			 * Negative test: an actor that is not authenticated as an admin
-			 * tries to ban an user and an IllegalArgumentException is thrown
-			 */
-			{
-				"rookie1", "rookie2", IllegalArgumentException.class
-			},
-			/**
-			 * Negative test: an admin tries to ban an actor that is not suspicious
-			 */
-			{
-				"rookie2", "admin1", IllegalArgumentException.class
-			}
-		};
+				/**
+				 * Positive test: an admin bans an actor with the spammer flag
+				 */
+				{ "rookie1", "admin1", null },
+				/**
+				 * Negative test: an actor that is not authenticated as an admin tries to ban an
+				 * user and an IllegalArgumentException is thrown
+				 */
+				{ "rookie1", "rookie2", IllegalArgumentException.class },
+				/**
+				 * Negative test: an admin tries to ban an actor that is not suspicious
+				 */
+				{ "rookie2", "admin1", IllegalArgumentException.class } };
 
 		/**
 		 * Data coverage:
@@ -130,19 +124,14 @@ public class AdminServiceTest extends AbstractTest {
 	@Test
 	public void driverUnBan() {
 		Object testingData[][] = {
-			/**
-			 * Positivce case: an actor logged as an admin unbans an actor
-			 */
-			{
-				"rookie1", "admin1", null
-			},
-			/**
-			 * Negative case: an actor that is not an admin tries to unban an actor
-			 */
-			{
-				"rookie1", "rookie2", IllegalArgumentException.class
-			}
-		};
+				/**
+				 * Positivce case: an actor logged as an admin unbans an actor
+				 */
+				{ "rookie1", "admin1", null },
+				/**
+				 * Negative case: an actor that is not an admin tries to unban an actor
+				 */
+				{ "rookie1", "rookie2", IllegalArgumentException.class } };
 
 		for (int i = 0; i < testingData.length; i++) {
 			this.templateUnBan((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
@@ -156,12 +145,12 @@ public class AdminServiceTest extends AbstractTest {
 			this.startTransaction();
 			super.authenticate(username);
 
-			//First, we ban the actor
+			// First, we ban the actor
 			Actor usern = this.actorService.getActorByUsername(user);
 			usern.getUserAccount().setIsNotLocked(false);
 			this.actorService.save(usern);
 
-			//Now, we try to unban the actor
+			// Now, we try to unban the actor
 			this.adminService.unBanSuspiciousActor(usern);
 
 			super.unauthenticate();
@@ -179,70 +168,106 @@ public class AdminServiceTest extends AbstractTest {
 	public void driverCreateAdmin() {
 		Object testingData[][] = {
 
-			{
-				//All data is correct
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 25, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", null
-			}, {
-				//Negative test, Blank name
-				"", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 25, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, Blank surname
-				"name", "", "ATU00000024", "holderName", 4164810248953065L, 12, 25, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, invalid VAT number
-				"name", "surname", "POEAU00000024", "holderName", 4164810248953065L, 12, 25, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, Blank VAT number
-				"name", "surname", "", "holderName", 4164810248953065L, 12, 25, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, Blank Holder Name
-				"name", "surname", "ATU00000024", "", 4164810248953065L, 12, 25, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, less than 16 digits credit card
-				"name", "surname", "ATU00000024", "holderName", 41102465L, 12, 25, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", IllegalArgumentException.class
-			}, {
-				//Negative test, invalid credit card number
-				"name", "surname", "ATU00000024", "holderName", 4164810248953000L, 12, 25, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", IllegalArgumentException.class
-			}, {
-				//Negative test, invalid Month
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 99, 25, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, invalid Year
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 10, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", IllegalArgumentException.class
-			}, {
-				//Negative test, invalid CVV
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 0, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, Blank card type
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, invalid photo format
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA", "invalidPhoto", "email@gmail.com", "666555444", "address", "username", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, Blank email
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA", "https://www.photo.com/", "", "666555444", "address", "username", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, Blank username
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "", "password", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, Blank password
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "", "admin1", ConstraintViolationException.class
-			}, {
-				//Negative test, Blank adminNumber
-				"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA", "https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password", "rookie1", IllegalArgumentException.class
-			},
-		};
+				{
+						// All data is correct
+						"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 25, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", null },
+				{
+						// Negative test, Blank name
+						"", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 25, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", ConstraintViolationException.class },
+				{
+						// Negative test, Blank surname
+						"name", "", "ATU00000024", "holderName", 4164810248953065L, 12, 25, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", ConstraintViolationException.class },
+				{
+						// Negative test, invalid VAT number
+						"name", "surname", "POEAU00000024", "holderName", 4164810248953065L, 12, 25, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", ConstraintViolationException.class },
+				{
+						// Negative test, Blank VAT number
+						"name", "surname", "", "holderName", 4164810248953065L, 12, 25, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", ConstraintViolationException.class },
+				{
+						// Negative test, Blank Holder Name
+						"name", "surname", "ATU00000024", "", 4164810248953065L, 12, 25, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", ConstraintViolationException.class },
+				{
+						// Negative test, less than 16 digits credit card
+						"name", "surname", "ATU00000024", "holderName", 41102465L, 12, 25, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", IllegalArgumentException.class },
+				{
+						// Negative test, invalid credit card number
+						"name", "surname", "ATU00000024", "holderName", 4164810248953000L, 12, 25, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", IllegalArgumentException.class },
+				{
+						// Negative test, invalid Month
+						"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 99, 25, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", ConstraintViolationException.class },
+				{
+						// Negative test, invalid Year
+						"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 10, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", IllegalArgumentException.class },
+				{
+						// Negative test, invalid CVV
+						"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 0, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", ConstraintViolationException.class },
+				{
+						// Negative test, Blank card type
+						"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"admin1", ConstraintViolationException.class },
+				{
+						// Negative test, invalid photo format
+						"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA",
+						"invalidPhoto", "email@gmail.com", "666555444", "address", "username", "password", "admin1",
+						ConstraintViolationException.class },
+				{
+						// Negative test, Blank email
+						"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA",
+						"https://www.photo.com/", "", "666555444", "address", "username", "password", "admin1",
+						ConstraintViolationException.class },
+				{
+						// Negative test, Blank username
+						"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "", "password", "admin1",
+						ConstraintViolationException.class },
+				{
+						// Negative test, Blank password
+						"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "", "admin1",
+						ConstraintViolationException.class },
+				{
+						// Negative test, Blank adminNumber
+						"name", "surname", "ATU00000024", "holderName", 4164810248953065L, 12, 20, 111, "VISA",
+						"https://www.photo.com/", "email@gmail.com", "666555444", "address", "username", "password",
+						"rookie1", IllegalArgumentException.class }, };
 
 		for (int i = 0; i < testingData.length; i++) {
-			this.templateCreateAdmin((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Long) testingData[i][4], (Integer) testingData[i][5], (Integer) testingData[i][6],
-				(Integer) testingData[i][7], (String) testingData[i][8], (String) testingData[i][9], (String) testingData[i][10], (String) testingData[i][11], (String) testingData[i][12], (String) testingData[i][13], (String) testingData[i][14],
-				(String) testingData[i][15], (Class<?>) testingData[i][16]);
+			this.templateCreateAdmin((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2],
+					(String) testingData[i][3], (Long) testingData[i][4], (Integer) testingData[i][5],
+					(Integer) testingData[i][6], (Integer) testingData[i][7], (String) testingData[i][8],
+					(String) testingData[i][9], (String) testingData[i][10], (String) testingData[i][11],
+					(String) testingData[i][12], (String) testingData[i][13], (String) testingData[i][14],
+					(String) testingData[i][15], (Class<?>) testingData[i][16]);
 		}
 
 	}
 
-	private void templateCreateAdmin(String name, String surname, String VAT, String holderName, Long number, Integer month, Integer year, Integer CVV, String cardType, String photo, String email, String phone, String address, String username,
-		String password, String adminName, Class<?> expected) {
+	private void templateCreateAdmin(String name, String surname, String VAT, String holderName, Long number,
+			Integer month, Integer year, Integer CVV, String cardType, String photo, String email, String phone,
+			String address, String username, String password, String adminName, Class<?> expected) {
 		Class<?> caught = null;
 		this.startTransaction();
 		this.authenticate(adminName);
