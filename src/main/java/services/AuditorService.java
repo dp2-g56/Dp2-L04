@@ -23,6 +23,7 @@ import domain.Auditor;
 import domain.CreditCard;
 import domain.Message;
 import domain.Position;
+import domain.Provider;
 import domain.SocialProfile;
 import forms.FormObjectAuditor;
 import forms.FormObjectEditAuditor;
@@ -343,6 +344,13 @@ public class AuditorService {
 		this.loggedAsAuditor();
 		Auditor auditor = this.loggedAuditor();
 		return this.auditorRepository.getAssignablePositions(auditor.getId());
+	}
+	
+	public void updateAuditor(Auditor auditor) {
+		this.loggedAsAuditor();
+		Assert.isTrue(auditor.getId() == this.loggedAuditor().getId());
+
+		this.save(auditor);
 	}
 
 }
