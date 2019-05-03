@@ -181,6 +181,171 @@
 </table>
 <br />
 
+<!-- LEVEL C -->
+<table style="width: 100%">
+
+	<tr>
+		<td><b><spring:message code="statistics.scorePositions" />:</b></td>
+	</tr>
+		
+	<tr> 
+		<td><b><spring:message code="statistics.maximum" /></b></td> 
+		<td><jstl:out value="${positionScoreMax}" /> </td>
+	</tr>
+	<tr> 
+		<td><b><spring:message code="statistics.minimum" /></b></td> 
+		<td><jstl:out value="${positionScoreMin}" /> </td>
+	</tr>
+	<tr> 
+		<td><b><spring:message code="statistics.standardDeviation" /></b></td> 
+		<td><jstl:out value="${positionScoreStddev}" /> </td>
+	</tr>
+	<tr> 
+		<td><b><spring:message code="statistics.average" /></b></td> 
+		<td><jstl:out value="${positionScoreAvg}" /> </td>
+	</tr>
+
+</table>
+<br />
+
+<table style="width: 100%">
+
+	<tr>
+		<td><b><spring:message code="statistics.scoreCompany" />:</b></td>
+	</tr>
+		
+	<tr> 
+		<td><b><spring:message code="statistics.maximum" /></b></td> 
+		<td><jstl:out value="${companyScoreMax}" /> </td>
+	</tr>
+	<tr> 
+		<td><b><spring:message code="statistics.minimum" /></b></td> 
+		<td><jstl:out value="${companyScoreMin}" /> </td>
+	</tr>
+	<tr> 
+		<td><b><spring:message code="statistics.standardDeviation" /></b></td> 
+		<td><jstl:out value="${companyScoreStddev}" /> </td>
+	</tr>
+	<tr> 
+		<td><b><spring:message code="statistics.average" /></b></td> 
+		<td><jstl:out value="${companyScoreAvg}" /> </td>
+	</tr>
+</table>
+<br />
+
+
+
+<table style="width: 100%">
+		<tr>
+			<td><b><spring:message code="statistics.companiesOrderedByScore" />:</b></td>
+		</tr>
+		<jstl:forEach items="${companiesOrderedByScore}" var="bCompany">
+			<tr>
+				<td><jstl:out value="${bCompany.companyName}" /></td>
+			</tr>
+		</jstl:forEach>
+</table>
+<br />
+
+<table style="width: 100%">		
+	<tr> 
+		<td><b><spring:message code="statistics.averageSalaryOfferedByThePositionsThatHaveTheHighestAverageAuditScoreAndKnuckles" /></b></td> 
+		<td><jstl:out value="${averageSalaryOfferedByThePositionsThatHaveTheHighestAverageAuditScoreAndKnuckles}" /> </td>
+	</tr>
+
+</table>
+<br />
+
+<!-- LEVEL B -->
+
+<table style="width: 100%">
+		<tr>
+			<td><b><spring:message code="statistics.providerTermsofItemsOrdered" />:</b></td>
+		</tr>
+		<jstl:forEach items="${providerTermsofItemsOrdered}" var="bCompany">
+			<tr>
+				<td><jstl:out value="${bCompany.make}" /></td>
+			</tr>
+		</jstl:forEach>
+</table>
+<br />
+
+<spring:message code="statistics.itemsPerProvider" />	
+<table style="width: 100%">
+	<tr> 
+		<td><b><spring:message code="statistics.average" /></b></td> 
+		<td><jstl:out value="${itemsPerProvider.get(0)}" /> </td>
+	</tr>
+	<tr>
+		<td><b><spring:message code="statistics.minimum"/></b></td> 
+		<td><jstl:out value="${itemsPerProvider.get(1)}" /> </td>
+	</tr>
+	<tr>
+		<td><b><spring:message code="statistics.maximum"/></b></td> 
+		<td><jstl:out value="${itemsPerProvider.get(2)}" /> </td>
+	</tr>
+	<tr>
+		<td><b><spring:message code="statistics.standardDeviation"/></b></td> 
+		<td><jstl:out value="${itemsPerProvider.get(3)}" /> </td>
+	</tr>
+</table>
+<br />
+
+<!-- LEVEL A -->
+
+<spring:message code="statistics.sponsorshipsPerProvider" />	
+<table style="width: 100%">
+	<tr> 
+		<td><b><spring:message code="statistics.average" /></b></td> 
+		<td><jstl:out value="${sponsorshipsPerProvider.get(0)}" /> </td>
+	</tr>
+	<tr>
+		<td><b><spring:message code="statistics.minimum"/></b></td> 
+		<td><jstl:out value="${sponsorshipsPerProvider.get(1)}" /> </td>
+	</tr>
+	<tr>
+		<td><b><spring:message code="statistics.maximum"/></b></td> 
+		<td><jstl:out value="${sponsorshipsPerProvider.get(2)}" /> </td>
+	</tr>
+	<tr>
+		<td><b><spring:message code="statistics.standardDeviation"/></b></td> 
+		<td><jstl:out value="${sponsorshipsPerProvider.get(3)}" /> </td>
+	</tr>
+</table>
+<br />
+
+<spring:message code="statistics.sponsorshipsPerPosition" />	
+<table style="width: 100%">
+	<tr> 
+		<td><b><spring:message code="statistics.average" /></b></td> 
+		<td><jstl:out value="${sponsorshipsPerPosition.get(0)}" /> </td>
+	</tr>
+	<tr>
+		<td><b><spring:message code="statistics.minimum"/></b></td> 
+		<td><jstl:out value="${sponsorshipsPerPosition.get(1)}" /> </td>
+	</tr>
+	<tr>
+		<td><b><spring:message code="statistics.maximum"/></b></td> 
+		<td><jstl:out value="${sponsorshipsPerPosition.get(2)}" /> </td>
+	</tr>
+	<tr>
+		<td><b><spring:message code="statistics.standardDeviation"/></b></td> 
+		<td><jstl:out value="${sponsorshipsPerPosition.get(3)}" /> </td>
+	</tr>
+</table>
+<br />
+
+<table style="width: 100%">
+		<tr>
+			<td><b><spring:message code="statistics.providers10PercentMoreSponsorships" />:</b></td>
+		</tr>
+		<jstl:forEach items="${providers10PercentMoreSponsorships}" var="bCompany">
+			<tr>
+				<td><jstl:out value="${bCompany.make}" /></td>
+			</tr>
+		</jstl:forEach>
+</table>
+<br />
 
 </security:authorize>
 
