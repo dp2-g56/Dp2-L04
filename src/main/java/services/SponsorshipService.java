@@ -204,22 +204,25 @@ public class SponsorshipService {
 	}
 
 	public void sendMessageToProvider(Provider provider) {
-		java.lang.Float amount = this.configurationService.getConfiguration().getFare()
-				+ this.configurationService.getConfiguration().getFare()
-						* this.configurationService.getConfiguration().getVAT() / 100;
-		
-		Admin system = this.adminService.getSystem();
+		java.lang.Float amount = this.configurationService.getConfiguration().getFare() + this.configurationService.getConfiguration().getFare() * this.configurationService.getConfiguration().getVAT() / 100;
 
 		String subject = "New charge for advertising / Nuevo cargo por publicidad";
 
-		String body = "You have paid: " + amount.toString()
-				+ " euros for advertising one of your sponsorship / Has pagado: " + amount.toString()
-				+ " euros por publicitar uno de tus patrocinios";
+		String body = "You have paid: " + amount.toString() + " euros for advertising one of your sponsorship / Has pagado: " + amount.toString() + " euros por publicitar uno de tus patrocinios";
 
-		Message message = this.messageService.create(subject, body, "Notification, Sponsorship",
-				this.adminService.getSystem().getUserAccount().getUsername(), provider.getUserAccount().getUsername());
+		Message message = this.messageService.createPublicData();
 
-		this.messageService.sendMessageWithActors(message, system, provider);
+		message.setSubject(subject);
+		message.setBody(body);
+		message.setTags("Notification, Sponsorship");
+		message.setSender("system");
+		message.setReceiver(provider.getUserAccount().getUsername());
+
+		this.messageService.save(message);
+
+		provider.getMessages().add(message);
+
+		this.providerService.save(provider);
 
 	}
 }
