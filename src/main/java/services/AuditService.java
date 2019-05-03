@@ -13,27 +13,26 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
-import repositories.AuditRepository;
 import domain.Audit;
 import domain.Auditor;
 import domain.Position;
+import repositories.AuditRepository;
 
 @Service
 @Transactional
 public class AuditService {
 
 	@Autowired
-	private AuditRepository	auditRepository;
+	private AuditRepository auditRepository;
 
 	@Autowired
-	private AuditorService	auditorService;
+	private AuditorService auditorService;
 
 	@Autowired
-	private Validator		validator;
+	private Validator validator;
 
 	@Autowired
-	private MessageService	messageService;
-
+	private MessageService messageService;
 
 	public List<Audit> getFinalAuditsByPosition(int positionId) {
 		return this.auditRepository.getFinalAuditsByPosition(positionId);
@@ -51,7 +50,7 @@ public class AuditService {
 		return this.auditRepository.getDraftAuditsByPosition(positionId);
 	}
 
-	//CREATE
+	// CREATE
 	public Audit create(Position position) {
 		Audit audit = new Audit();
 
@@ -66,7 +65,6 @@ public class AuditService {
 	}
 
 	public Audit reconstruct(Audit audit, BindingResult binding) {
-		Assert.isTrue(audit.getIsDraftMode());
 		this.auditorService.loggedAsAuditor();
 		Auditor auditor = this.auditorService.loggedAuditor();
 		Audit result = new Audit();
@@ -138,13 +136,13 @@ public class AuditService {
 
 		/*
 		 * List<Position> allPositionsOfRookie = new ArrayList<Position>();
-		 * 
+		 *
 		 * allPositionsOfRookie =
 		 * this.positionService.positionsOfApplicationOfRookie(rookie);
-		 * 
+		 *
 		 * for (Position p : allPositionsOfRookie) if
 		 * (Collections.disjoint(p.getApplications(), applications)) {
-		 * 
+		 *
 		 * }
 		 */
 
