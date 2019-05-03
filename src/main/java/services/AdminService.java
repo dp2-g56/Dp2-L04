@@ -28,6 +28,7 @@ import domain.Configuration;
 import domain.CreditCard;
 import domain.Message;
 import domain.Position;
+import domain.Provider;
 import domain.Rookie;
 import domain.SocialProfile;
 import forms.FormObjectAdmin;
@@ -569,8 +570,100 @@ public class AdminService {
 		List<Company> companies = this.companyService.findAll();
 		Assert.isTrue(companies.size() == scores.size());
 
-		for (Company c : companies) {
+		for (Company c : companies)
 			c.setScore(scores.get(companies.indexOf(c)));
-		}
 	}
+
+	//QUERIES ACME-ROOKIES
+
+	//LEVEL C
+	public List<Company> companiesOrderedByScore() {
+		return this.adminRepository.companiesOrderedByScore();
+	}
+
+	//Position
+	public Double positionScoreMax() {
+		return this.adminRepository.positionScoreMax();
+	}
+
+	public Double positionScoreMin() {
+		return this.adminRepository.positionScoreMin();
+	}
+
+	public Double positionScoreStddev() {
+		return this.adminRepository.positionScoreStddev();
+	}
+
+	public Double positionScoreAvg() {
+		return this.adminRepository.positionScoreAvg();
+	}
+
+	//Company
+	public Double companyScoreMax() {
+		return this.adminRepository.companyScoreMax();
+	}
+
+	public Double companyScoreMin() {
+		return this.adminRepository.companyScoreMin();
+	}
+
+	public Double companyScoreAvg() {
+		return this.adminRepository.companyScoreAvg();
+	}
+
+	public Double companyScoreStddev() {
+		return this.adminRepository.companyScoreStddev();
+	}
+
+	public Double averageSalaryOfferedByThePositionsThatHaveTheHighestAverageAuditScoreAndKnuckles() {
+		return this.adminRepository.averageSalaryOfferedByThePositionsThatHaveTheHighestAverageAuditScoreAndKnuckles();
+	}
+
+	//LEVEL B
+	public List<Double> itemsPerProvider() {
+		Double[] array = this.adminRepository.itemsPerProvider();
+		List<Double> result = new ArrayList<Double>();
+
+		result.add(array[0]);
+		result.add(array[1]);
+		result.add(array[2]);
+		result.add(array[3]);
+
+		return result;
+	}
+
+	public List<Provider> providerTermsofItemsOrdered() {
+		return this.adminRepository.providerTermsofItemsOrdered();
+	}
+
+	//LEVEL A
+	public List<Double> sponsorshipsPerProvider() {
+		Double[] array = this.adminRepository.sponsorshipsPerProvider();
+		List<Double> result = new ArrayList<Double>();
+
+		result.add(array[0]);
+		result.add(array[1]);
+		result.add(array[2]);
+		result.add(array[3]);
+
+		return result;
+	}
+
+	public List<Double> sponsorshipsPerPosition() {
+		Double[] array = this.adminRepository.sponsorshipsPerPosition();
+		List<Double> result = new ArrayList<Double>();
+
+		result.add(array[0]);
+		result.add(array[1]);
+		result.add(array[2]);
+		result.add(array[3]);
+
+		return result;
+
+	}
+
+	public List<Provider> providers10PercentMoreSponsorships() {
+		return this.adminRepository.providers10PercentMoreSponsorships();
+	}
+
 }
