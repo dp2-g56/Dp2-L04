@@ -21,11 +21,10 @@ import domain.Sponsorship;
 public class PositionAuditorController extends AbstractController {
 
 	@Autowired
-	private AuditorService	auditorService;
-	
+	private AuditorService auditorService;
+
 	@Autowired
 	private SponsorshipService sponsorshipService;
-
 
 	public PositionAuditorController() {
 		super();
@@ -42,14 +41,15 @@ public class PositionAuditorController extends AbstractController {
 		List<Position> positions;
 
 		positions = this.auditorService.showAssignablePositions();
-		
+
 		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
 		for (Position p : positions) {
-			Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
-			//this.sponsorshipService.sendMessageToProvider(spo.getProvider());
-			randomSpo.put(p.getId(), spo);
+			if (!p.getSponsorships().isEmpty()) {
+				Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+				this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+				randomSpo.put(p.getId(), spo);
+			}
 		}
-
 
 		result = new ModelAndView("position/auditor/listAssignablePositions");
 		result.addObject("randomSpo", randomSpo);

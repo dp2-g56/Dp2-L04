@@ -341,10 +341,11 @@ public class AnonymousController extends AbstractController {
 
 		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
 		for (Position p : publicPositions) {
-
-			Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
-			if (spo.getProvider() != null) {
-				this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+			if (!p.getSponsorships().isEmpty()) {
+				Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+				if (spo.getProvider() != null && (this.providerService.loggedProvider() != spo.getProvider())) {
+					this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+				}
 				randomSpo.put(p.getId(), spo);
 			}
 		}
