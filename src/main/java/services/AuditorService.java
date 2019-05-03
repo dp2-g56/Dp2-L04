@@ -14,45 +14,43 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import repositories.AuditorRepository;
-import security.Authority;
-import security.LoginService;
-import security.UserAccount;
 import domain.Audit;
 import domain.Auditor;
 import domain.CreditCard;
 import domain.Message;
 import domain.Position;
-import domain.Provider;
 import domain.SocialProfile;
 import forms.FormObjectAuditor;
 import forms.FormObjectEditAuditor;
+import repositories.AuditorRepository;
+import security.Authority;
+import security.LoginService;
+import security.UserAccount;
 
 @Service
 @Transactional
 public class AuditorService {
 
 	@Autowired
-	private AuditorRepository		auditorRepository;
+	private AuditorRepository auditorRepository;
 
 	@Autowired
-	private AuditService			auditService;
+	private AuditService auditService;
 
 	@Autowired
-	private CreditCardService		creditCardService;
+	private CreditCardService creditCardService;
 
 	@Autowired
-	private ConfigurationService	configurationService;
+	private ConfigurationService configurationService;
 
 	@Autowired
-	private AdminService			adminService;
+	private AdminService adminService;
 
 	@Autowired
-	private PositionService			positionService;
+	private PositionService positionService;
 
-
-	//-----------------------------------------SECURITY-----------------------------
-	//------------------------------------------------------------------------------
+	// -----------------------------------------SECURITY-----------------------------
+	// ------------------------------------------------------------------------------
 
 	public Auditor save(Auditor auditor) {
 		return this.auditorRepository.save(auditor);
@@ -60,7 +58,7 @@ public class AuditorService {
 
 	/**
 	 * LoggedCompany now contains the security of loggedAsCompany
-	 * 
+	 *
 	 * @return
 	 */
 	public Auditor loggedAuditor() {
@@ -86,11 +84,10 @@ public class AuditorService {
 		Assert.isTrue(!a.getPosition().getIsDraftMode());
 
 		if (a.getId() == 0)
-			Assert.isTrue(this.auditorRepository.getAssignablePositions(loggedAuditor.getId()).contains(a.getPosition()));
-		else {
-			Assert.isTrue(a.getIsDraftMode());
+			Assert.isTrue(
+					this.auditorRepository.getAssignablePositions(loggedAuditor.getId()).contains(a.getPosition()));
+		else
 			Assert.isTrue(loggedAuditor.getAudits().contains(a));
-		}
 		this.auditService.save(a);
 	}
 
@@ -186,47 +183,61 @@ public class AuditorService {
 
 		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 
-		//Confirmacion contrasena
+		// Confirmacion contrasena
 		if (!formObjectAuditor.getPassword().equals(formObjectAuditor.getConfirmPassword()))
 			if (locale.contains("ES"))
-				binding.addError(new FieldError("formObjectAuditor", "password", formObjectAuditor.getPassword(), false, null, null, "Las contrasenas no coinciden"));
+				binding.addError(new FieldError("formObjectAuditor", "password", formObjectAuditor.getPassword(), false,
+						null, null, "Las contrasenas no coinciden"));
 			else
-				binding.addError(new FieldError("formObjectAuditor", "password", formObjectAuditor.getPassword(), false, null, null, "Passwords don't match"));
+				binding.addError(new FieldError("formObjectAuditor", "password", formObjectAuditor.getPassword(), false,
+						null, null, "Passwords don't match"));
 
-		//Confirmacion terminos y condiciones
+		// Confirmacion terminos y condiciones
 		if (!formObjectAuditor.getTermsAndConditions())
 			if (locale.contains("ES"))
-				binding.addError(new FieldError("formObjectAuditor", "termsAndConditions", formObjectAuditor.getTermsAndConditions(), false, null, null, "Debe aceptar los terminos y condiciones"));
+				binding.addError(new FieldError("formObjectAuditor", "termsAndConditions",
+						formObjectAuditor.getTermsAndConditions(), false, null, null,
+						"Debe aceptar los terminos y condiciones"));
 			else
-				binding.addError(new FieldError("formObjectAuditor", "termsAndConditions", formObjectAuditor.getTermsAndConditions(), false, null, null, "You must accept the terms and conditions"));
+				binding.addError(new FieldError("formObjectAuditor", "termsAndConditions",
+						formObjectAuditor.getTermsAndConditions(), false, null, null,
+						"You must accept the terms and conditions"));
 
 		if (card.getNumber() != null)
 			if (!this.creditCardService.validateNumberCreditCard(card))
 				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObjectAuditor", "number", formObjectAuditor.getNumber(), false, null, null, "El numero de la tarjeta es invalido"));
+					binding.addError(new FieldError("formObjectAuditor", "number", formObjectAuditor.getNumber(), false,
+							null, null, "El numero de la tarjeta es invalido"));
 				else
-					binding.addError(new FieldError("formObjectAuditor", "number", formObjectAuditor.getNumber(), false, null, null, "The card number is invalid"));
+					binding.addError(new FieldError("formObjectAuditor", "number", formObjectAuditor.getNumber(), false,
+							null, null, "The card number is invalid"));
 
 		if (card.getExpirationMonth() != null && card.getExpirationYear() != null)
 			if (!this.creditCardService.validateDateCreditCard(card))
 				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObjectAuditor", "expirationMonth", card.getExpirationMonth(), false, null, null, "La tarjeta no puede estar caducada"));
+					binding.addError(new FieldError("formObjectAuditor", "expirationMonth", card.getExpirationMonth(),
+							false, null, null, "La tarjeta no puede estar caducada"));
 				else
-					binding.addError(new FieldError("formObjectAuditor", "expirationMonth", card.getExpirationMonth(), false, null, null, "The credit card can not be expired"));
+					binding.addError(new FieldError("formObjectAuditor", "expirationMonth", card.getExpirationMonth(),
+							false, null, null, "The credit card can not be expired"));
 
 		List<String> cardType = this.configurationService.getConfiguration().getCardType();
 
 		if (!cardType.contains(result.getCreditCard().getBrandName()))
 			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-				binding.addError(new FieldError("formObjectAuditor", "brandName", card.getBrandName(), false, null, null, "Tarjeta no admitida"));
+				binding.addError(new FieldError("formObjectAuditor", "brandName", card.getBrandName(), false, null,
+						null, "Tarjeta no admitida"));
 			else
-				binding.addError(new FieldError("formObjectAuditor", "brandName", card.getBrandName(), false, null, null, "The credit card is not accepted"));
+				binding.addError(new FieldError("formObjectAuditor", "brandName", card.getBrandName(), false, null,
+						null, "The credit card is not accepted"));
 
 		if (result.getEmail().matches("[\\w.%-]+\\<[\\w.%-]+\\@+\\>|[\\w.%-]+"))
 			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-				binding.addError(new FieldError("formObjectAuditor", "email", result.getEmail(), false, null, null, "No sigue el patron ejemplo@dominio.asd o alias <ejemplo@dominio.asd>"));
+				binding.addError(new FieldError("formObjectAuditor", "email", result.getEmail(), false, null, null,
+						"No sigue el patron ejemplo@dominio.asd o alias <ejemplo@dominio.asd>"));
 			else
-				binding.addError(new FieldError("formObjectAuditor", "email", result.getEmail(), false, null, null, "Dont follow the pattern example@domain.asd or alias <example@domain.asd>"));
+				binding.addError(new FieldError("formObjectAuditor", "email", result.getEmail(), false, null, null,
+						"Dont follow the pattern example@domain.asd or alias <example@domain.asd>"));
 
 		return result;
 	}
@@ -240,7 +251,7 @@ public class AuditorService {
 
 		FormObjectEditAuditor res = new FormObjectEditAuditor();
 
-		//Company
+		// Company
 		res.setAddress(auditor.getAddress());
 		res.setName(auditor.getName());
 		res.setVATNumber(auditor.getVATNumber());
@@ -250,7 +261,7 @@ public class AuditorService {
 		res.setSurname(auditor.getSurname());
 		res.setPhone(auditor.getPhone());
 
-		//Credit Card
+		// Credit Card
 		CreditCard c = auditor.getCreditCard();
 
 		res.setHolderName(c.getHolderName());
@@ -267,6 +278,7 @@ public class AuditorService {
 	public Auditor findOne(int id) {
 		return this.auditorRepository.findOne(id);
 	}
+
 	public Auditor reconstructAuditorPersonalData(FormObjectEditAuditor formObjectauditor, BindingResult binding) {
 		Auditor res = new Auditor();
 
@@ -274,7 +286,7 @@ public class AuditorService {
 
 		CreditCard card = new CreditCard();
 
-		//Credit Card
+		// Credit Card
 		card.setBrandName(formObjectauditor.getBrandName());
 		card.setCvvCode(formObjectauditor.getCvvCode());
 		card.setExpirationMonth(formObjectauditor.getExpirationMonth());
@@ -302,24 +314,30 @@ public class AuditorService {
 		if (card.getNumber() != null)
 			if (!this.creditCardService.validateNumberCreditCard(card))
 				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "number", formObjectauditor.getNumber(), false, null, null, "El numero de la tarjeta es invalido"));
+					binding.addError(new FieldError("formObject", "number", formObjectauditor.getNumber(), false, null,
+							null, "El numero de la tarjeta es invalido"));
 				else
-					binding.addError(new FieldError("formObject", "number", formObjectauditor.getNumber(), false, null, null, "The card number is invalid"));
+					binding.addError(new FieldError("formObject", "number", formObjectauditor.getNumber(), false, null,
+							null, "The card number is invalid"));
 
 		if (card.getExpirationMonth() != null && card.getExpirationYear() != null)
 			if (!this.creditCardService.validateDateCreditCard(card))
 				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false, null, null, "La tarjeta no puede estar caducada"));
+					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
+							null, null, "La tarjeta no puede estar caducada"));
 				else
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false, null, null, "The credit card can not be expired"));
+					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
+							null, null, "The credit card can not be expired"));
 
 		List<String> cardType = this.configurationService.getConfiguration().getCardType();
 
 		if (!cardType.contains(res.getCreditCard().getBrandName()))
 			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null, "Tarjeta no admitida"));
+				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null,
+						"Tarjeta no admitida"));
 			else
-				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null, "The credit card is not accepted"));
+				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null,
+						"The credit card is not accepted"));
 
 		return res;
 
@@ -345,7 +363,7 @@ public class AuditorService {
 		Auditor auditor = this.loggedAuditor();
 		return this.auditorRepository.getAssignablePositions(auditor.getId());
 	}
-	
+
 	public void updateAuditor(Auditor auditor) {
 		this.loggedAsAuditor();
 		Assert.isTrue(auditor.getId() == this.loggedAuditor().getId());
