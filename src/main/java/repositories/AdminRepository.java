@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import domain.Admin;
 import domain.Company;
 import domain.Position;
+import domain.Provider;
 import domain.Rookie;
 
 @Repository
@@ -135,4 +136,60 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
 	@Query("select ((select round(avg(l.score),1) from Company c join c.positions p join p.audits l where c = d and l.isDraftMode = false)/10) from Company d")
 	public List<Double> computeScore();
 
+	/**
+	 * LEVEL C 4/4
+	 */
+	@Query("select c from Company c order by c.score DESC")
+	public List<Company> companiesOrderedByScore();
+
+	//@Query("select max(cast((select avg(a.score) from Position p join p.audits a where p = d and a.isDraftMode=false) as float)), min(cast((select avg(a.score) from Position p join p.audits a where p = d and a.isDraftMode=false) as float)), sum(cast((select avg(a.score) from Position p join p.audits a where p = d and a.isDraftMode=false) as float))/(select count(b) from Position b where b.isDraftMode = false and b.isCancelled = false),stddev(cast((select avg(a.score) from Position p join p.audits a where p = d and a.isDraftMode=false) as float)) from Position d")
+	//public Double[] positionsScore();
+
+	@Query("select max(cast((select avg(a.score) from Position p join p.audits a where p = d and a.isDraftMode=false) as float)) from Position d")
+	public Double positionScoreMax();
+
+	@Query("select min(cast((select avg(a.score) from Position p join p.audits a where p = d and a.isDraftMode=false) as float)) from Position d")
+	public Double positionScoreMin();
+
+	@Query("select stddev(cast((select avg(a.score) from Position p join p.audits a where p = d and a.isDraftMode=false) as float)) from Position d")
+	public Double positionScoreStddev();
+
+	@Query("select sum(cast((select avg(a.score) from Position p join p.audits a where p = d and a.isDraftMode=false) as float))/(select count(b) from Position b where b.isDraftMode = false and b.isCancelled = false) from Position d")
+	public Double positionScoreAvg();
+
+	@Query("select max(c.score) from Company c")
+	public Double companyScoreMax();
+
+	@Query("select min(c.score) from Company c")
+	public Double companyScoreMin();
+
+	@Query("select avg(c.score) from Company c")
+	public Double companyScoreAvg();
+
+	@Query("select stddev(c.score) from Company c")
+	public Double companyScoreStddev();
+
+	@Query("select avg(u.offeredSalary) from Position u where (select avg(j.score) from Position o join o.audits j where o = u) = (select max(cast((select avg(a.score) from Position p join p.audits a where p = d and a.isDraftMode=false) as float)) from Position d)")
+	public Double averageSalaryOfferedByThePositionsThatHaveTheHighestAverageAuditScoreAndKnuckles();
+
+	/**
+	 * LEVEL B 2/2
+	 */
+	@Query("select avg(p.items.size), min(p.items.size), max(p.items.size), (sqrt(sum(p.items.size * p.items.size) / count(p.items.size) - (avg(p.items.size) * avg(p.items.size)))) from Provider p")
+	public Double[] itemsPerProvider();
+
+	@Query("select a from Provider a join a.items f order by count(f)")
+	public List<Provider> providerTermsofItemsOrdered();
+
+	/**
+	 * LEVEL A 3/3
+	 */
+	@Query("select avg(p.sponsorships.size),min(p.sponsorships.size),max(p.sponsorships.size), (sqrt(sum(p.sponsorships.size * p.sponsorships.size) / count(p.sponsorships.size) - (avg(p.sponsorships.size) * avg(p.sponsorships.size)))) from Provider p")
+	public Double[] sponsorshipsPerProvider();
+
+	@Query("select avg(p.sponsorships.size),min(p.sponsorships.size),max(p.sponsorships.size), (sqrt(sum(p.sponsorships.size * p.sponsorships.size) / count(p.sponsorships.size) - (avg(p.sponsorships.size) * avg(p.sponsorships.size)))) from Position p")
+	public Double[] sponsorshipsPerPosition();
+
+	@Query("select distinct c from Provider c, Sponsorship d where c.sponsorships.size >= 1.1 * (select avg(c.sponsorships.size) from Provider c)")
+	public List<Provider> providers10PercentMoreSponsorships();
 }
