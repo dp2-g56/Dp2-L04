@@ -88,7 +88,7 @@ public class AuditController extends AbstractController {
 
 		position = audit.getPosition();
 
-		if (position == null || position.getIsDraftMode() || position.getIsCancelled() || (!audit.getIsDraftMode()) || !(loggedAuditor.getAudits().contains(audit)))
+		if (position == null || audit == null || position.getIsDraftMode() || position.getIsCancelled() || (!audit.getIsDraftMode()) || !(loggedAuditor.getAudits().contains(audit)))
 			return this.list();
 
 		result = this.createEditModelAndView(audit);
