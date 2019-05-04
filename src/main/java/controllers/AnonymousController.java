@@ -564,8 +564,19 @@ public class AnonymousController extends AbstractController {
 
 		filteredPositions = this.positionService.positionsFiltered(word);
 
+		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
+		for (Position p : filteredPositions)
+			if (!p.getSponsorships().isEmpty()) {
+				Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+				if (this.actorService.loggedAsActorBoolean())
+					if (spo.getProvider() != null && (this.providerService.loggedProvider() != spo.getProvider()))
+						this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+				randomSpo.put(p.getId(), spo);
+			}
+
 		result = new ModelAndView("anonymous/filtered/positions");
 		result.addObject("publicPositions", filteredPositions);
+		result.addObject("randomSpo", randomSpo);
 		result.addObject("requestURI", "anonymous/filtered/positions.do");
 
 		return result;
