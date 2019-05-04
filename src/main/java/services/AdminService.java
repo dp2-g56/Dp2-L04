@@ -546,13 +546,20 @@ public class AdminService {
 		this.loggedAsAdmin();
 
 		List<Double> scores = this.adminRepository.computeScore();
+		List<Float> mins = this.adminRepository.minScoreAuditByCompany();
+		List<Float> maxs = this.adminRepository.maxScoreAuditByCompany();
 		List<Company> companies = this.companyService.findAll();
 		Assert.isTrue(companies.size() == scores.size());
 
-		for (Company c : companies)
-			c.setScore(scores.get(companies.indexOf(c)));
+		for (Company c : companies) {
+			int index = companies.indexOf(c);
+			if (mins.get(index) != null && mins.get(index).equals(maxs.get(index))) {
+				c.setScore((double) (mins.get(index)));
+			} else {
+				c.setScore(scores.get(index));
+			}
+		}
 	}
-
 	//QUERIES ACME-ROOKIES
 
 	//LEVEL C
