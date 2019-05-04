@@ -16,7 +16,7 @@ import domain.Message;
 
 @Controller
 @RequestMapping("/broadcast/administrator")
-public class AdministratorBroadcastMessage extends AbstractController {
+public class AdministratorBroadcastMessageController extends AbstractController {
 
 	@Autowired
 	private AdminService			adminService;
@@ -28,13 +28,14 @@ public class AdministratorBroadcastMessage extends AbstractController {
 	private ConfigurationService	configurationService;
 
 
-	public AdministratorBroadcastMessage() {
+	public AdministratorBroadcastMessageController() {
 
 		super();
 	}
 
 	@RequestMapping(value = "/send", method = RequestMethod.GET)
 	public ModelAndView create() {
+		this.adminService.loggedAsAdmin();
 		ModelAndView result;
 		Message message;
 
@@ -51,7 +52,6 @@ public class AdministratorBroadcastMessage extends AbstractController {
 	@RequestMapping(value = "/send", method = RequestMethod.POST, params = "send")
 	public ModelAndView send(@ModelAttribute("messageSend") Message message, BindingResult binding) {
 		ModelAndView result;
-
 		message = this.adminService.reconstruct(message, binding);
 
 		if (binding.hasErrors())
@@ -87,15 +87,9 @@ public class AdministratorBroadcastMessage extends AbstractController {
 	}
 
 	@RequestMapping(value = "/sendRebranding", method = RequestMethod.GET)
-	public ModelAndView createRebranding() {
-
-		/*
-		 * if (this.configurationService.isRebrandingBroadcasted()) {
-		 * 
-		 * }
-		 */
-
+	public ModelAndView createRebrandingo() {
 		ModelAndView result;
+
 		Message message;
 
 		message = this.messageService.create();
@@ -106,6 +100,7 @@ public class AdministratorBroadcastMessage extends AbstractController {
 		result = this.createEditModelAndViewRebranding(message);
 
 		return result;
+
 	}
 	@RequestMapping(value = "/sendRebranding", method = RequestMethod.POST, params = "send")
 	public ModelAndView sendRebranding(@ModelAttribute("messageSend") Message message, BindingResult binding) {
@@ -122,6 +117,7 @@ public class AdministratorBroadcastMessage extends AbstractController {
 
 			} catch (Throwable oops) {
 				result = this.createEditModelAndViewRebranding(message, "company.commit.error");
+
 			}
 		return result;
 	}
@@ -137,12 +133,17 @@ public class AdministratorBroadcastMessage extends AbstractController {
 	protected ModelAndView createEditModelAndViewRebranding(Message message, String messageCode) {
 		ModelAndView result;
 
-		result = new ModelAndView("broadcast/administrator/sendRebranding");
+		Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 
-		result.addObject("targetUri", "broadcast/administrator/sendRebranding.do");
-		result.addObject("messageSend", message);
-		result.addObject("message", messageCode);
+		if (isMessageBroadcasted)
+			result = new ModelAndView("redirect:/");
+		else {
+			result = new ModelAndView("broadcast/administrator/sendRebranding");
 
+			result.addObject("targetUri", "broadcast/administrator/sendRebranding.do");
+			result.addObject("messageSend", message);
+			result.addObject("message", messageCode);
+		}
 		return result;
 	}
 
