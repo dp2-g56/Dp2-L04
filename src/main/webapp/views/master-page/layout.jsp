@@ -72,10 +72,16 @@
 			<br />
 			<span class="message"><spring:message code="${message}" /></span>
 		</jstl:if>	
+		<jstl:if test="${confirmation}">
+			<br />
+		<font color = "green"> <strong><spring:message code="computeScore.confirmation" /></strong></font>
+		</jstl:if>
 	</div>
 	<div>
 		<tiles:insertAttribute name="footer" />
 	</div>
+	
+	
 
 </body>
 </html>

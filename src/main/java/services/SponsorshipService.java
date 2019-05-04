@@ -225,4 +225,9 @@ public class SponsorshipService {
 		this.providerService.save(provider);
 
 	}
+
+	public void deleteInBatch(List<Sponsorship> sponsorships) {
+		this.sponsorshipRepository.deleteInBatch(sponsorships);
+	}
+
 }
