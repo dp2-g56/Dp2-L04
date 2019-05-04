@@ -13,21 +13,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.Validator;
 
 import repositories.CompanyRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
 import domain.Application;
+import domain.Audit;
 import domain.Company;
 import domain.CreditCard;
-import domain.Curriculum;
-import domain.Rookie;
 import domain.Message;
 import domain.Position;
 import domain.Problem;
+import domain.Rookie;
 import domain.SocialProfile;
+import domain.Sponsorship;
 import forms.FormObjectCompany;
 import forms.FormObjectEditCompany;
 
@@ -57,10 +57,10 @@ public class CompanyService {
 	private FinderService			finderService;
 
 	@Autowired
-	private CurriculumService		curriculumService;
+	private AuditService			auditService;
 
 	@Autowired
-	private Validator				validator;
+	private SponsorshipService		sponsorshipService;
 
 
 	//----------------------------------------CRUD METHODS--------------------------
@@ -82,7 +82,7 @@ public class CompanyService {
 
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
-		List<Authority> authorities = (List<Authority>) userAccount.getAuthorities();
+		userAccount.getAuthorities();
 		return this.companyRepository.getCompanyByUsername(userAccount.getUsername());
 	}
 
@@ -415,19 +415,25 @@ public class CompanyService {
 
 		int companyId = company.getId();
 
+		List<Sponsorship> sponsorships = this.companyRepository.sponsorshipsOfCompany(companyId);
+
+		this.sponsorshipService.deleteInBatch(sponsorships);
+
+		List<Audit> audits = this.companyRepository.auditsOfCompany(companyId);
+
+		this.auditService.deleteInBatch(audits);
+
 		List<Application> applications = this.companyRepository.applicationsOfCompany(companyId);
 
 		List<Rookie> rookies = this.companyRepository.rookiesOfCompany(companyId);
-
-		List<Curriculum> curriculums = this.companyRepository.curriculumsOfApplicationssOfCompany(companyId);
 
 		for (Rookie h : rookies) {
 			h.getApplications().removeAll(applications);
 		}
 
-		this.applicationService.deleteinBatch(applications);
-
-		this.curriculumService.deleteInBatch(curriculums);
+		for (Application a : applications) {
+			this.applicationService.delete(a);
+		}
 
 		List<Position> positions = new ArrayList<Position>();
 		positions.addAll(company.getPositions());
@@ -451,7 +457,6 @@ public class CompanyService {
 		this.companyRepository.delete(company);
 
 	}
-
 	public void flush() {
 		this.companyRepository.flush();
 

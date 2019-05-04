@@ -8,10 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import domain.Application;
+import domain.Audit;
 import domain.Company;
 import domain.Curriculum;
-import domain.Rookie;
 import domain.Position;
+import domain.Rookie;
+import domain.Sponsorship;
 
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
@@ -42,5 +44,11 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
 	@Query("select distinct a.curriculum from Company c join c.positions p join p.applications a where c.id = ?1")
 	public List<Curriculum> curriculumsOfApplicationssOfCompany(int idCompany);
+
+	@Query("select p.audits from Company c join c.positions p where c.id = ?1")
+	public List<Audit> auditsOfCompany(int idCompany);
+
+	@Query("select p.sponsorships from Company c join c.positions p where c.id = ?1")
+	public List<Sponsorship> sponsorshipsOfCompany(int idCompany);
 
 }
