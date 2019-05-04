@@ -11,9 +11,9 @@
 <display:table pagesize="5" name="items" id="row" class="displaytag" 
 					requestURI="anonymous/item/list.do">
 			
-		<display:column property="name" titleKey="item.name" />
+		<display:column property="name" titleKey="item.name" sortable="true"/>
 		
-		<display:column property="description" titleKey="item.description" />
+		<display:column property="description" titleKey="item.description" sortable="true"/>
 		
 		<display:column titleKey="item.links">
 			<spring:url var="links" value="/anonymous/item/listLinks.do">
