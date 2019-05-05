@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -385,12 +386,16 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
-	public ModelAndView listProblems(@RequestParam int positionId, @RequestParam boolean assignable) {
+	public ModelAndView listProblems(@RequestParam int positionId) {
 		ModelAndView result;
+
+		Boolean assignable = false;
 
 		List<Problem> allProblems = new ArrayList<>();
 		allProblems = this.positionService.getProblemsOfPosition(positionId);
 		Actor actor = this.positionService.getActorWithPosition(positionId);
+		Position position = this.positionService.findOne(positionId);
+		Assert.isTrue(position.getProblems().containsAll(allProblems));
 
 		Actor loggedActor = this.actorService.loggedActor();
 		Boolean sameActorLogged;
@@ -401,15 +406,19 @@ public class AnonymousController extends AbstractController {
 		else
 			sameActorLogged = false;
 
-		result = new ModelAndView("anonymous/problem/list");
+		if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+			result = new ModelAndView("redirect:/anonymous/position/list.do");
+		else {
 
-		result.addObject("problems", allProblems);
-		result.addObject("publicData", publicData);
-		result.addObject("sameActorLogged", sameActorLogged);
-		result.addObject("requestURI", "anonymous/problem/list.do");
-		result.addObject("positionId", positionId);
-		result.addObject("assignable", assignable);
+			result = new ModelAndView("anonymous/problem/list");
 
+			result.addObject("problems", allProblems);
+			result.addObject("publicData", publicData);
+			result.addObject("sameActorLogged", sameActorLogged);
+			result.addObject("requestURI", "anonymous/problem/list.do");
+			result.addObject("positionId", positionId);
+			result.addObject("assignable", assignable);
+		}
 		return result;
 	}
 
@@ -434,13 +443,14 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
-	public ModelAndView listAplications(@RequestParam int positionId, @RequestParam boolean assignable) {
+	public ModelAndView listAplications(@RequestParam int positionId) {
 		ModelAndView result;
+		Boolean assignable = false;
 
 		List<Application> allApplications = new ArrayList<Application>();
 		allApplications = this.applicationService.getApplicationsCompany(positionId);
 		Actor actor = this.positionService.getActorWithPosition(positionId);
-
+		Position position = this.positionService.findOne(positionId);
 		Actor loggedActor = this.actorService.loggedActor();
 		Boolean sameActorLogged;
 
@@ -449,43 +459,55 @@ public class AnonymousController extends AbstractController {
 		else
 			sameActorLogged = false;
 
-		result = new ModelAndView("anonymous/application/list");
+		if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+			result = new ModelAndView("redirect:/anonymous/position/list.do");
+		else {
 
-		result.addObject("allApplications", allApplications);
-		result.addObject("sameActorLogged", sameActorLogged);
-		result.addObject("requestURI", "anonymous/application/list.do");
-		result.addObject("positionId", positionId);
-		result.addObject("assignable", assignable);
+			result = new ModelAndView("anonymous/application/list");
 
+			result.addObject("allApplications", allApplications);
+			result.addObject("sameActorLogged", sameActorLogged);
+			result.addObject("requestURI", "anonymous/application/list.do");
+			result.addObject("positionId", positionId);
+			result.addObject("assignable", assignable);
+		}
 		return result;
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
-	public ModelAndView listAudits(@RequestParam int positionId, @RequestParam boolean assignable) {
+	public ModelAndView listAudits(@RequestParam int positionId) {
 		ModelAndView result;
+		Boolean assignable = false;
 
 		List<Audit> finalAudits = new ArrayList<Audit>();
 		finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
+		Position position = this.positionService.findOne(positionId);
+		Assert.isTrue(position.getAudits().containsAll(finalAudits));
 
-		result = new ModelAndView("anonymous/audit/list");
+		if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+			result = new ModelAndView("redirect:/anonymous/position/list.do");
+		else {
+			result = new ModelAndView("anonymous/audit/list");
 
-		result.addObject("finalAudits", finalAudits);
-		result.addObject("requestURI", "anonymous/audit/list.do");
-		result.addObject("positionId", positionId);
-		result.addObject("assignable", assignable);
+			result.addObject("finalAudits", finalAudits);
+			result.addObject("requestURI", "anonymous/audit/list.do");
+			result.addObject("positionId", positionId);
+			result.addObject("assignable", assignable);
+		}
 
 		return result;
 	}
 
 	@RequestMapping(value = "/company/listOne", method = RequestMethod.GET)
-	public ModelAndView listCompany(@RequestParam int positionId, @RequestParam boolean assignable) {
+	public ModelAndView listCompany(@RequestParam int positionId) {
 
 		ModelAndView result;
+		Boolean assignable = false;
 		List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
 
 		Company company = this.companyService.companyOfRespectivePosition(positionId);
 		Actor actor = this.positionService.getActorWithPosition(positionId);
-
+		Position position = this.positionService.findOne(positionId);
 		Boolean score = true;
 
 		Actor loggedActor = this.actorService.loggedActor();
@@ -499,15 +521,18 @@ public class AnonymousController extends AbstractController {
 
 		Boolean publicValue = true;
 
-		result = new ModelAndView("anonymous/company/listOne");
-		result.addObject("actor", company);
-		result.addObject("socialProfiles", socialProfiles);
-		result.addObject("score", score);
-		result.addObject("publicValue", publicValue);
-		result.addObject("sameActorLogged", sameActorLogged);
-		result.addObject("requestURI", "anonymous/company/listOne.do");
-		result.addObject("assignable", assignable);
-
+		if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+			result = new ModelAndView("redirect:/anonymous/position/list.do");
+		else {
+			result = new ModelAndView("anonymous/company/listOne");
+			result.addObject("actor", company);
+			result.addObject("socialProfiles", socialProfiles);
+			result.addObject("score", score);
+			result.addObject("publicValue", publicValue);
+			result.addObject("sameActorLogged", sameActorLogged);
+			result.addObject("requestURI", "anonymous/company/listOne.do");
+			result.addObject("assignable", assignable);
+		}
 		return result;
 	}
 
@@ -603,16 +628,20 @@ public class AnonymousController extends AbstractController {
 
 		ModelAndView result;
 		List<Item> items;
+		Boolean publicData = false;
 
-		if (providerId == null) {
+		if (providerId == null)
 			items = this.itemService.findAll();
-		} else {
+		else {
 			items = this.itemService.getItemsFromProvider(providerId);
+			Provider provider = this.providerService.findOne(providerId);
+			Assert.isTrue(provider.getItems().containsAll(items));
+			publicData = true;
 		}
-
 		Map<Item, Provider> providersByItem = this.itemService.getProvidersByItem(items);
 
 		result = new ModelAndView("anonymous/item/list");
+		result.addObject("publicData", publicData);
 		result.addObject("items", items);
 		result.addObject("providersByItem", providersByItem);
 		result.addObject("requestURI", "anonymous/item/list.do");
