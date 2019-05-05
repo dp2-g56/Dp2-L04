@@ -50,5 +50,10 @@
 			</a>
 		</display:column>
 	
+	
 		
 	</display:table>
+	
+	<jstl:if test="${publicData}">
+  	<a href="anonymous/provider/list.do"><spring:message code="position.backToPublicData" /></a>
+ 	</jstl:if>
