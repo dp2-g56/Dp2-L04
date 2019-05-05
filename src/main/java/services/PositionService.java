@@ -207,7 +207,7 @@ public class PositionService {
 
 		//Rechaza todas las applications en SUBMITTED
 		for (Application a : submittedApplication) {
-			a.setStatus(Status.REJECTED);
+			a.setStatus(Status.ACCEPTED);
 			this.applicationService.save(a);
 		}
 
@@ -232,8 +232,6 @@ public class PositionService {
 		Assert.notNull(position);
 		Company loggedCompany = this.companyService.loggedCompany();
 		Assert.isTrue(loggedCompany.getPositions().contains(position));
-		Assert.isTrue(position.getIsDraftMode());
-		Assert.isTrue(!position.getIsCancelled());
 
 		FormObjectPositionProblemCheckbox result = new FormObjectPositionProblemCheckbox();
 
@@ -324,7 +322,7 @@ public class PositionService {
 		}
 
 		if (!position.getIsDraftMode())
-			Assert.isTrue(problems.size() >= 2);
+			Assert.isTrue(problems.size() >= 1);
 
 		position.setProblems(problems);
 		Position saved = new Position();

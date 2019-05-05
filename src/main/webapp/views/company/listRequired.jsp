@@ -17,7 +17,6 @@
 		</display:column>
 				
 	</display:table>
-		
 <br />
-<a href="position/company/list.do"><spring:message code="position.back" /></a>
+<a href="http://localhost:8080/Acme-Rookies/j_spring_security_logout"><spring:message code="position.back" /></a>
 
