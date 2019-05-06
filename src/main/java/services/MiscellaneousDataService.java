@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.ArrayList;
@@ -11,31 +12,29 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
-import domain.Curriculum;
-import domain.Rookie;
-import domain.MiscellaneousData;
-import domain.PersonalData;
-import domain.PositionData;
-import repositories.CurriculumRepository;
 import repositories.MiscellaneousDataRepository;
+import domain.Curriculum;
+import domain.MiscellaneousData;
+import domain.Rookie;
 
 @Service
 @Transactional
 public class MiscellaneousDataService {
-	
+
 	@Autowired
-	private MiscellaneousDataRepository miscellaneousDataRepository;
+	private MiscellaneousDataRepository	miscellaneousDataRepository;
 	@Autowired
-	private RookieService rookieService;
+	private RookieService				rookieService;
 	@Autowired
-	private CurriculumService curriculumService;
+	private CurriculumService			curriculumService;
 	@Autowired
-	private Validator validator;
-	
+	private Validator					validator;
+
+
 	public void save(MiscellaneousData m) {
 		this.miscellaneousDataRepository.save(m);
 	}
-	
+
 	public MiscellaneousData findOne(int miscellaneousDataId) {
 		return this.miscellaneousDataRepository.findOne(miscellaneousDataId);
 	}
@@ -46,15 +45,15 @@ public class MiscellaneousDataService {
 		Assert.notNull(miscellaneousData);
 		return miscellaneousData;
 	}
-	
+
 	public void deleteInBatch(Iterable<MiscellaneousData> entities) {
 		this.miscellaneousDataRepository.deleteInBatch(entities);
 	}
 
 	public void addOrUpdateMiscellaneousDataAsRookie(MiscellaneousData miscellaneousData, int curriculumId) {
 		Rookie rookie = this.rookieService.securityAndRookie();
-		
-		if(miscellaneousData.getId()==0) {
+
+		if (miscellaneousData.getId() == 0) {
 			Curriculum curriculum = this.curriculumService.getCurriculumOfRookie(rookie.getId(), curriculumId);
 			Assert.notNull(curriculum);
 			List<MiscellaneousData> miscellaneoussData = curriculum.getMiscellaneousData();
@@ -74,20 +73,19 @@ public class MiscellaneousDataService {
 
 	public MiscellaneousData reconstruct(MiscellaneousData miscellaneousData, BindingResult binding) {
 		MiscellaneousData miscellaneousDataReconstruct = new MiscellaneousData();
-		
-		if(miscellaneousData.getId()==0) {
-			miscellaneousDataReconstruct.setFreeText(miscellaneousData.getFreeText());
+
+		if (miscellaneousData.getId() == 0) {
+			miscellaneousDataReconstruct = miscellaneousData;
 			miscellaneousDataReconstruct.setAttachments(new ArrayList<String>());
 		} else {
 			MiscellaneousData miscellaneousDataFounded = this.findOne(miscellaneousData.getId());
-			miscellaneousDataReconstruct.setId(miscellaneousDataFounded.getId());
-			miscellaneousDataReconstruct.setVersion(miscellaneousDataFounded.getVersion());
-			miscellaneousDataReconstruct.setFreeText(miscellaneousData.getFreeText());
+
+			miscellaneousDataReconstruct = miscellaneousData;
 			miscellaneousDataReconstruct.setAttachments(miscellaneousDataFounded.getAttachments());
 		}
-		
+
 		this.validator.validate(miscellaneousDataReconstruct, binding);
-		
+
 		return miscellaneousDataReconstruct;
 	}
 
@@ -127,5 +125,15 @@ public class MiscellaneousDataService {
 
 	public List<String> getAttachmentsOfMiscellaneousDataOfLoggedRookie(int miscellaneousDataId) {
 		return this.getMiscellaneousDataOfLoggedRookie(miscellaneousDataId).getAttachments();
+	}
+
+	public MiscellaneousData create() {
+		MiscellaneousData result = new MiscellaneousData();
+		List<String> attachments = new ArrayList<String>();
+
+		result.setFreeText("");
+		result.setAttachments(attachments);
+
+		return result;
 	}
 }

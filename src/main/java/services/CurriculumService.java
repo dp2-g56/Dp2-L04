@@ -137,6 +137,10 @@ public class CurriculumService {
 
 			curriculum.setId(curriculumFounded.getId());
 			curriculum.setVersion(curriculumFounded.getVersion());
+			curriculum.setMiscellaneousData(curriculumFounded.getMiscellaneousData());
+			curriculum.setEducationData(curriculumFounded.getEducationData());
+			curriculum.setPositionData(curriculumFounded.getPositionData());
+
 		}
 		curriculum.setTitle(formObject.getTitle());
 		curriculum.setPersonalData(personalData);
