@@ -90,7 +90,7 @@ public class PositionDataRookieController extends AbstractController {
 		else
 			tiles = "rookie/editPositionData";
 
-		if (positionData.getEndDate() != null) {
+		if (positionData.getEndDate() != null && positionData.getStartDate() != null) {
 			String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 
 			if (positionData.getStartDate().after(positionData.getEndDate()))
