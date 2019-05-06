@@ -44,7 +44,6 @@ public class FormObjectSponsorshipCreditCard {
 		this.id = id;
 	}
 
-	@URL
 	@NotBlank
 	public String getBanner() {
 		return this.banner;
@@ -55,7 +54,6 @@ public class FormObjectSponsorshipCreditCard {
 	}
 
 	@URL
-	@NotBlank
 	public String getTargetURL() {
 		return this.targetURL;
 	}

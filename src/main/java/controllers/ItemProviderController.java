@@ -152,16 +152,6 @@ public class ItemProviderController extends AbstractController {
 
 		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 
-		// Links URL
-		if (!formObjectItem.getLinks().isEmpty())
-			for (String s : item.getLinks())
-				if (!this.itemService.isUrl(s))
-					if (locale.contains("ES"))
-						binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false,
-								null, null, "URLs incorrecta"));
-					else
-						binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false,
-								null, null, "Wrong URLs"));
 
 		// Links URL
 		if (!formObjectItem.getPictures().isEmpty())

@@ -15,13 +15,12 @@ import org.hibernate.validator.constraints.URL;
 @Access(AccessType.PROPERTY)
 public class Sponsorship extends DomainEntity {
 
-	private CreditCard	creditCard;
-	private String		banner;
-	private String		targetUrl;
+	private CreditCard creditCard;
+	private String banner;
+	private String targetUrl;
 
-	private Position	position;
-	private Provider	provider;
-
+	private Position position;
+	private Provider provider;
 
 	@NotNull
 	@Valid
@@ -34,7 +33,6 @@ public class Sponsorship extends DomainEntity {
 	}
 
 	@NotBlank
-	@URL
 	public String getBanner() {
 		return this.banner;
 	}
@@ -43,7 +41,6 @@ public class Sponsorship extends DomainEntity {
 		this.banner = banner;
 	}
 
-	@NotBlank
 	@URL
 	public String getTargetUrl() {
 		return this.targetUrl;
