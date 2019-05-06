@@ -64,7 +64,7 @@
 		</jstl:choose>
 
 		<display:column titleKey="application.problemTitle"
-			style="color:${color}">
+			style="color:${color}" sortable="true">
 			<jstl:out value="${row.problem.title}" />
 		</display:column>
 
