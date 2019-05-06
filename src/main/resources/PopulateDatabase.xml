@@ -1440,6 +1440,8 @@
 				<property name="curriculum" ref="curriculum5" />
 				<property name="rookie" ref="rookie1" />
 			</bean>
+			
+			
 	<!-- FIN APPLICATION -->
 			
 	<!-- FINDER -->
