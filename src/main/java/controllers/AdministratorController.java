@@ -10,7 +10,9 @@
 
 package controllers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import security.LoginService;
+import security.UserAccount;
 import services.ActorService;
 import services.AdminService;
 import services.AuditorService;
@@ -63,8 +67,39 @@ public class AdministratorController extends AbstractController {
 		ModelAndView result;
 
 		this.adminService.computeScore();
+		SimpleDateFormat formatter;
+		String moment;
+		Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 
-		result = new ModelAndView("redirect:/");
+		formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		moment = formatter.format(new Date());
+
+		String welcomeMessage;
+		String systemName = this.configurationService.getConfiguration().getSystemName();
+		UserAccount userAccount;
+		String username;
+
+		try {
+			userAccount = LoginService.getPrincipal();
+			username = userAccount.getUsername();
+		} catch (Exception oops) {
+			username = "";
+		}
+
+		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
+		if (locale.equals("EN")) {
+			welcomeMessage = this.configurationService.getConfiguration().getWelcomeMessageEnglish();
+		} else {
+			welcomeMessage = this.configurationService.getConfiguration().getWelcomeMessageSpanish();
+		}
+
+		result = new ModelAndView("welcome/index");
+		result.addObject("username", username);
+		result.addObject("isMessageBroadcasted", isMessageBroadcasted);
+		result.addObject("moment", moment);
+		result.addObject("welcomeMessage", welcomeMessage);
+		result.addObject("systemName", systemName);
+		result.addObject("confirmation", true);
 
 		return result;
 	}
@@ -95,13 +130,14 @@ public class AdministratorController extends AbstractController {
 		//Reconstruccion
 		admin = this.adminService.reconstruct(formObjectAdmin, binding);
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(formObjectAdmin);
-		else
+		} else {
 			try {
 
-				if (admin.getPhone().matches("([0-9]{4,})$"))
+				if (admin.getPhone().matches("([0-9]{4,})$")) {
 					admin.setPhone(prefix + admin.getPhone());
+				}
 				this.adminService.saveNewAdmin(admin);
 
 				result = new ModelAndView("redirect:/");
@@ -110,6 +146,7 @@ public class AdministratorController extends AbstractController {
 				result = this.createEditModelAndView(formObjectAdmin, "company.commit.error");
 
 			}
+		}
 		return result;
 	}
 
@@ -207,13 +244,14 @@ public class AdministratorController extends AbstractController {
 		//Reconstruccion
 		auditor = this.auditorService.reconstruct(formObjectAuditor, binding);
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(formObjectAuditor);
-		else
+		} else {
 			try {
 
-				if (auditor.getPhone().matches("([0-9]{4,})$"))
+				if (auditor.getPhone().matches("([0-9]{4,})$")) {
 					auditor.setPhone(prefix + auditor.getPhone());
+				}
 				this.auditorService.saveNewAuditor(auditor);
 
 				result = new ModelAndView("redirect:/");
@@ -222,6 +260,7 @@ public class AdministratorController extends AbstractController {
 				result = this.createEditModelAndView(formObjectAuditor, "company.commit.error");
 
 			}
+		}
 		return result;
 	}
 

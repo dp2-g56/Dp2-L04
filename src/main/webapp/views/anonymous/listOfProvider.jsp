@@ -11,13 +11,13 @@
 	<display:table name="providers" id="row" pagesize="5" class="displaytag" 
 					requestURI="/anonymous/provider/list.do">
 	
-		<display:column property="make" titleKey="provider.make" /> 
-		<display:column property="name" titleKey="companies.name" /> 
-		<display:column property="VATNumber" titleKey="companies.VATNumber" /> 
-		<display:column property="photo" titleKey="companies.photo" /> 
-		<display:column property="email" titleKey="companies.email" /> 
-		<display:column property="phone" titleKey="companies.phone" /> 
-		<display:column property="address" titleKey="companies.address" /> 
+		<display:column property="make" titleKey="provider.make" sortable="true"/> 
+		<display:column property="name" titleKey="companies.name" sortable="true"/> 
+		<display:column property="VATNumber" titleKey="companies.VATNumber" sortable="true"/> 
+		<display:column property="photo" titleKey="companies.photo" sortable="true"/> 
+		<display:column property="email" titleKey="companies.email" sortable="true"/> 
+		<display:column property="phone" titleKey="companies.phone" sortable="true"/> 
+		<display:column property="address" titleKey="companies.address" sortable="true"/> 
 		
 		
 		<display:column titleKey="provider.items">
