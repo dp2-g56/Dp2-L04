@@ -92,7 +92,7 @@ public class EducationDataRookieController extends AbstractController {
 		else
 			tiles = "rookie/editEducationData";
 
-		if (educationData.getEndDate() != null) {
+		if (educationData.getEndDate() != null && educationData.getStartDate() != null) {
 			String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 
 			if (educationData.getStartDate().after(educationData.getEndDate()))
