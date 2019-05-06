@@ -15,12 +15,20 @@
 	<display:column titleKey="position.status" >
 		<jstl:out value="${row.position.title}"></jstl:out>
 	</display:column>
-
-	<display:column property="momentCreation" titleKey="audit.momentCreation" />
-	
+	<jstl:if test="${locale == 'EN' }">
+		<display:column property="momentCreation" titleKey="audit.momentCreation" />
+	</jstl:if>
 	<display:column property="freeText" titleKey="audit.freeText" />	
 	
-	<display:column property="score" titleKey="audit.score" />
+	<display:column titleKey="audit.score">
+		<jstl:choose>
+			<jstl:when test="${row.score == 10.0}">
+				<jstl:out value="${68509}"></jstl:out>
+			</jstl:when><jstl:otherwise>
+				<jstl:out value="${row.score}"></jstl:out>
+			</jstl:otherwise>
+		</jstl:choose>		
+	</display:column>
 	
 	<display:column titleKey="position.status">
         <jstl:choose>
@@ -34,6 +42,7 @@
         	
         </jstl:choose>
     </display:column>
+    
     
     <display:column>
 		<jstl:if test="${row.isDraftMode}">

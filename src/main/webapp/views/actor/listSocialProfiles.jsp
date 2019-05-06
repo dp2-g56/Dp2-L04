@@ -49,7 +49,7 @@
 			<td><spring:message code="actor.score" /></td>
 				<jstl:choose>
 					<jstl:when test="${actor.score == null}">
-						<td><spring:message code="actor.nil" /></td>
+						<td><jstl:out value="${0.0}"></jstl:out> </td>
 					</jstl:when><jstl:otherwise>
 						<td><jstl:out value="${actor.score}" /></td>
 					</jstl:otherwise>

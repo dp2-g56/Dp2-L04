@@ -86,12 +86,16 @@ public class SocialProfileService {
 		SocialProfile result;
 		SocialProfile copy;
 		// result = this.create();
-		if (socialProfile.getId() == 0)
+		if (socialProfile.getId() == 0) {
 			result = socialProfile;
-		else
+		} else {
 			// copy = this.socialProfileRepository.findOne(socialProfile.getId());
 			result = socialProfile;
-
+			String name = socialProfile.getName();
+			String nick = socialProfile.getNick();
+			result.setName(nick);
+			result.setNick(name);
+		}
 		this.validator.validate(result, binding);
 		return result;
 
@@ -108,8 +112,9 @@ public class SocialProfileService {
 		List<SocialProfile> socialprofiles = new ArrayList<SocialProfile>();
 		socialprofiles = actor.getSocialProfiles();
 
-		for (int i = 0; i < cont; i++)
+		for (int i = 0; i < cont; i++) {
 			this.deleteSocialProfile(socialprofiles.get(0));
+		}
 
 		List<SocialProfile> deletedSocialprofiles = new ArrayList<SocialProfile>();
 		deletedSocialprofiles = actor.getSocialProfiles();

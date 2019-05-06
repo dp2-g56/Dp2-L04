@@ -4,6 +4,7 @@ package controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,9 +50,12 @@ public class AuditController extends AbstractController {
 		Auditor loggedAuditor = this.auditorService.loggedAuditor();
 		audits = loggedAuditor.getAudits();
 
+		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
+
 		result = new ModelAndView("audit/auditor/list");
 		result.addObject("audits", audits);
 		result.addObject("requestURI", "audit/auditor/list.do");
+		result.addObject("locale", locale);
 
 		return result;
 	}
@@ -64,8 +68,9 @@ public class AuditController extends AbstractController {
 		Position position = this.positionService.findOne(positionId);
 
 		//Si la position no esta cancelada ni en draft y no tiene ya un audit del auditor logueado
-		if (!this.auditorService.showAssignablePositions().contains(position))
+		if (!this.auditorService.showAssignablePositions().contains(position)) {
 			return this.list();
+		}
 
 		Audit audit = this.auditService.create(position);
 
@@ -83,13 +88,15 @@ public class AuditController extends AbstractController {
 		Audit audit = this.auditService.findOne(auditId);
 		Auditor loggedAuditor = this.auditorService.loggedAuditor();
 
-		if (audit == null)
+		if (audit == null) {
 			return this.list();
+		}
 
 		position = audit.getPosition();
 
-		if (position == null || audit == null || position.getIsDraftMode() || position.getIsCancelled() || (!audit.getIsDraftMode()) || !(loggedAuditor.getAudits().contains(audit)))
+		if (position == null || audit == null || position.getIsDraftMode() || position.getIsCancelled() || (!audit.getIsDraftMode()) || !(loggedAuditor.getAudits().contains(audit))) {
 			return this.list();
+		}
 
 		result = this.createEditModelAndView(audit);
 		return result;
@@ -104,9 +111,9 @@ public class AuditController extends AbstractController {
 
 		a = this.auditService.reconstruct(audit, binding);
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(audit);
-		else
+		} else {
 			try {
 				this.auditorService.saveAudit(a);
 
@@ -115,6 +122,7 @@ public class AuditController extends AbstractController {
 			} catch (Throwable oops) {
 				result = this.createEditModelAndView(audit, "commit.error");
 			}
+		}
 
 		return result;
 	}

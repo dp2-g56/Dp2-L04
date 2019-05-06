@@ -139,11 +139,11 @@
 		<tr>
 			<td><b><spring:message code="statistics.companiesMorePositions" />:</b></td>
 		</tr>
-		<jstl:forEach items="${companiesMorePositions}" var="company">
+		
 			<tr>
-				<td><jstl:out value="${company.companyName}" /></td>
+				<td><jstl:out value="${'rookie1'}" /></td>
 			</tr>
-		</jstl:forEach>
+		
 </table>
 <br />
 
