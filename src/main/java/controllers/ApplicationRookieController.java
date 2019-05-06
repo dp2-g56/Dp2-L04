@@ -1,12 +1,13 @@
 package controllers;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,14 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import domain.Application;
 import domain.Curriculum;
-import domain.Rookie;
 import domain.Position;
-import domain.Problem;
+import domain.Rookie;
 import domain.Status;
 import services.ApplicationService;
-import services.RookieService;
 import services.MessageService;
 import services.PositionService;
+import services.RookieService;
 
 @Controller
 @RequestMapping("/application/rookie")
@@ -156,7 +156,7 @@ public class ApplicationRookieController extends AbstractController {
 			result = this.createEditModelAndView(p);
 			result.addObject("curriculums", curriculums);
 			result.addObject("positions", positions);
-		} else {
+		} else
 			try {
 				this.rookieService.addApplication(p);
 
@@ -168,7 +168,6 @@ public class ApplicationRookieController extends AbstractController {
 				result.addObject("curriculums", curriculums);
 				result.addObject("positions", positions);
 			}
-		}
 		return result;
 	}
 
@@ -183,10 +182,20 @@ public class ApplicationRookieController extends AbstractController {
 
 		p = this.applicationService.reconstruct(application, binding);
 
+		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
+
+		if (p.getExplication().contentEquals(""))
+			if (locale.contains("ES"))
+				binding.addError(new FieldError("application", "explication", application.getExplication(), false, null,
+						null, "La explicacion no se puede dejar en blanco"));
+			else
+				binding.addError(new FieldError("application", "explication", application.getExplication(), false, null,
+						null, "Explication can not be blank"));
+
 		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(p);
-			result.addObject("message", "rookie.url.error");
-		} else {
+			result.addObject("message", "rookie.fields.error");
+		} else
 			try {
 				this.applicationService.save(p);
 				this.messageService.notificationStatusApplicationSubmitted(p);
@@ -194,7 +203,6 @@ public class ApplicationRookieController extends AbstractController {
 			} catch (Throwable oops) {
 				result = this.createEditModelAndView(application, "rookie.commit.error");
 			}
-		}
 		return result;
 	}
 
