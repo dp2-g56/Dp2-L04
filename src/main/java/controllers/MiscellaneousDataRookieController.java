@@ -87,7 +87,7 @@ public class MiscellaneousDataRookieController extends AbstractController {
 			result = new ModelAndView("rookie/createAttachment");
 			result.addObject("miscellaneousDataId", miscellaneousDataId);
 			result.addObject("attachment", attachment);
-			result.addObject("message", "commit.error");
+			result.addObject("message", "commit.error.url");
 		}
 
 		return result;
@@ -109,7 +109,8 @@ public class MiscellaneousDataRookieController extends AbstractController {
 		ModelAndView result;
 
 		try {
-			MiscellaneousData miscellaneousData = this.miscellaneousDataService.getMiscellaneousDataOfLoggedRookie(miscellaneousDataId);
+			MiscellaneousData miscellaneousData = this.miscellaneousDataService
+					.getMiscellaneousDataOfLoggedRookie(miscellaneousDataId);
 			Curriculum curriculum = this.curriculumService.getCurriculumOfMiscellaneousData(miscellaneousDataId);
 
 			result = this.createEditModelAndView("rookie/editMiscellaneousData", miscellaneousData, curriculum.getId());
@@ -150,10 +151,12 @@ public class MiscellaneousDataRookieController extends AbstractController {
 		MiscellaneousData miscellaneousDataReconstructed = this.miscellaneousDataService.reconstruct(miscellaneousData, binding);
 
 		if (binding.hasErrors()) {
+
 			result = this.createEditModelAndView(tiles, miscellaneousDataReconstructed, curriculumId);
-		} else {
+		else
 			try {
-				this.miscellaneousDataService.addOrUpdateMiscellaneousDataAsRookie(miscellaneousDataReconstructed, curriculumId);
+				this.miscellaneousDataService.addOrUpdateMiscellaneousDataAsRookie(miscellaneousDataReconstructed,
+						curriculumId);
 				result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumId);
 			} catch (Throwable oops) {
 				result = this.createEditModelAndView(tiles, miscellaneousDataReconstructed, curriculumId, "commit.error");
@@ -170,7 +173,8 @@ public class MiscellaneousDataRookieController extends AbstractController {
 		return result;
 	}
 
-	private ModelAndView createEditModelAndView(String tiles, MiscellaneousData miscellaneousData, int curriculumId, String message) {
+	private ModelAndView createEditModelAndView(String tiles, MiscellaneousData miscellaneousData, int curriculumId,
+			String message) {
 		ModelAndView result = this.createEditModelAndView(tiles, miscellaneousData, curriculumId);
 		result.addObject("message", message);
 		return result;
