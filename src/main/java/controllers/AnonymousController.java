@@ -392,7 +392,7 @@ public class AnonymousController extends AbstractController {
 		Boolean assignable = false;
 
 		List<Problem> allProblems = new ArrayList<>();
-		allProblems = this.positionService.getProblemsOfPosition(positionId);
+		allProblems = this.problemService.findAll();
 		Actor actor = this.positionService.getActorWithPosition(positionId);
 		Position position = this.positionService.findOne(positionId);
 		Assert.isTrue(position.getProblems().containsAll(allProblems));

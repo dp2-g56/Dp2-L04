@@ -98,7 +98,12 @@ function isEmpty(obj) {
 	<acme:textbox path="address" code="admin.address" />
 	<br />	
 	
-	<acme:textbox path="companyName" code="compnay.companyName" />
+	<form:label path="companyName">
+		<spring:message code="compnay.companyName" />
+	</form:label>
+	<form:input path="companyName"/>
+	
+	<br />
 	</fieldset>
 	<br />
 	
