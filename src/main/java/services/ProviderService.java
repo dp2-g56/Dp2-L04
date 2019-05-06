@@ -14,22 +14,18 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import repositories.ProviderRepository;
-import security.Authority;
-import security.LoginService;
-import security.UserAccount;
-import domain.Company;
 import domain.CreditCard;
-import domain.Finder;
 import domain.Item;
 import domain.Message;
 import domain.Provider;
-import domain.Rookie;
 import domain.SocialProfile;
 import domain.Sponsorship;
 import forms.FormObjectEditProvider;
 import forms.FormObjectProvider;
-import forms.FormObjectRookie;
+import repositories.ProviderRepository;
+import security.Authority;
+import security.LoginService;
+import security.UserAccount;
 
 @Service
 @Transactional
@@ -194,15 +190,6 @@ public class ProviderService {
 					binding.addError(new FieldError("formObject", "number", formObjectProvider.getNumber(), false, null,
 							null, "The card number is invalid"));
 
-		if (card.getExpirationMonth() != null && card.getExpirationYear() != null)
-			if (!this.creditCardService.validateDateCreditCard(card))
-				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
-							null, null, "La tarjeta no puede estar caducada"));
-				else
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
-							null, null, "The credit card can not be expired"));
-
 		List<String> cardType = this.configurationService.getConfiguration().getCardType();
 
 		if (!cardType.contains(result.getCreditCard().getBrandName()))
@@ -257,7 +244,7 @@ public class ProviderService {
 
 		provider.getItems().clear();
 
-		//this.itemService.deleteInBatch(items);
+		// this.itemService.deleteInBatch(items);
 
 		this.sponsorshipService.deleteAllSponsorships();
 

@@ -9,6 +9,7 @@
 
 <security:authorize access="hasRole('PROVIDER')">
 	
-	<img src="https://i.imgur.com/6uttNzr.jpg"	/>
+	<p>bug bug bug...</p>
+	<img src="https://i.imgur.com/6uttNzr.jpg" width="200" height="200"/>
 
 </security:authorize>

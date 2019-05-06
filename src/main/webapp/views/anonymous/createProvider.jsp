@@ -144,7 +144,7 @@ function isEmpty(obj) {
 
 	<!-- BOTONES -->	
 	<input type="submit" name="save" value="<spring:message code="admin.save" />" 
-	onclick="phonenumberval();validateEmail();"/> 
+	onclick="validateEmail();"/> 
 	
 	<acme:cancel url="/" code="admin.cancel" /> 
 	
