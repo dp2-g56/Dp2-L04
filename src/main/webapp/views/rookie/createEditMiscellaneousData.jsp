@@ -11,9 +11,10 @@
 
 	<form:form action="miscellaneousData/rookie/save.do" modelAttribute="miscellaneousData" >
 	
-		<jstl:if test="${miscellaneousData.id>0}">
+		
 			<form:input path="id" hidden="true"/>
-		</jstl:if>
+			<form:input path="version" hidden="true"/>
+		
 		<input type="hidden" value="${curriculumId}" name="curriculumId"/>
 		
 		<acme:input code="miscellaneousData.freeText" path="freeText"/>

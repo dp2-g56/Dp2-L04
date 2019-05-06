@@ -3,33 +3,31 @@ package controllers;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import domain.Curriculum;
-import domain.MiscellaneousData;
 import services.CurriculumService;
 import services.MiscellaneousDataService;
 import services.RookieService;
+import domain.Curriculum;
+import domain.MiscellaneousData;
 
 @Controller
 @RequestMapping("/miscellaneousData/rookie")
 public class MiscellaneousDataRookieController extends AbstractController {
 
 	@Autowired
-	private CurriculumService curriculumService;
+	private CurriculumService			curriculumService;
 	@Autowired
-	private MiscellaneousDataService miscellaneousDataService;
+	private MiscellaneousDataService	miscellaneousDataService;
 	@Autowired
-	private RookieService rookieService;
+	private RookieService				rookieService;
+
 
 	public MiscellaneousDataRookieController() {
 		super();
@@ -40,14 +38,12 @@ public class MiscellaneousDataRookieController extends AbstractController {
 		ModelAndView result;
 
 		try {
-			List<String> attachments = this.miscellaneousDataService
-					.getAttachmentsOfMiscellaneousDataOfLoggedRookie(miscellaneousDataId);
+			List<String> attachments = this.miscellaneousDataService.getAttachmentsOfMiscellaneousDataOfLoggedRookie(miscellaneousDataId);
 
 			result = new ModelAndView("rookie/attachments");
 			result.addObject("attachments", attachments);
 			result.addObject("miscellaneousDataId", miscellaneousDataId);
-			result.addObject("curriculumId",
-					this.curriculumService.getCurriculumOfMiscellaneousData(miscellaneousDataId).getId());
+			result.addObject("curriculumId", this.curriculumService.getCurriculumOfMiscellaneousData(miscellaneousDataId).getId());
 		} catch (Throwable oops) {
 			result = new ModelAndView("redirect:/curriculum/rookie/list.do");
 		}
@@ -101,7 +97,7 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	public ModelAndView newMiscellaneousData(@RequestParam int curriculumId) {
 		ModelAndView result;
 
-		MiscellaneousData miscellaneousData = new MiscellaneousData();
+		MiscellaneousData miscellaneousData = this.miscellaneousDataService.create();
 
 		result = this.createEditModelAndView("rookie/createMiscellaneousData", miscellaneousData, curriculumId);
 
@@ -142,21 +138,20 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
-	public ModelAndView saveMiscellaneousData(
-			@ModelAttribute("miscellaneousData") @Valid MiscellaneousData miscellaneousData, BindingResult binding,
-			@Valid int curriculumId) {
+	public ModelAndView saveMiscellaneousData(MiscellaneousData miscellaneousData, BindingResult binding, int curriculumId) {
 		ModelAndView result;
 
 		String tiles;
-		if (miscellaneousData.getId() == 0)
+		if (miscellaneousData.getId() == 0) {
 			tiles = "rookie/createMiscellaneousData";
-		else
+		} else {
 			tiles = "rookie/editMiscellaneousData";
+		}
 
-		MiscellaneousData miscellaneousDataReconstructed = this.miscellaneousDataService.reconstruct(miscellaneousData,
-				binding);
+		MiscellaneousData miscellaneousDataReconstructed = this.miscellaneousDataService.reconstruct(miscellaneousData, binding);
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
+
 			result = this.createEditModelAndView(tiles, miscellaneousDataReconstructed, curriculumId);
 		else
 			try {
@@ -164,9 +159,9 @@ public class MiscellaneousDataRookieController extends AbstractController {
 						curriculumId);
 				result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumId);
 			} catch (Throwable oops) {
-				result = this.createEditModelAndView(tiles, miscellaneousDataReconstructed, curriculumId,
-						"commit.error");
+				result = this.createEditModelAndView(tiles, miscellaneousDataReconstructed, curriculumId, "commit.error");
 			}
+		}
 
 		return result;
 	}

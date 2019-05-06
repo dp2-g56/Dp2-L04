@@ -1,3 +1,4 @@
+
 package services;
 
 import java.net.URL;
@@ -12,21 +13,23 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
+import repositories.MiscellaneousDataRepository;
 import domain.Curriculum;
 import domain.MiscellaneousData;
 import domain.Rookie;
 import repositories.MiscellaneousDataRepository;
+
 
 @Service
 @Transactional
 public class MiscellaneousDataService {
 
 	@Autowired
-	private MiscellaneousDataRepository miscellaneousDataRepository;
+	private MiscellaneousDataRepository	miscellaneousDataRepository;
 	@Autowired
-	private RookieService rookieService;
+	private RookieService				rookieService;
 	@Autowired
-	private CurriculumService curriculumService;
+	private CurriculumService			curriculumService;
 	@Autowired
 	private Validator validator;
 
@@ -76,13 +79,12 @@ public class MiscellaneousDataService {
 		MiscellaneousData miscellaneousDataReconstruct = new MiscellaneousData();
 
 		if (miscellaneousData.getId() == 0) {
-			miscellaneousDataReconstruct.setFreeText(miscellaneousData.getFreeText());
+			miscellaneousDataReconstruct = miscellaneousData;
 			miscellaneousDataReconstruct.setAttachments(new ArrayList<String>());
 		} else {
 			MiscellaneousData miscellaneousDataFounded = this.findOne(miscellaneousData.getId());
-			miscellaneousDataReconstruct.setId(miscellaneousDataFounded.getId());
-			miscellaneousDataReconstruct.setVersion(miscellaneousDataFounded.getVersion());
-			miscellaneousDataReconstruct.setFreeText(miscellaneousData.getFreeText());
+
+			miscellaneousDataReconstruct = miscellaneousData;
 			miscellaneousDataReconstruct.setAttachments(miscellaneousDataFounded.getAttachments());
 		}
 
@@ -143,4 +145,13 @@ public class MiscellaneousDataService {
 		}
 	}
 
+	public MiscellaneousData create() {
+		MiscellaneousData result = new MiscellaneousData();
+		List<String> attachments = new ArrayList<String>();
+
+		result.setFreeText("");
+		result.setAttachments(attachments);
+
+		return result;
+	}
 }
