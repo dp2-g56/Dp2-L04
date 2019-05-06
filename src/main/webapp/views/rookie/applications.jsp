@@ -23,9 +23,9 @@
 		<label for="filter"><spring:message code="application.filter" /></label>
 		<br /> <select name="fselect">
 			<option value="ALL">-</option>
-			<option value="PENDING"><spring:message
-					code="application.status.pending" /></option>
 			<option value="SUBMITTED"><spring:message
+					code="application.status.pending" /></option>
+			<option value="PENDING"><spring:message
 					code="application.status.submitted" /></option>
 			<option value="ACCEPTED"><spring:message
 					code="application.status.accepted" /></option>
