@@ -41,9 +41,6 @@
    	
 	</display:column>
 	
-	<display:column titleKey="application.rookie">
-		<jstl:out value="${row.rookie.userAccount.username}" />
-	</display:column>
 	
 	
 	

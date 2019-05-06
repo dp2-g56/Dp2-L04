@@ -12,9 +12,9 @@
 	<display:table pagesize="5" name="items" id="row" class="displaytag" 
 					requestURI="/item/provider/list.do">
 			
-		<display:column property="name" titleKey="item.name" sortable="true"/>
+		<display:column property="name" titleKey="item.name"/>
 		
-		<display:column property="description" titleKey="item.description" sortable="true"/>
+		<display:column property="description" titleKey="item.description"/>
 		
 		<display:column titleKey="item.links">
 			<spring:url var="links" value="/item/provider/listLinks.do">
@@ -47,7 +47,7 @@
 				<spring:message code="item.edit" var = "editMessage" />
 				<jstl:out value="${editMessage}"/>
 			</a> / 
-			<a href="${deleteUrl}" onclick="return confirm('<spring:message code="item.delete.confirmation" />')">
+			<a href="${deleteUrl}">
 				<spring:message code="item.delete" var = "deleteMessage" />
 				<jstl:out value="${deleteMessage}"/>
 			</a>

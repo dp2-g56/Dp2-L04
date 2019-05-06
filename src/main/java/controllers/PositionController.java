@@ -344,8 +344,7 @@ public class PositionController extends AbstractController {
 
 		if (company.getPositions().contains(position)) {
 
-			if (!position.getIsDraftMode() || position.getIsCancelled())
-				return this.list();
+
 
 			if (!(company.getPositions().contains(position)))
 				return this.list();
@@ -398,7 +397,7 @@ public class PositionController extends AbstractController {
 
 		if (formObjectPositionProblemCheckbox.getIsDraftMode() != null)
 			if (!formObjectPositionProblemCheckbox.getIsDraftMode())
-				errorProblems = !(problems.size() >= 2);
+				errorProblems = !(problems.size() >= 1);
 
 		if (binding.hasErrors() || errorProblems) {
 			result = this.createEditModelAndView(position);
@@ -480,7 +479,7 @@ public class PositionController extends AbstractController {
 
 		try {
 			this.positionService.deletePositionWithId(formObjectPositionProblemCheckbox.getId());
-			result = new ModelAndView("redirect:/position/company/list.do");
+			result = new ModelAndView("redirect:https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 		} catch (Throwable oops) {
 			result = this.createEditModelAndView(formObjectPositionProblemCheckbox, "commit.error");
 		}

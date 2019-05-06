@@ -39,8 +39,8 @@ public class Problem extends DomainEntity {
 	public void setStatement(String statement) {
 		this.statement = statement;
 	}
-
-	@Valid
+	
+	@NotBlank
 	public String getHint() {
 		return this.hint;
 	}

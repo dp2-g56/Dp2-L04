@@ -26,7 +26,6 @@ public class FormObjectItem {
 		this.id = id;
 	}
 
-	@NotBlank
 	public String getName() {
 		return name;
 	}
