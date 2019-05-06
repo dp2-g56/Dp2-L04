@@ -1441,18 +1441,7 @@
 				<property name="rookie" ref="rookie1" />
 			</bean>
 			
-			<bean id ="application2" class="domain.Application">
-				<property name="creationMoment" value="02/05/2019 12:00" />
-				<property name="link" value="https://www.youtube.com/watch?v=SVfovID6QU8" />
-				<property name="explication" value="Explication 1" />
-				<property name="submitMoment" value="02/01/2018 11:30" />
-				
-				<property name="status" value="SUBMITTED" />
-				<property name="problem" ref="problem2" />
-				<property name="position" ref="position1" />
-				<property name="curriculum" ref="curriculum5" />
-				<property name="rookie" ref="rookie1" />
-			</bean>
+			
 	<!-- FIN APPLICATION -->
 			
 	<!-- FINDER -->
