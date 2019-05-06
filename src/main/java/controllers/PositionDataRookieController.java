@@ -94,8 +94,8 @@ public class PositionDataRookieController extends AbstractController {
 
 		if (positionData.getStartDate().after(positionData.getEndDate()))
 			if (locale.contains("ES"))
-				binding.addError(new FieldError("positionData", "startDatestartDate", positionData.getStartDate(),
-						false, null, null, "La fecha de fin no puede ser anterior a la de inicio"));
+				binding.addError(new FieldError("positionData", "startDate", positionData.getStartDate(), false, null,
+						null, "La fecha de fin no puede ser anterior a la de inicio"));
 			else
 				binding.addError(new FieldError("positionData", "startDate", positionData.getStartDate(), false, null,
 						null, "The end date can not be before the start date"));
