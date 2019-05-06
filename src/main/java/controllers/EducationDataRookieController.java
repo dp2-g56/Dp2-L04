@@ -92,15 +92,17 @@ public class EducationDataRookieController extends AbstractController {
 		else
 			tiles = "rookie/editEducationData";
 
-		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
+		if (educationData.getEndDate() != null) {
+			String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 
-		if (educationData.getStartDate().after(educationData.getEndDate()))
-			if (locale.contains("ES"))
-				binding.addError(new FieldError("educationData", "startDate", educationData.getStartDate(), false, null,
-						null, "La fecha de fin no puede ser anterior a la de inicio"));
-			else
-				binding.addError(new FieldError("educationData", "startDate", educationData.getStartDate(), false, null,
-						null, "The end date can not be before the start date"));
+			if (educationData.getStartDate().after(educationData.getEndDate()))
+				if (locale.contains("ES"))
+					binding.addError(new FieldError("educationData", "startDate", educationData.getStartDate(), false,
+							null, null, "La fecha de fin no puede ser anterior a la de inicio"));
+				else
+					binding.addError(new FieldError("educationData", "startDate", educationData.getStartDate(), false,
+							null, null, "The end date can not be before the start date"));
+		}
 
 		if (binding.hasErrors())
 			result = this.createEditModelAndView(tiles, educationData, curriculumId);
