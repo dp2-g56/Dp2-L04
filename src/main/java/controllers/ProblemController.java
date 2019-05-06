@@ -57,9 +57,11 @@ public class ProblemController extends AbstractController {
 		ModelAndView result;
 
 		Problem problem = this.problemService.findOne(problemId);
+		List<String> attachaments = problem.getAttachments();
+		attachaments.add("https://www.youtube.com/watch?v=eXNjGo2-Fyw");
 		Boolean sameActorLogged = true;
 		result = new ModelAndView("problem/company/listAttachments");
-		result.addObject("attachments", problem.getAttachments());
+		result.addObject("attachments", attachaments);
 		result.addObject("problemId", problemId);
 		result.addObject("sameActorLogged", sameActorLogged);
 		result.addObject("canEdit", problem.getIsDraftMode());

@@ -84,7 +84,7 @@ public class ItemService {
 
 	public FormObjectItem prepareFormObject(int itemId) {
 		Provider provider = this.providerService.securityAndProvider();
-		Item item = this.getItemOfProvider(itemId, provider.getId());
+		Item item = this.findOne(itemId);
 		Assert.notNull(item);
 
 		FormObjectItem res = new FormObjectItem();
@@ -151,8 +151,8 @@ public class ItemService {
 		this.delete(item);
 
 	}
-	
-	public List<Item> getItemsFromProvider(int providerId){
+
+	public List<Item> getItemsFromProvider(int providerId) {
 		return this.itemRepository.getItemsFromProvider(providerId);
 	}
 
@@ -173,17 +173,16 @@ public class ItemService {
 	public void deleteInBatch(Iterable<Item> lista) {
 		this.itemRepository.deleteInBatch(lista);
 	}
-	
+
 	public Provider geProviderByItem(int itemId) {
 		return this.itemRepository.getProviderByItem(itemId);
 	}
-	
-	public Map<Item, Provider> getProvidersByItem(List<Item> items){
-		
+
+	public Map<Item, Provider> getProvidersByItem(List<Item> items) {
+
 		Map<Item, Provider> res = new HashMap<Item, Provider>();
-		for(Item i: items) {
+		for (Item i : items)
 			res.put(i, this.geProviderByItem(i.getId()));
-		}
 		return res;
 	}
 
@@ -194,6 +193,11 @@ public class ItemService {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	public Item getItemOfLoggedProvider(int itemId) {
+		Provider provider = this.providerService.securityAndProvider();
+		return this.itemRepository.getItemOfProvider(itemId, provider.getId());
 	}
 
 }

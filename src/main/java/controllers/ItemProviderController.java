@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -55,12 +56,14 @@ public class ItemProviderController extends AbstractController {
 		ModelAndView result;
 
 		try {
+			Assert.notNull(this.itemService.getItemOfLoggedProvider(itemId));
+
 			List<String> links = this.itemService.getLinksOfItem(itemId);
 
 			result = new ModelAndView("provider/links");
 			result.addObject("links", links);
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			result = new ModelAndView("provider/troll");
 		}
 
 		return result;
@@ -71,12 +74,14 @@ public class ItemProviderController extends AbstractController {
 		ModelAndView result;
 
 		try {
+			Assert.notNull(this.itemService.getItemOfLoggedProvider(itemId));
+
 			List<String> pictures = this.itemService.getPicturesOfItem(itemId);
 
 			result = new ModelAndView("provider/pictures");
 			result.addObject("pictures", pictures);
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			result = new ModelAndView("provider/troll");
 		}
 
 		return result;
@@ -147,16 +152,6 @@ public class ItemProviderController extends AbstractController {
 
 		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 
-		// Links URL
-		if (!formObjectItem.getLinks().isEmpty())
-			for (String s : item.getLinks())
-				if (!this.itemService.isUrl(s))
-					if (locale.contains("ES"))
-						binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false,
-								null, null, "URLs incorrecta"));
-					else
-						binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false,
-								null, null, "Wrong URLs"));
 
 		// Links URL
 		if (!formObjectItem.getPictures().isEmpty())
