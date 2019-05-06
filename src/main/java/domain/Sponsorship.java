@@ -23,7 +23,6 @@ public class Sponsorship extends DomainEntity {
 	private Provider	provider;
 
 
-	@NotNull
 	@Valid
 	public CreditCard getCreditCard() {
 		return this.creditCard;
@@ -34,7 +33,6 @@ public class Sponsorship extends DomainEntity {
 	}
 
 	@NotBlank
-	@URL
 	public String getBanner() {
 		return this.banner;
 	}
@@ -43,7 +41,6 @@ public class Sponsorship extends DomainEntity {
 		this.banner = banner;
 	}
 
-	@NotBlank
 	@URL
 	public String getTargetUrl() {
 		return this.targetUrl;
