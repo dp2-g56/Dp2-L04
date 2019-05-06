@@ -54,19 +54,17 @@ public class PositionController extends AbstractController {
 	@Autowired
 	private ApplicationService applicationService;
 
+	@Autowired
+	private ActorService actorService;
 
 	@Autowired
-	private ActorService		actorService;
+	private FinderService finderService;
 
 	@Autowired
-	private FinderService		finderService;
+	private CurriculumService curriculumService;
 
-	@Autowired
-	private CurriculumService	curriculumService;
-	
 	@Autowired
 	private SponsorshipService sponsorshipService;
-
 
 	public PositionController() {
 		super();
@@ -85,12 +83,14 @@ public class PositionController extends AbstractController {
 		Company loggedCompany = this.companyService.loggedCompany();
 
 		positions = loggedCompany.getPositions();
-		
+
 		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
 		for (Position p : positions) {
-			Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
-			//this.sponsorshipService.sendMessageToProvider(spo.getProvider());
-			randomSpo.put(p.getId(), spo);
+			if (!p.getSponsorships().isEmpty()) {
+				Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+				this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+				randomSpo.put(p.getId(), spo);
+			}
 		}
 
 		result = new ModelAndView("position/company/list");

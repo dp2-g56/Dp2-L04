@@ -418,4 +418,8 @@ public class PositionService {
 		return this.positionRepository.getActorWithPosition(positionId);
 	}
 
+	public Company getCompanyOfPosition(int positionId) {
+		return this.getCompanyOfPosition(positionId);
+	}
+
 }

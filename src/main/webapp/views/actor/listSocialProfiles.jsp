@@ -56,6 +56,21 @@
 				</jstl:choose>
 		</tr>
 	</jstl:if> 
+	
+	<security:authorize access="hasAnyRole('ADMIN')">
+		<tr>
+			<td><spring:message code="actor.spam" /></td>
+			
+			<jstl:choose>
+					<jstl:when test="${actor.hasSpam == false}">
+						<td><spring:message code="actor.na" /></td>
+					</jstl:when>
+					<jstl:otherwise>
+						<td><spring:message code="actor.isSuspicious" /></td>
+					</jstl:otherwise>
+				</jstl:choose>
+		</tr>
+	</security:authorize>
 	</table>
 	
 	<!-- Export Data -->

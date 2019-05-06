@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.CompanyService;
 import services.ProblemService;
+import domain.Company;
 import domain.Problem;
 
 @Controller
@@ -21,10 +22,11 @@ import domain.Problem;
 public class ProblemController extends AbstractController {
 
 	@Autowired
-	private ProblemService problemService;
+	private ProblemService	problemService;
 
 	@Autowired
-	private CompanyService companyService;
+	private CompanyService	companyService;
+
 
 	public ProblemController() {
 		super();
@@ -94,16 +96,16 @@ public class ProblemController extends AbstractController {
 		ModelAndView result;
 
 		Problem problem = this.problemService.findOne(problemId);
-		List<Problem> problems = this.problemService.findAll();
+		Company company = this.companyService.loggedCompany();
 
-		if (problems.contains(problem))
+		if (problem != null && company.getProblems().contains(problem)) {
 			result = this.createEditModelAndView(problem);
-		else
+		} else {
 			result = new ModelAndView("redirect:list.do");
+		}
 
 		return result;
 	}
-
 	@RequestMapping(value = "/company/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(Problem problem, BindingResult binding) {
 
@@ -215,7 +217,6 @@ public class ProblemController extends AbstractController {
 		result.addObject("problemId", problemId);
 		return result;
 	}
-
 
 	protected ModelAndView createEditModelAndView(Problem problem) {
 		ModelAndView result;

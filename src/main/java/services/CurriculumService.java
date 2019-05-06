@@ -1,7 +1,7 @@
 package services;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 
-import repositories.CurriculumRepository;
 import domain.Curriculum;
 import domain.EducationData;
-import domain.Rookie;
 import domain.MiscellaneousData;
 import domain.PersonalData;
 import domain.PositionData;
+import domain.Rookie;
 import forms.FormObjectCurriculumPersonalData;
+import repositories.CurriculumRepository;
 
 @Service
 @Transactional
@@ -137,6 +137,13 @@ public class CurriculumService {
 
 			curriculum.setId(curriculumFounded.getId());
 			curriculum.setVersion(curriculumFounded.getVersion());
+
+			curriculum.setPositionData(curriculumFounded.getPositionData());
+			curriculum.setMiscellaneousData(curriculumFounded.getMiscellaneousData());
+			curriculum.setEducationData(curriculumFounded.getEducationData());
+			curriculum.setMiscellaneousData(curriculumFounded.getMiscellaneousData());
+			curriculum.setEducationData(curriculumFounded.getEducationData());
+			curriculum.setPositionData(curriculumFounded.getPositionData());
 		}
 		curriculum.setTitle(formObject.getTitle());
 		curriculum.setPersonalData(personalData);
@@ -235,7 +242,7 @@ public class CurriculumService {
 	public void flush() {
 		this.curriculumRepository.flush();
 	}
-	
+
 	public void deleteInBatch(List<Curriculum> curriculums) {
 		this.curriculumRepository.deleteInBatch(curriculums);
 	}

@@ -21,11 +21,13 @@ import org.springframework.web.servlet.ModelAndView;
 import services.CompanyService;
 import services.FinderService;
 import services.RookieService;
+import services.SponsorshipService;
 import services.PositionService;
 import services.ProblemService;
 import domain.Company;
 import domain.Finder;
 import domain.Rookie;
+import domain.Sponsorship;
 import domain.Position;
 import domain.Problem;
 import forms.FormObjectPositionProblemCheckbox;
@@ -37,12 +39,13 @@ import security.UserAccount;
 public class FinderRookieController extends AbstractController {
 
 	@Autowired
-	private PositionService	positionService;
+	private PositionService positionService;
 	@Autowired
-	private RookieService	rookieService;
+	private RookieService rookieService;
 	@Autowired
-	private FinderService	finderService;
-
+	private FinderService finderService;
+	@Autowired
+	private SponsorshipService sponsorshipService;
 
 	public FinderRookieController() {
 		super();
@@ -51,21 +54,31 @@ public class FinderRookieController extends AbstractController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView result;
-		
+
 		try {
 			Rookie rookie = this.rookieService.securityAndRookie();
 			List<Position> positions = this.finderService.finderList(rookie.getFinder());
-			
+
+			Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
+			for (Position p : positions) {
+				if (!p.getSponsorships().isEmpty()) {
+					Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+					this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+					randomSpo.put(p.getId(), spo);
+				}
+			}
+
 			result = new ModelAndView("rookie/finderResult");
+			result.addObject("randomSpo", randomSpo);
 			result.addObject("positions", positions);
 			result.addObject("rookie", rookie);
-		} catch(Throwable oops) {
+		} catch (Throwable oops) {
 			result = new ModelAndView("redirect:/");
 		}
-		
-		return result;	
+
+		return result;
 	}
-	
+
 	@RequestMapping(value = "/clean", method = RequestMethod.POST, params = "save")
 	public ModelAndView save() {
 		ModelAndView result;
@@ -75,18 +88,18 @@ public class FinderRookieController extends AbstractController {
 			this.finderService.getFinalPositionsAndCleanFinder(rookie.getFinder());
 
 			result = new ModelAndView("redirect:list.do");
-		} catch(Throwable oops) {
+		} catch (Throwable oops) {
 			result = new ModelAndView("redirect:list.do");
 		}
 
 		return result;
 
 	}
-	
+
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit() {
 		ModelAndView result;
-		
+
 		try {
 			Rookie rookie = this.rookieService.securityAndRookie();
 
@@ -94,21 +107,21 @@ public class FinderRookieController extends AbstractController {
 			Assert.notNull(finder);
 
 			result = this.createEditModelAndView(finder);
-		} catch(Throwable oops) {
+		} catch (Throwable oops) {
 			result = new ModelAndView("redirect:list.do");
 		}
 
 		return result;
 
 	}
-	
+
 	// Save
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(Finder finderForm, BindingResult binding) {
 		ModelAndView result;
 
 		Finder finder = this.finderService.reconstruct(finderForm, binding);
-		
+
 		if (binding.hasErrors())
 			result = this.createEditModelAndView(finderForm);
 		else
@@ -120,13 +133,13 @@ public class FinderRookieController extends AbstractController {
 					Rookie rookie = this.rookieService.securityAndRookie();
 					result = this.createEditModelAndView(finder, "finder.commit.error");
 					result.addObject("rookie", rookie);
-				} catch(Throwable oops2) {
+				} catch (Throwable oops2) {
 					result = new ModelAndView("redirect:/");
 				}
 			}
 		return result;
 	}
-	
+
 	// CreateEditModelAndView
 	protected ModelAndView createEditModelAndView(Finder finder) {
 		ModelAndView result;

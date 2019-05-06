@@ -28,7 +28,7 @@
 	<display:column property ="subject"	
 					titleKey="mail.message.subject"/>
 	
-	<display:column	property ="tags"
+	<display:column	property ="tags" sortable ="true"
 					titleKey="mail.message.tags"/>
 					
 	<display:column	property ="body"

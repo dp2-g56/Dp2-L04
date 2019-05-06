@@ -429,6 +429,7 @@
 		<property name="sponsorships">
 			<list>
 			<ref bean="sponsorship1" />
+			<ref bean="sponsorship3" />
 			</list>
 		</property>
 	</bean>	
@@ -450,6 +451,11 @@
 				<ref bean="item4" />
 				<ref bean="item5" />
 				<ref bean="item6" />
+			</list>
+		</property>
+		<property name="sponsorships">
+			<list>
+			<ref bean="sponsorship2" />
 			</list>
 		</property>
 	</bean>	
@@ -1515,6 +1521,7 @@
 		<property name="sponsorships">
 			<list>
 			<ref bean="sponsorship1" />
+			<ref bean="sponsorship2" />
 			</list>
 		</property>
 	</bean>
@@ -1552,6 +1559,11 @@
 		<property name="audits">
 			<list>
 			<ref bean="audit1" />
+			</list>
+		</property>
+		<property name="sponsorships">
+			<list>
+			<ref bean="sponsorship3" />
 			</list>
 		</property>
 	</bean>
@@ -3179,7 +3191,7 @@
 		<property name="surname" value="P Surname" />
 		<property name="VATNumber" value="SE193654321" />
 		<property name="creditCard" ref="creditCard201" />
-		<property name="photo" value="https://trello.com/c/unl0e9cp/1-requisitos" />
+		<property name="photo" value="" />
 		<property name="email" value="provider4@gmail.com" />
 		<property name="phone" value="+34609235522" />
 		<property name="address" value="provider3House" />
@@ -3422,6 +3434,22 @@
 		<property name="banner" value="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
 		<property name="targetUrl" value="http://www.github.com" />
 		<property name="position" ref="position1" />
+		<property name="provider" ref="provider1" />
+	</bean>
+	
+	<bean id="sponsorship2" class="domain.Sponsorship">
+		<property name="creditCard" ref="creditCard12" />
+		<property name="banner" value="https://images.vexels.com/media/users/3/137419/isolated/preview/b1a3fab214230557053ed1c4bf17b46c-icono-de-twitter-logo-by-vexels.png" />
+		<property name="targetUrl" value="http://www.github.com" />
+		<property name="position" ref="position1" />
+		<property name="provider" ref="provider2" />
+	</bean>
+	
+	<bean id="sponsorship3" class="domain.Sponsorship">
+		<property name="creditCard" ref="creditCard11" />
+		<property name="banner" value="https://ih1.redbubble.net/image.418233732.0994/flat,800x800,075,f.u1.jpg" />
+		<property name="targetUrl" value="http://www.github.com" />
+		<property name="position" ref="position2" />
 		<property name="provider" ref="provider1" />
 	</bean>
 

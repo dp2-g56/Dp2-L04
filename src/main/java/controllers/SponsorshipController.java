@@ -68,7 +68,7 @@ public class SponsorshipController {
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
 		ModelAndView result;
-		
+
 		this.providerService.loggedAsProvider();
 		FormObjectSponsorshipCreditCard formObject = new FormObjectSponsorshipCreditCard();
 
@@ -83,21 +83,27 @@ public class SponsorshipController {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam int sponsorshipId) {
 		ModelAndView result;
-		
-		this.providerService.loggedAsProvider();
+
+		Provider provider = this.providerService.loggedProvider();
 
 		Sponsorship sponsorship = this.sponsorshipService.findOne(sponsorshipId);
 
-		List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
+		if (provider.getSponsorships().contains(sponsorship)) {
 
-		FormObjectSponsorshipCreditCard formObject = new FormObjectSponsorshipCreditCard();
+			List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
 
-		formObject.setId(sponsorship.getId());
-		formObject.setBanner(sponsorship.getBanner());
-		formObject.setTargetURL(sponsorship.getTargetUrl());
+			FormObjectSponsorshipCreditCard formObject = new FormObjectSponsorshipCreditCard();
 
-		result = this.createEditModelAndView("sponsorship/edit", formObject);
-		result.addObject("positions", positions);
+			formObject.setId(sponsorship.getId());
+			formObject.setBanner(sponsorship.getBanner());
+			formObject.setTargetURL(sponsorship.getTargetUrl());
+
+			result = this.createEditModelAndView("sponsorship/edit", formObject);
+			result.addObject("positions", positions);
+
+		} else {
+			result = this.list();
+		}
 
 		return result;
 	}
@@ -106,7 +112,7 @@ public class SponsorshipController {
 	public ModelAndView save(@ModelAttribute("formObject") @Valid FormObjectSponsorshipCreditCard formObject,
 			BindingResult binding, @RequestParam Position position) {
 		ModelAndView result;
-		
+
 		this.providerService.loggedAsProvider();
 
 		Sponsorship sponsorship = new Sponsorship();
