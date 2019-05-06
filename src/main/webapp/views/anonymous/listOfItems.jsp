@@ -8,8 +8,7 @@
 <%@taglib prefix="acme"  tagdir="/WEB-INF/tags"%>
 
 
-<display:table pagesize="5" name="items" id="row" class="displaytag" 
-					requestURI="anonymous/item/list.do">
+<display:table name="items" id="row">
 			
 		<display:column property="name" titleKey="item.name" sortable="true"/>
 		
@@ -35,7 +34,7 @@
 			</spring:url>
 			<a href="${pictures}">
 				<spring:message code="item.pictures.show" var ="show" />
-				<jstl:out value="${show} (${row.pictures.size()})"/>
+				<jstl:out value="${show}"/>
 			</a>
 		</display:column>
 		
