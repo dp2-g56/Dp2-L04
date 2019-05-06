@@ -382,7 +382,7 @@ public class PositionService {
 	}
 
 	public List<Position> positionsFiltered(String word) {
-		return this.positionRepository.positionsFiltered("%" + word + "%");
+		return this.positionRepository.positionsFiltered(word + "%");
 	}
 
 	public List<String> getSkillsAsRookie(int positionId) {

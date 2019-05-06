@@ -67,7 +67,7 @@ public class WelcomeController extends AbstractController {
 		String imageURL = this.configurationService.getConfiguration().getImageURL();
 
 		request.getSession().setAttribute("imageURL", imageURL);
-		request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+		//request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 
 		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 		if (locale.equals("EN"))
@@ -77,6 +77,7 @@ public class WelcomeController extends AbstractController {
 
 		result = new ModelAndView("welcome/index");
 		result.addObject("name", name);
+		result.addObject("isMessageBroadcasted", isMessageBroadcasted);
 		result.addObject("username", username);
 		result.addObject("moment", moment);
 		result.addObject("welcomeMessage", welcomeMessage);

@@ -104,7 +104,7 @@ public class ProviderService {
 		List<Authority> authorities = new ArrayList<Authority>();
 
 		Authority authority = new Authority();
-		authority.setAuthority(Authority.PROVIDER);
+		authority.setAuthority(Authority.ADMIN);
 		authorities.add(authority);
 
 		userAccount.setAuthorities(authorities);
@@ -257,7 +257,7 @@ public class ProviderService {
 
 		provider.getItems().clear();
 
-		this.itemService.deleteInBatch(items);
+		//this.itemService.deleteInBatch(items);
 
 		this.sponsorshipService.deleteAllSponsorships();
 

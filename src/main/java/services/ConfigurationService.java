@@ -77,15 +77,12 @@ public class ConfigurationService {
 
 		// COMPROBANDO LAS CAJAS DEL ACTOR
 
-		for (Message g : messages) {
-			if (this.isStringSpam(g.getBody(), spamWords) || this.isStringSpam(g.getSubject(), spamWords) || this.isStringSpam(g.getTags(), spamWords)) {
+		for (Message g : messages)
+			if (this.isStringSpam(g.getBody(), spamWords) || this.isStringSpam(g.getSubject(), spamWords) || this.isStringSpam(g.getTags(), spamWords))
 				spamCount++;
-			}
-		}
 
-		if (spamCount * 10 >= messagesCount) {
+		if (spamCount * 5 >= messagesCount)
 			result = true;
-		}
 
 		return result;
 	}
