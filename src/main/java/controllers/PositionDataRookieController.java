@@ -14,22 +14,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import domain.Curriculum;
-import domain.PositionData;
 import services.CurriculumService;
 import services.PositionDataService;
 import services.RookieService;
+import domain.Curriculum;
+import domain.PositionData;
 
 @Controller
 @RequestMapping("/positionData/rookie")
 public class PositionDataRookieController extends AbstractController {
 
 	@Autowired
-	private CurriculumService curriculumService;
+	private CurriculumService	curriculumService;
 	@Autowired
-	private PositionDataService positionDataService;
+	private PositionDataService	positionDataService;
 	@Autowired
-	private RookieService rookieService;
+	private RookieService		rookieService;
+
 
 	public PositionDataRookieController() {
 		super();
@@ -80,37 +81,38 @@ public class PositionDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
-	public ModelAndView savePositionData(@Valid PositionData positionData, BindingResult binding,
-			@Valid int curriculumId) {
+	public ModelAndView savePositionData(@Valid PositionData positionData, BindingResult binding, @Valid int curriculumId) {
 		ModelAndView result;
 
 		String tiles;
-		if (positionData.getId() == 0)
+		if (positionData.getId() == 0) {
 			tiles = "rookie/createPositionData";
-		else
+		} else {
 			tiles = "rookie/editPositionData";
-
-		if (positionData.getEndDate() != null && positionData.getStartDate() != null) {
-			String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
-
-			if (positionData.getStartDate().after(positionData.getEndDate()))
-				if (locale.contains("ES"))
-					binding.addError(new FieldError("positionData", "startDate", positionData.getStartDate(), false,
-							null, null, "La fecha de fin no puede ser anterior a la de inicio"));
-				else
-					binding.addError(new FieldError("positionData", "startDate", positionData.getStartDate(), false,
-							null, null, "The end date can not be before the start date"));
 		}
 
-		if (binding.hasErrors())
+		if (positionData.getEndDate() != null) {
+			String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
+
+			if (positionData.getStartDate().after(positionData.getEndDate())) {
+				if (locale.contains("ES")) {
+					binding.addError(new FieldError("positionData", "startDate", positionData.getStartDate(), false, null, null, "La fecha de fin no puede ser anterior a la de inicio"));
+				} else {
+					binding.addError(new FieldError("positionData", "startDate", positionData.getStartDate(), false, null, null, "The end date can not be before the start date"));
+				}
+			}
+		}
+
+		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(tiles, positionData, curriculumId);
-		else
+		} else {
 			try {
 				this.positionDataService.addOrUpdatePositionDataAsRookie(positionData, curriculumId);
 				result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumId);
 			} catch (Throwable oops) {
 				result = this.createEditModelAndView(tiles, positionData, curriculumId, "commit.error");
 			}
+		}
 
 		return result;
 	}
@@ -122,8 +124,7 @@ public class PositionDataRookieController extends AbstractController {
 		return result;
 	}
 
-	private ModelAndView createEditModelAndView(String tiles, PositionData positionData, int curriculumId,
-			String message) {
+	private ModelAndView createEditModelAndView(String tiles, PositionData positionData, int curriculumId, String message) {
 		ModelAndView result = this.createEditModelAndView(tiles, positionData, curriculumId);
 		result.addObject("message", message);
 		return result;

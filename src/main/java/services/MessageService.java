@@ -189,8 +189,9 @@ public class MessageService {
 
 		Boolean hasSpam = this.configurationService.isStringSpam(message.getBody(), spamWords) || this.configurationService.isStringSpam(message.getSubject(), spamWords) || this.configurationService.isStringSpam(message.getTags(), spamWords);
 
-		if (hasSpam)
+		if (hasSpam) {
 			messageCopy.setTags("SPAM");
+		}
 
 		Message messageSavedCopy = this.messageRepository.save(messageCopy);
 
@@ -201,8 +202,9 @@ public class MessageService {
 		this.actorService.save(receiver);
 
 		this.flush();
-		if (hasSpam)
+		if (hasSpam) {
 			this.actorService.updateActorSpam(loggedActor);
+		}
 
 		return messageSaved;
 	}
@@ -222,8 +224,9 @@ public class MessageService {
 
 		Boolean hasSpam = this.configurationService.isStringSpam(message.getBody(), spamWords) || this.configurationService.isStringSpam(message.getSubject(), spamWords) || this.configurationService.isStringSpam(message.getTags(), spamWords);
 
-		if (hasSpam)
+		if (hasSpam) {
 			messageCopy.setTags("SPAM");
+		}
 
 		Message messageSavedCopy = this.messageRepository.save(messageCopy);
 
@@ -234,8 +237,9 @@ public class MessageService {
 		this.actorService.save(receiver);
 
 		this.flush();
-		if (hasSpam)
+		if (hasSpam) {
 			this.actorService.updateActorSpam(loggedActor);
+		}
 	}
 
 	public void notificationStatusApplicationSubmitted(Application app) {
@@ -297,6 +301,7 @@ public class MessageService {
 			Date thisMoment = new Date();
 			thisMoment.setTime(thisMoment.getTime() - 1000);
 			result.setMoment(thisMoment);
+			result.setTags("F-");
 
 		} else {
 			result = this.messageRepository.findOne(messageTest.getId());

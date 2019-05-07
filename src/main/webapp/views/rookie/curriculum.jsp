@@ -16,7 +16,7 @@
 	<display:table name="personalData" id="row">
 			
 		<display:column property="fullName" titleKey="personalData.fullName" /> 
-		<display:column property="statement" titleKey="personalData.statement" /> 
+		<display:column property="statement" titleKey="personalData.statement2" /> 
 		<display:column property="phoneNumber" titleKey="personalData.phoneNumber" /> 
 		<display:column property="gitHubProfile" titleKey="personalData.gitHubProfile" /> 
 		<display:column property="linkedinProfile" titleKey="personalData.linkedinProfile" /> 
@@ -137,7 +137,7 @@
 					<spring:message code="miscellaneousData.edit" var="editMiscellaneousDataMessage" />
 					<jstl:out value="${editMiscellaneousDataMessage}"/>
 				</a> / 
-				<a href="${deleteMiscellaneousData}" onclick="return confirm('<spring:message code="miscellaneousData.delete.confirmation" />')">
+				<a href="${editMiscellaneousData}" onclick="return confirm('<spring:message code="miscellaneousData.delete.confirmation" />')">
 					<spring:message code="miscellaneousData.delete" var="deleteMiscellaneousDataMessage" />
 					<jstl:out value="${deleteMiscellaneousDataMessage}"/>
 				</a>
