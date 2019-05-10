@@ -431,11 +431,13 @@ public class AnonymousController extends AbstractController {
 
 		Problem problem = this.problemService.findOne(problemId);
 
+		Boolean publicData = true;
 		list = problem.getAttachments();
 
 		result = new ModelAndView("anonymous/attachement/list");
 
 		result.addObject("attachments", list);
+		result.addObject("publicData", publicData);
 		result.addObject("requestURI", "anonymous/attachement/list.do");
 		result.addObject("problemId", problemId);
 
@@ -559,9 +561,20 @@ public class AnonymousController extends AbstractController {
 
 		List<Position> positions = this.companyService.positionsOfCompanyInFinalNotCancelled(idCompany);
 
+		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
+		for (Position p : positions)
+			if (!p.getSponsorships().isEmpty()) {
+				Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+				if (this.actorService.loggedAsActorBoolean())
+					if (spo.getProvider() != null && (this.providerService.loggedProvider() != spo.getProvider()))
+						this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+				randomSpo.put(p.getId(), spo);
+			}
+
 		result = new ModelAndView("anonymous/company/positions");
 		result.addObject("publicPositionsSize", positions.size());
 		result.addObject("publicPositions", positions);
+		result.addObject("randomSpo", randomSpo);
 		result.addObject("requestURI", "anonymous/company/positions.do");
 
 		return result;
