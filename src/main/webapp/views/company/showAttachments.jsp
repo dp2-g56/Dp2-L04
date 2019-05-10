@@ -40,10 +40,8 @@
 
 	</security:authorize>	
 	
-	<security:authorize access="hasAnyRole('ROLE_ANONYMOUS')">		
-	<input type="button"
-		name="cancel"
-		value="<spring:message code="problem.back"/>" onclick="javascript:relativeRedir('anonymous/position/list.do');" />
-	</security:authorize>																
+		 <jstl:if test="${publicData}">
+		 <a href="javascript:history.go(-1)"><spring:message code="position.backToPublicData" /></a>
+		  </jstl:if>															
 
 
