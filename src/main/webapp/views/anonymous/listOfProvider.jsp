@@ -12,7 +12,7 @@
 					requestURI="/anonymous/provider/list.do">
 	
 		<display:column property="make" titleKey="provider.make" sortable="true"/> 
-		<display:column property="name" titleKey="companies.name" /> 
+		<display:column property="name" titleKey="companies.name" sortable="true"/> 
 		<display:column property="VATNumber" titleKey="companies.VATNumber" sortable="true"/> 
 		<display:column property="photo" titleKey="companies.photo" sortable="true"/> 
 		<display:column property="email" titleKey="companies.email" sortable="true"/> 
