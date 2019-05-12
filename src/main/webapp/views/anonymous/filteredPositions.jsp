@@ -23,14 +23,30 @@
 		
 	<display:table pagesize="5" name="publicPositions" id="row" requestURI="${requestURI}" >
 			
-		<display:column property="title" titleKey="possition.title" /> 
-		<display:column property="description" titleKey="possition.description" /> 
-		<display:column property="deadline" titleKey="possition.deadline" /> 
-		<display:column property="requiredProfile" titleKey="possition.requiredProfile" /> 
-		<display:column property="requiredSkills" titleKey="possition.requiredSkills" /> 
-		<display:column property="requiredTecnologies" titleKey="possition.requiredTecnologies" /> 
-		<display:column property="offeredSalary" titleKey="possition.offeredSalary" /> 
-		<display:column property="ticker" titleKey="possition.ticker" /> 
+		<display:column titleKey="possition.title" > 
+			<jstl:out value="${row.title}" />
+		</display:column>
+		<display:column titleKey="possition.description" > 
+			<jstl:out value="${row.description}" />
+		</display:column>
+		<display:column titleKey="possition.deadline" > 
+			<jstl:out value="${row.deadline}" />
+		</display:column>
+		<display:column titleKey="possition.requiredProfile" > 
+			<jstl:out value="${row.requiredProfile}" />
+		</display:column>
+		<display:column titleKey="possition.requiredSkills" > 
+			<jstl:out value="${row.requiredSkills}" />
+		</display:column>
+		<display:column titleKey="possition.requiredTecnologies" > 
+			<jstl:out value="${row.requiredTecnologies}" />
+		</display:column>
+		<display:column titleKey="possition.offeredSalary" >
+			<jstl:out value="${row.offeredSalary}" />
+		</display:column> 
+		<display:column titleKey="possition.ticker" > 
+			<jstl:out value="${row.ticker}" />
+		</display:column>
 		
 		
 		<display:column  titleKey="possition.problems" > 

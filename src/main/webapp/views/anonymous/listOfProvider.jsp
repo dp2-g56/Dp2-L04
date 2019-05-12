@@ -11,13 +11,27 @@
 	<display:table name="providers" id="row" pagesize="5" class="displaytag" 
 					requestURI="/anonymous/provider/list.do">
 	
-		<display:column property="make" titleKey="provider.make" sortable="true"/> 
-		<display:column property="name" titleKey="companies.name" sortable="true"/> 
-		<display:column property="VATNumber" titleKey="companies.VATNumber" sortable="true"/> 
-		<display:column property="photo" titleKey="companies.photo" sortable="true"/> 
-		<display:column property="email" titleKey="companies.email" sortable="true"/> 
-		<display:column property="phone" titleKey="companies.phone" sortable="true"/> 
-		<display:column property="address" titleKey="companies.address" sortable="true"/> 
+		<display:column titleKey="provider.make" sortable="true"> 
+			<jstl:out value="${row.make}" />
+		</display:column>
+		<display:column titleKey="companies.name" sortable="true">
+			<jstl:out value="${row.name}" /> 
+		</display:column>
+		<display:column titleKey="companies.VATNumber" sortable="true"> 
+			<jstl:out value="${row.VATNumber}" />
+		</display:column>
+		<display:column titleKey="companies.photo" sortable="true"> 
+			<jstl:out value="${row.photo}" />
+		</display:column>
+		<display:column titleKey="companies.email" sortable="true">
+			<jstl:out value="${row.email}" /> 
+		</display:column>
+		<display:column titleKey="companies.phone" sortable="true"> 
+			<jstl:out value="${row.phone}" />
+		</display:column>
+		<display:column titleKey="companies.address" sortable="true"> 
+			<jstl:out value="${row.address}" />
+		</display:column>
 		
 		
 		<display:column titleKey="provider.items">

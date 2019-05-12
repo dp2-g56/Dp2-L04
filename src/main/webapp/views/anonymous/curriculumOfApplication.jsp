@@ -15,11 +15,21 @@
 	
 	<display:table name="personalData" id="row">
 			
-		<display:column property="fullName" titleKey="personalData.fullName" /> 
-		<display:column property="statement" titleKey="personalData.statement" /> 
-		<display:column property="phoneNumber" titleKey="personalData.phoneNumber" /> 
-		<display:column property="gitHubProfile" titleKey="personalData.gitHubProfile" /> 
-		<display:column property="linkedinProfile" titleKey="personalData.linkedinProfile" /> 
+		<display:column titleKey="personalData.fullName" > 
+			<jstl:out value="${row.fullName}" />
+		</display:column>
+		<display:column titleKey="personalData.statement" > 
+			<jstl:out value="${row.statement}" />
+		</display:column>
+		<display:column titleKey="personalData.phoneNumber" > 
+			<jstl:out value="${row.phoneNumber}" />
+		</display:column>
+		<display:column titleKey="personalData.gitHubProfile" > 
+			<jstl:out value="${row.gitHubProfile}" />
+		</display:column>
+		<display:column titleKey="personalData.linkedinProfile" > 
+			<jstl:out value="${row.linkedinProfile}" />
+		</display:column>
 	
 	</display:table>
 	
@@ -29,10 +39,18 @@
 	<display:table name="positionData" id="row" pagesize="5" class="displaytag" 
 					requestURI="${requestURI}">
 			
-		<display:column property="title" titleKey="positionData.title" /> 
-		<display:column property="description" titleKey="positionData.description" /> 
-		<display:column property="startDate" titleKey="positionData.startDate" /> 
-		<display:column property="endDate" titleKey="positionData.endDate" />
+		<display:column titleKey="positionData.title" > 
+			<jstl:out value="${row.title}" />
+		</display:column>
+		<display:column titleKey="positionData.description" > 
+			<jstl:out value="${row.description}" />
+		</display:column>
+		<display:column titleKey="positionData.startDate" > 
+			<jstl:out value="${row.startDate}" />
+		</display:column>
+		<display:column titleKey="positionData.endDate" >
+			<jstl:out value="${row.endDate}" />
+		</display:column>
 	
 	</display:table>
 
@@ -43,11 +61,21 @@
 	<display:table name="educationData" id="row" pagesize="5" class="displaytag" 
 					requestURI="${requestURI}">
 			
-		<display:column property="degree" titleKey="educationData.degree" /> 
-		<display:column property="institution" titleKey="educationData.institution" /> 
-		<display:column property="mark" titleKey="educationData.mark" /> 
-		<display:column property="startDate" titleKey="educationData.startDate" /> 
-		<display:column property="endDate" titleKey="educationData.endDate" />
+		<display:column titleKey="educationData.degree" > 
+			<jstl:out value="${row.degree}" />
+		</display:column>
+		<display:column titleKey="educationData.institution" > 
+			<jstl:out value="${row.institution}" />
+		</display:column>
+		<display:column titleKey="educationData.mark" > 
+			<jstl:out value="${row.mark}" />
+		</display:column>
+		<display:column titleKey="educationData.startDate" > 
+			<jstl:out value="${row.startDate}" />
+		</display:column>
+		<display:column titleKey="educationData.endDate" >
+			<jstl:out value="${row.endDate}" />
+		</display:column>
 	
 	</display:table>
 	
@@ -57,9 +85,13 @@
 	<display:table name="miscellaneousData" id="row" pagesize="5" class="displaytag" 
 					requestURI="${requestURI}">
 			
-		<display:column property="freeText" titleKey="miscellaneousData.freeText" />
+		<display:column titleKey="miscellaneousData.freeText" >
+			<jstl:out value="${row.freeText}" />
+		</display:column>
 		
-		<display:column property="attachments" titleKey="miscellaneousData.attachment" /> 
+		<display:column titleKey="miscellaneousData.attachment" > 
+			<jstl:out value="${row.attachments}" />
+		</display:column>
 		
 	</display:table>
 	

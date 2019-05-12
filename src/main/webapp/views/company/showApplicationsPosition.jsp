@@ -14,15 +14,25 @@
 
 
 	
-	<display:column property="creationMoment" titleKey="application.creationMoment" />
+	<display:column titleKey="application.creationMoment" >
+		<jstl:out value="${row.creationMoment}" />
+	</display:column>
 	
-	<display:column property="link" titleKey="application.link" />	
+	<display:column titleKey="application.link" >	
+		<jstl:out value="${row.link}" />
+	</display:column>
 	
-	<display:column property="explication" titleKey="application.explication" />
+	<display:column titleKey="application.explication" >
+		<jstl:out value="${row.explication}" />
+	</display:column>
 	
-	<display:column property="submitMoment" titleKey="application.submitMoment" />
+	<display:column titleKey="application.submitMoment" >
+		<jstl:out value="${row.submitMoment}" />
+	</display:column>
 	
-	<display:column property="status" titleKey="application.status" />
+	<display:column titleKey="application.status" >	
+		<jstl:out value="${row.status}" />
+	</display:column>
 	
 	<display:column titleKey="application.problem"> 
 		<jstl:out value="${row.problem.title}"/>

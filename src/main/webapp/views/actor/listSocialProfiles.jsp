@@ -119,13 +119,17 @@
 	<display:table pagesize="5" name="socialProfiles" id="socialProfile"
 		requestURI="${requestURI}">
 
-		<display:column property="nick" titleKey="socialProfile.nick" />
+		<display:column titleKey="socialProfile.nick" >
+			<jstl:out value="${socialProfile.nick}" />
+		</display:column>
 
-		<display:column property="name" titleKey="socialProfile.name" />
+		<display:column titleKey="socialProfile.name" >
+			<jstl:out value="${socialProfile.name}" />
+		</display:column>
 	
-
-		<display:column property="profileLink"
-			titleKey="socialProfile.profileLink" />
+		<display:column titleKey="socialProfile.profileLink" >
+			<jstl:out value="${socialProfile.profileLink}" />
+		</display:column>
 			
 			
 	<security:authorize access="isAuthenticated()">		
@@ -164,9 +168,13 @@
 	
 	<display:table pagesize="5" name="items" id="row" class="displaytag" >
 			
-		<display:column property="name" titleKey="item.name" />
+		<display:column titleKey="item.name" >
+			<jstl:out value="${row.name}" />
+		</display:column>
 		
-		<display:column property="description" titleKey="item.description" />
+		<display:column titleKey="item.description" >
+			<jstl:out value="${row.description}" />
+		</display:column>
 		
 		<display:column titleKey="item.links">
 			<spring:url var="links" value="/anonymous/item/listLinks.do">
