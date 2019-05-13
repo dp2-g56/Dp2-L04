@@ -12,15 +12,21 @@
 
 	<display:table pagesize="5" name="finalAudits" id="row" requestURI="${requestURI}" >
 
-	<display:column property="momentCreation" titleKey="audit.momentCreation" />
+		<display:column titleKey="audit.momentCreation" >
+			<jstl:out value="${row.momentCreation}" />
+		</display:column>
 	
-	<display:column property="freeText" titleKey="audit.freeText" />	
+		<display:column titleKey="audit.freeText" >
+			<jstl:out value="${row.freeText}" />
+		</display:column>	
 	
-	<display:column property="score" titleKey="audit.score" />
+		<display:column titleKey="audit.score" >
+			<jstl:out value="${row.score}" />
+		</display:column>
 	
-	<display:column titleKey="audit.auditor">
-		<jstl:out value="${row.auditor.userAccount.username}" />
-	</display:column>
+		<display:column titleKey="audit.auditor">
+			<jstl:out value="${row.auditor.userAccount.username}" />
+		</display:column>
 	
 	
 	</display:table>

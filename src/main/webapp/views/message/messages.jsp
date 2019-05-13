@@ -16,23 +16,29 @@
 	requestURI="message/actor/list.do" >
 	
 	<!-- Date -->
-	<display:column	property ="moment"
-					titleKey="mail.message.moment"/>
+	<display:column	titleKey="mail.message.moment">
+			<jstl:out value="${row.moment}" />
+	</display:column>
 					
-	<display:column	property ="sender" 	
-					titleKey="mail.message.sender"/>
+	<display:column	titleKey="mail.message.sender">
+			<jstl:out value="${row.sender}" />
+	</display:column>
 
-	<display:column	property ="receiver" 	
-					titleKey="mail.message.receiver"/>
+	<display:column	titleKey="mail.message.receiver">
+			<jstl:out value="${row.receiver}" />
+	</display:column>
 	
-	<display:column property ="subject"	
-					titleKey="mail.message.subject"/>
+	<display:column titleKey="mail.message.subject">
+			<jstl:out value="${row.subject}" />
+	</display:column>
 	
-	<display:column	property ="tags" sortable ="true"
-					titleKey="mail.message.tags"/>
+	<display:column	sortable ="true" titleKey="mail.message.tags">
+			<jstl:out value="${row.tags}" />
+	</display:column>
 					
-	<display:column	property ="body"
-					titleKey="mail.message.body"/>
+	<display:column	titleKey="mail.message.body">
+			<jstl:out value="${row.body}" />
+	</display:column>
 				
 	<display:column>
 		

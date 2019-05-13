@@ -23,16 +23,25 @@
 	requestURI="${requestURI}">
 
 
-	<display:column property="ticker" titleKey="position.ticker" />
+	<display:column titleKey="position.ticker" >
+		<jstl:out value="${row.ticker}" />
+	</display:column>
 
-	<display:column property="title" titleKey="position.title" />
+	<display:column titleKey="position.title" >	
+		<jstl:out value="${row.title}" />
+	</display:column>
 
-	<display:column property="description" titleKey="position.description" />
+	<display:column titleKey="position.description" >
+		<jstl:out value="${row.description}" />
+	</display:column>
 
-	<display:column property="deadline" titleKey="position.deadline" />
+	<display:column titleKey="position.deadline" >
+		<jstl:out value="${row.deadline}" />
+	</display:column>
 
-	<display:column property="requiredProfile"
-		titleKey="position.requiredProfile" />
+	<display:column titleKey="position.requiredProfile" >
+		<jstl:out value="${row.requiredProfile}" />
+	</display:column>
 
 
 	<display:column titleKey="position.requiredSkills">

@@ -10,12 +10,24 @@
 	
 	<display:table pagesize="5"  name="companies" id="row" requestURI="${requestURI}" >
 	
-		<display:column property="name" titleKey="companies.name" /> 
-		<display:column property="VATNumber" titleKey="companies.VATNumber" /> 
-		<display:column property="photo" titleKey="companies.photo" /> 
-		<display:column property="email" titleKey="companies.email" /> 
-		<display:column property="phone" titleKey="companies.phone" /> 
-		<display:column property="address" titleKey="companies.address" />
+		<display:column titleKey="companies.name" >
+			<jstl:out value="${row.name}" /> 
+		</display:column>
+		<display:column titleKey="companies.VATNumber" > 
+			<jstl:out value="${row.VATNumber}" />
+		</display:column>
+		<display:column titleKey="companies.photo" > 
+			<jstl:out value="${row.photo}" />
+		</display:column>
+		<display:column titleKey="companies.email" > 
+			<jstl:out value="${row.email}" />
+		</display:column>
+		<display:column titleKey="companies.phone" > 
+			<jstl:out value="${row.phone}" />
+		</display:column>
+		<display:column titleKey="companies.address" >
+			<jstl:out value="${row.address}" />
+		</display:column>
 		
 		<display:column  titleKey="actor.score" >
 			<jstl:choose>

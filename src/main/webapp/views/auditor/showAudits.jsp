@@ -16,11 +16,17 @@
 		<jstl:out value="${row.position.title}"></jstl:out>
 	</display:column>
 
-	<display:column property="momentCreation" titleKey="audit.momentCreation" />
+	<display:column titleKey="audit.momentCreation" >
+		<jstl:out value="${row.momentCreation}" />
+	</display:column>
 	
-	<display:column property="freeText" titleKey="audit.freeText" />	
+	<display:column titleKey="audit.freeText" >	
+		<jstl:out value="${row.freeText}" />
+	</display:column>
 	
-	<display:column property="score" titleKey="audit.score" />
+	<display:column titleKey="audit.score" >
+		<jstl:out value="${row.score}" />
+	</display:column>
 	
 	<display:column titleKey="position.status">
         <jstl:choose>

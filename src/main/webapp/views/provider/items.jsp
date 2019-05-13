@@ -12,9 +12,13 @@
 	<display:table pagesize="5" name="items" id="row" class="displaytag" 
 					requestURI="/item/provider/list.do">
 			
-		<display:column property="name" titleKey="item.name" sortable="true"/>
+		<display:column titleKey="item.name" sortable="true">
+				<jstl:out value="${row.name}" />
+		</display:column>
 		
-		<display:column property="description" titleKey="item.description" sortable="true"/>
+		<display:column titleKey="item.description" sortable="true">
+				<jstl:out value="${row.description}" />
+		</display:column>
 		
 		<display:column titleKey="item.links">
 			<spring:url var="links" value="/item/provider/listLinks.do">

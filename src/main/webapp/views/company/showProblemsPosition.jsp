@@ -14,11 +14,17 @@
 	
 	<display:table pagesize="5" name="allProblems" id="row" requestURI="${requestURI}" >
 	
-	<display:column property="title" titleKey="problem.title" />
+	<display:column titleKey="problem.title" >
+		<jstl:out value="${row.title}" />
+	</display:column>
 	
-	<display:column property="statement" titleKey="problem.statement" />
+	<display:column titleKey="problem.statement" >
+		<jstl:out value="${row.statement}" />
+	</display:column>
 	
-	<display:column property="hint" titleKey="problem.hint" />
+	<display:column titleKey="problem.hint" >
+		<jstl:out value="${row.hint}" />
+	</display:column>
 		
 	<display:column titleKey="problem.attachments">
         <jstl:set var="attachmentsSize" value="${row.attachments.size()}" />

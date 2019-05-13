@@ -30,11 +30,17 @@
 </security:authorize>
 
 	
-	<display:column  property="title" titleKey="problem.title" />
+	<display:column titleKey="problem.title" >
+		<jstl:out value="${row.title}" />
+	</display:column>
 	
-	<display:column  property="statement" titleKey="problem.statement" />
+	<display:column titleKey="problem.statement" >
+		<jstl:out value="${row.statement}" />
+	</display:column>
 	
-	<display:column  property="hint" titleKey="problem.hint" />
+	<display:column titleKey="problem.hint" >
+		<jstl:out value="${row.hint}" />
+	</display:column>
     
     <security:authorize access="hasRole('COMPANY')">
     <display:column titleKey="problem.attachments">

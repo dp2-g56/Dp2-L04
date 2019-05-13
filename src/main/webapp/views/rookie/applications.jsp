@@ -76,11 +76,14 @@
 		<display:column property="link" titleKey="request.link"
 			style="color:${color}" />
 
-		<display:column property="explication" titleKey="request.explication"
-			style="color:${color}" />
+		<display:column titleKey="request.explication"
+			style="color:${color}" >
+			<jstl:out value="${row.explication}" />
+			</display:column>
 
-		<display:column property="submitMoment"
-			titleKey="request.submitMoment" style="color:${color}" />
+		<display:column titleKey="request.submitMoment" style="color:${color}" >
+			<jstl:out value="${row.submitMoment}" />
+			</display:column>
 
 		<display:column property="status" titleKey="request.status"
 			style="color:${color}" />

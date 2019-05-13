@@ -21,12 +21,17 @@
 				value="*${number.toString().charAt(number.toString().length() - 4)}${number.toString().charAt(number.toString().length() - 3)}${number.toString().charAt(number.toString().length() - 2)}${number.toString().charAt(number.toString().length() - 1)}" />
 		</display:column>
 
-		<display:column property="position.title"
-			titleKey="sponsorship.position.title" />
+		<display:column titleKey="sponsorship.position.title" >
+				<jstl:out value="${row.position.title}" />
+		</display:column>
 
-		<display:column property="banner" titleKey="sponsorship.banner" />
+		<display:column titleKey="sponsorship.banner" >
+				<jstl:out value="${row.banner}" />
+		</display:column>
 
-		<display:column property="targetUrl" titleKey="sponsorship.targetUrl" />
+		<display:column titleKey="sponsorship.targetUrl" >
+				<jstl:out value="${row.targetUrl}" />
+		</display:column>
 
 		<display:column>
 			<spring:url var="deleteUrl" value="/sponsorship/provider/delete.do">
