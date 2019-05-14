@@ -21,10 +21,11 @@ import domain.Sponsorship;
 public class PositionAuditorController extends AbstractController {
 
 	@Autowired
-	private AuditorService auditorService;
+	private AuditorService		auditorService;
 
 	@Autowired
-	private SponsorshipService sponsorshipService;
+	private SponsorshipService	sponsorshipService;
+
 
 	public PositionAuditorController() {
 		super();
@@ -36,27 +37,29 @@ public class PositionAuditorController extends AbstractController {
 	// Listar Positions
 	@RequestMapping(value = "/listAssignablePositions", method = RequestMethod.GET)
 	public ModelAndView list() {
+		try {
+			ModelAndView result;
+			List<Position> positions;
 
-		ModelAndView result;
-		List<Position> positions;
+			positions = this.auditorService.showAssignablePositions();
 
-		positions = this.auditorService.showAssignablePositions();
+			Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
+			for (Position p : positions)
+				if (!p.getSponsorships().isEmpty()) {
+					Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+					this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+					randomSpo.put(p.getId(), spo);
+				}
 
-		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
-		for (Position p : positions) {
-			if (!p.getSponsorships().isEmpty()) {
-				Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
-				this.sponsorshipService.sendMessageToProvider(spo.getProvider());
-				randomSpo.put(p.getId(), spo);
-			}
+			result = new ModelAndView("position/auditor/listAssignablePositions");
+			result.addObject("randomSpo", randomSpo);
+			result.addObject("positions", positions);
+			result.addObject("requestURI", "position/auditor/listAssignablePositions.do");
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-
-		result = new ModelAndView("position/auditor/listAssignablePositions");
-		result.addObject("randomSpo", randomSpo);
-		result.addObject("positions", positions);
-		result.addObject("requestURI", "position/auditor/listAssignablePositions.do");
-
-		return result;
 	}
 
 }

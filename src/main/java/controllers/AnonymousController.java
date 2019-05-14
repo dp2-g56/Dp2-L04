@@ -51,37 +51,38 @@ import forms.FormObjectRookie;
 public class AnonymousController extends AbstractController {
 
 	@Autowired
-	private RookieService rookieService;
+	private RookieService			rookieService;
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ConfigurationService	configurationService;
 
 	@Autowired
-	private CompanyService companyService;
+	private CompanyService			companyService;
 
 	@Autowired
-	private PositionService positionService;
+	private PositionService			positionService;
 
 	@Autowired
-	private ApplicationService applicationService;
+	private ApplicationService		applicationService;
 
 	@Autowired
-	private ProblemService problemService;
+	private ProblemService			problemService;
 
 	@Autowired
-	private ActorService actorService;
+	private ActorService			actorService;
 
 	@Autowired
-	private AuditService auditService;
+	private AuditService			auditService;
 
 	@Autowired
-	private ProviderService providerService;
+	private ProviderService			providerService;
 
 	@Autowired
-	private ItemService itemService;
+	private ItemService				itemService;
 
 	@Autowired
-	private SponsorshipService sponsorshipService;
+	private SponsorshipService		sponsorshipService;
+
 
 	public AnonymousController() {
 		super();
@@ -89,21 +90,28 @@ public class AnonymousController extends AbstractController {
 
 	@RequestMapping(value = "/termsAndConditionsEN", method = RequestMethod.GET)
 	public ModelAndView listEN() {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		result = new ModelAndView("termsAndConditionsEN");
+			result = new ModelAndView("termsAndConditionsEN");
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/termsAndConditionsES", method = RequestMethod.GET)
 	public ModelAndView listES() {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			result = new ModelAndView("termsAndConditionsES");
 
-		result = new ModelAndView("termsAndConditionsES");
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// CREATE
@@ -111,48 +119,55 @@ public class AnonymousController extends AbstractController {
 
 	@RequestMapping(value = "/rookie/create", method = RequestMethod.GET)
 	public ModelAndView createAdmin() {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		FormObjectRookie formObjectRookie = new FormObjectRookie();
-		formObjectRookie.setTermsAndConditions(false);
+			FormObjectRookie formObjectRookie = new FormObjectRookie();
+			formObjectRookie.setTermsAndConditions(false);
 
-		result = new ModelAndView("anonymous/rookie/create");
+			result = new ModelAndView("anonymous/rookie/create");
 
-		result = this.createEditModelAndView(formObjectRookie);
+			result = this.createEditModelAndView(formObjectRookie);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/rookie/create", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@Valid FormObjectRookie formObjectRookie, BindingResult binding) {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			Rookie rookie = new Rookie();
+			rookie = this.rookieService.createRookie();
 
-		Rookie rookie = new Rookie();
-		rookie = this.rookieService.createRookie();
+			Configuration configuration = this.configurationService.getConfiguration();
+			String prefix = configuration.getSpainTelephoneCode();
 
-		Configuration configuration = this.configurationService.getConfiguration();
-		String prefix = configuration.getSpainTelephoneCode();
+			// Reconstruccion
+			rookie = this.rookieService.reconstruct(formObjectRookie, binding);
 
-		// Reconstruccion
-		rookie = this.rookieService.reconstruct(formObjectRookie, binding);
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(formObjectRookie);
+			else
+				try {
 
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(formObjectRookie);
-		else
-			try {
+					if (rookie.getPhone().matches("([0-9]{4,})$"))
+						rookie.setPhone(prefix + rookie.getPhone());
+					this.rookieService.save(rookie);
 
-				if (rookie.getPhone().matches("([0-9]{4,})$"))
-					rookie.setPhone(prefix + rookie.getPhone());
-				this.rookieService.save(rookie);
+					result = new ModelAndView("redirect:/");
 
-				result = new ModelAndView("redirect:/");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(formObjectRookie, "company.commit.error");
 
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(formObjectRookie, "company.commit.error");
-
-			}
-		return result;
+				}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	protected ModelAndView createEditModelAndView(FormObjectRookie formObjectRookie) {
@@ -186,48 +201,55 @@ public class AnonymousController extends AbstractController {
 
 	@RequestMapping(value = "/company/create", method = RequestMethod.GET)
 	public ModelAndView createCompany() {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		FormObjectCompany formObjectCompany = new FormObjectCompany();
-		formObjectCompany.setTermsAndConditions(false);
+			FormObjectCompany formObjectCompany = new FormObjectCompany();
+			formObjectCompany.setTermsAndConditions(false);
 
-		result = new ModelAndView("anonymous/company/create");
+			result = new ModelAndView("anonymous/company/create");
 
-		result = this.createEditModelAndView(formObjectCompany);
+			result = this.createEditModelAndView(formObjectCompany);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/company/create", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@Valid FormObjectCompany formObjectCompany, BindingResult binding) {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			Company company = new Company();
+			company = this.companyService.createCompany();
 
-		Company company = new Company();
-		company = this.companyService.createCompany();
+			Configuration configuration = this.configurationService.getConfiguration();
+			String prefix = configuration.getSpainTelephoneCode();
 
-		Configuration configuration = this.configurationService.getConfiguration();
-		String prefix = configuration.getSpainTelephoneCode();
+			// Reconstruccion
+			company = this.companyService.reconstruct(formObjectCompany, binding);
 
-		// Reconstruccion
-		company = this.companyService.reconstruct(formObjectCompany, binding);
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(formObjectCompany);
+			else
+				try {
 
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(formObjectCompany);
-		else
-			try {
+					if (company.getPhone().matches("([0-9]{4,})$"))
+						company.setPhone(prefix + company.getPhone());
+					this.companyService.save(company);
 
-				if (company.getPhone().matches("([0-9]{4,})$"))
-					company.setPhone(prefix + company.getPhone());
-				this.companyService.save(company);
+					result = new ModelAndView("redirect:/");
 
-				result = new ModelAndView("redirect:/");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(formObjectCompany, "company.commit.error");
 
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(formObjectCompany, "company.commit.error");
-
-			}
-		return result;
+				}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	protected ModelAndView createEditModelAndView(FormObjectCompany formObjectCompany) {
@@ -261,48 +283,55 @@ public class AnonymousController extends AbstractController {
 
 	@RequestMapping(value = "/provider/create", method = RequestMethod.GET)
 	public ModelAndView createProvider() {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		FormObjectProvider formObjectProvider = new FormObjectProvider();
-		formObjectProvider.setTermsAndConditions(false);
+			FormObjectProvider formObjectProvider = new FormObjectProvider();
+			formObjectProvider.setTermsAndConditions(false);
 
-		result = new ModelAndView("anonymous/provider/create");
+			result = new ModelAndView("anonymous/provider/create");
 
-		result = this.createEditModelAndView(formObjectProvider);
+			result = this.createEditModelAndView(formObjectProvider);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/provider/create", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@Valid FormObjectProvider formObjectProvider, BindingResult binding) {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			Provider provider = new Provider();
+			provider = this.providerService.create();
 
-		Provider provider = new Provider();
-		provider = this.providerService.create();
+			Configuration configuration = this.configurationService.getConfiguration();
+			String prefix = configuration.getSpainTelephoneCode();
 
-		Configuration configuration = this.configurationService.getConfiguration();
-		String prefix = configuration.getSpainTelephoneCode();
+			// Reconstruccion
+			provider = this.providerService.reconstruct(formObjectProvider, binding);
 
-		// Reconstruccion
-		provider = this.providerService.reconstruct(formObjectProvider, binding);
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(formObjectProvider);
+			else
+				try {
 
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(formObjectProvider);
-		else
-			try {
+					if (provider.getPhone().matches("([0-9]{4,})$"))
+						provider.setPhone(prefix + provider.getPhone());
+					this.providerService.save(provider);
 
-				if (provider.getPhone().matches("([0-9]{4,})$"))
-					provider.setPhone(prefix + provider.getPhone());
-				this.providerService.save(provider);
+					result = new ModelAndView("redirect:/");
 
-				result = new ModelAndView("redirect:/");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(formObjectProvider, "company.commit.error");
 
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(formObjectProvider, "company.commit.error");
-
-			}
-		return result;
+				}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	protected ModelAndView createEditModelAndView(FormObjectProvider formObjectProvider) {
@@ -333,29 +362,32 @@ public class AnonymousController extends AbstractController {
 
 	@RequestMapping(value = "/position/list", method = RequestMethod.GET)
 	public ModelAndView listPositions() {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			List<Position> publicPositions = new ArrayList<Position>();
 
-		List<Position> publicPositions = new ArrayList<Position>();
+			publicPositions = this.companyService.AllPositionsInFinal();
 
-		publicPositions = this.companyService.AllPositionsInFinal();
+			Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
+			for (Position p : publicPositions)
+				if (!p.getSponsorships().isEmpty()) {
+					Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+					if (this.actorService.loggedAsActorBoolean())
+						if (spo.getProvider() != null && (this.providerService.loggedProvider() != spo.getProvider()))
+							this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+					randomSpo.put(p.getId(), spo);
+				}
 
-		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
-		for (Position p : publicPositions)
-			if (!p.getSponsorships().isEmpty()) {
-				Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
-				if (this.actorService.loggedAsActorBoolean())
-					if (spo.getProvider() != null && (this.providerService.loggedProvider() != spo.getProvider()))
-						this.sponsorshipService.sendMessageToProvider(spo.getProvider());
-				randomSpo.put(p.getId(), spo);
-			}
+			result = new ModelAndView("anonymous/position/list");
+			result.addObject("randomSpo", randomSpo);
+			result.addObject("publicPositions", publicPositions);
+			result.addObject("requestURI", "anonymous/position/list.do");
 
-		result = new ModelAndView("anonymous/position/list");
-		result.addObject("randomSpo", randomSpo);
-		result.addObject("publicPositions", publicPositions);
-		result.addObject("requestURI", "anonymous/position/list.do");
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/curriculum/list", method = RequestMethod.GET)
@@ -387,334 +419,382 @@ public class AnonymousController extends AbstractController {
 
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
 	public ModelAndView listProblems(@RequestParam int positionId) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Boolean assignable = false;
+			Boolean assignable = false;
 
-		List<Problem> allProblems = new ArrayList<>();
-		allProblems = this.positionService.getProblemsOfPosition(positionId);
-		Actor actor = this.positionService.getActorWithPosition(positionId);
-		Position position = this.positionService.findOne(positionId);
-		Assert.isTrue(position.getProblems().containsAll(allProblems));
+			List<Problem> allProblems = new ArrayList<>();
+			allProblems = this.positionService.getProblemsOfPosition(positionId);
+			Actor actor = this.positionService.getActorWithPosition(positionId);
+			Position position = this.positionService.findOne(positionId);
+			Assert.isTrue(position.getProblems().containsAll(allProblems));
 
-		Actor loggedActor = this.actorService.loggedActor();
-		Boolean sameActorLogged;
-		Boolean publicData = true;
+			Actor loggedActor = this.actorService.loggedActor();
+			Boolean sameActorLogged;
+			Boolean publicData = true;
 
-		if (loggedActor.equals(actor))
-			sameActorLogged = true;
-		else
-			sameActorLogged = false;
+			if (loggedActor.equals(actor))
+				sameActorLogged = true;
+			else
+				sameActorLogged = false;
 
-		if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
-			result = new ModelAndView("redirect:/anonymous/position/list.do");
-		else {
+			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+				result = new ModelAndView("redirect:/anonymous/position/list.do");
+			else {
 
-			result = new ModelAndView("anonymous/problem/list");
+				result = new ModelAndView("anonymous/problem/list");
 
-			result.addObject("problems", allProblems);
-			result.addObject("publicData", publicData);
-			result.addObject("sameActorLogged", sameActorLogged);
-			result.addObject("requestURI", "anonymous/problem/list.do");
-			result.addObject("positionId", positionId);
-			result.addObject("assignable", assignable);
+				result.addObject("problems", allProblems);
+				result.addObject("publicData", publicData);
+				result.addObject("sameActorLogged", sameActorLogged);
+				result.addObject("requestURI", "anonymous/problem/list.do");
+				result.addObject("positionId", positionId);
+				result.addObject("assignable", assignable);
+			}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-		return result;
 	}
 
 	@RequestMapping(value = "/attachement/list", method = RequestMethod.GET)
 	public ModelAndView listAttachement(@RequestParam int problemId) {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			List<String> list = new ArrayList<String>();
 
-		List<String> list = new ArrayList<String>();
+			Problem problem = this.problemService.findOne(problemId);
 
-		Problem problem = this.problemService.findOne(problemId);
+			Boolean publicData = true;
+			list = problem.getAttachments();
 
-		Boolean publicData = true;
-		list = problem.getAttachments();
+			result = new ModelAndView("anonymous/attachement/list");
 
-		result = new ModelAndView("anonymous/attachement/list");
+			result.addObject("attachments", list);
+			result.addObject("publicData", publicData);
+			result.addObject("requestURI", "anonymous/attachement/list.do");
+			result.addObject("problemId", problemId);
 
-		result.addObject("attachments", list);
-		result.addObject("publicData", publicData);
-		result.addObject("requestURI", "anonymous/attachement/list.do");
-		result.addObject("problemId", problemId);
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
 	public ModelAndView listAplications(@RequestParam int positionId) {
-		ModelAndView result;
-		Boolean assignable = false;
+		try {
+			ModelAndView result;
+			Boolean assignable = false;
 
-		List<Application> allApplications = new ArrayList<Application>();
-		allApplications = this.applicationService.getApplicationsCompany(positionId);
-		Actor actor = this.positionService.getActorWithPosition(positionId);
-		Position position = this.positionService.findOne(positionId);
-		Actor loggedActor = this.actorService.loggedActor();
-		Boolean sameActorLogged;
+			List<Application> allApplications = new ArrayList<Application>();
+			allApplications = this.applicationService.getApplicationsCompany(positionId);
+			Actor actor = this.positionService.getActorWithPosition(positionId);
+			Position position = this.positionService.findOne(positionId);
+			Actor loggedActor = this.actorService.loggedActor();
+			Boolean sameActorLogged;
 
-		if (loggedActor.equals(actor))
-			sameActorLogged = true;
-		else
-			sameActorLogged = false;
+			if (loggedActor.equals(actor))
+				sameActorLogged = true;
+			else
+				sameActorLogged = false;
 
-		if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
-			result = new ModelAndView("redirect:/anonymous/position/list.do");
-		else {
+			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+				result = new ModelAndView("redirect:/anonymous/position/list.do");
+			else {
 
-			result = new ModelAndView("anonymous/application/list");
+				result = new ModelAndView("anonymous/application/list");
 
-			result.addObject("allApplications", allApplications);
-			result.addObject("sameActorLogged", sameActorLogged);
-			result.addObject("requestURI", "anonymous/application/list.do");
-			result.addObject("positionId", positionId);
-			result.addObject("assignable", assignable);
+				result.addObject("allApplications", allApplications);
+				result.addObject("sameActorLogged", sameActorLogged);
+				result.addObject("requestURI", "anonymous/application/list.do");
+				result.addObject("positionId", positionId);
+				result.addObject("assignable", assignable);
+			}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-		return result;
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
 	public ModelAndView listAudits(@RequestParam int positionId) {
-		ModelAndView result;
-		Boolean assignable = false;
+		try {
+			ModelAndView result;
+			Boolean assignable = false;
 
-		List<Audit> finalAudits = new ArrayList<Audit>();
-		finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
-		Position position = this.positionService.findOne(positionId);
-		Assert.isTrue(position.getAudits().containsAll(finalAudits));
+			List<Audit> finalAudits = new ArrayList<Audit>();
+			finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
+			Position position = this.positionService.findOne(positionId);
+			Assert.isTrue(position.getAudits().containsAll(finalAudits));
 
-		if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
-			result = new ModelAndView("redirect:/anonymous/position/list.do");
-		else {
-			result = new ModelAndView("anonymous/audit/list");
+			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+				result = new ModelAndView("redirect:/anonymous/position/list.do");
+			else {
+				result = new ModelAndView("anonymous/audit/list");
 
-			result.addObject("finalAudits", finalAudits);
-			result.addObject("requestURI", "anonymous/audit/list.do");
-			result.addObject("positionId", positionId);
-			result.addObject("assignable", assignable);
+				result.addObject("finalAudits", finalAudits);
+				result.addObject("requestURI", "anonymous/audit/list.do");
+				result.addObject("positionId", positionId);
+				result.addObject("assignable", assignable);
+			}
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-
-		return result;
 	}
 
 	@RequestMapping(value = "/company/listOne", method = RequestMethod.GET)
 	public ModelAndView listCompany(@RequestParam int positionId) {
+		try {
+			ModelAndView result;
+			Boolean assignable = false;
+			List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
 
-		ModelAndView result;
-		Boolean assignable = false;
-		List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
+			Company company = this.companyService.companyOfRespectivePosition(positionId);
+			Actor actor = this.positionService.getActorWithPosition(positionId);
+			Position position = this.positionService.findOne(positionId);
+			Boolean score = true;
 
-		Company company = this.companyService.companyOfRespectivePosition(positionId);
-		Actor actor = this.positionService.getActorWithPosition(positionId);
-		Position position = this.positionService.findOne(positionId);
-		Boolean score = true;
+			Actor loggedActor = this.actorService.loggedActor();
+			Boolean sameActorLogged;
+			socialProfiles = actor.getSocialProfiles();
 
-		Actor loggedActor = this.actorService.loggedActor();
-		Boolean sameActorLogged;
-		socialProfiles = actor.getSocialProfiles();
+			if (loggedActor.equals(actor))
+				sameActorLogged = true;
+			else
+				sameActorLogged = false;
 
-		if (loggedActor.equals(actor))
-			sameActorLogged = true;
-		else
-			sameActorLogged = false;
+			Boolean publicValue = true;
 
-		Boolean publicValue = true;
-
-		if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
-			result = new ModelAndView("redirect:/anonymous/position/list.do");
-		else {
-			result = new ModelAndView("anonymous/company/listOne");
-			result.addObject("actor", company);
-			result.addObject("socialProfiles", socialProfiles);
-			result.addObject("score", score);
-			result.addObject("publicValue", publicValue);
-			result.addObject("sameActorLogged", sameActorLogged);
-			result.addObject("requestURI", "anonymous/company/listOne.do");
-			result.addObject("assignable", assignable);
+			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+				result = new ModelAndView("redirect:/anonymous/position/list.do");
+			else {
+				result = new ModelAndView("anonymous/company/listOne");
+				result.addObject("actor", company);
+				result.addObject("socialProfiles", socialProfiles);
+				result.addObject("score", score);
+				result.addObject("publicValue", publicValue);
+				result.addObject("sameActorLogged", sameActorLogged);
+				result.addObject("requestURI", "anonymous/company/listOne.do");
+				result.addObject("assignable", assignable);
+			}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-		return result;
 	}
 
 	// SIGUIENTE DESPLEGABLE
 
 	@RequestMapping(value = "/company/list", method = RequestMethod.GET)
 	public ModelAndView listCompanies() {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			List<Company> companies = this.companyService.allCompanies();
 
-		List<Company> companies = this.companyService.allCompanies();
+			result = new ModelAndView("anonymous/company/list");
+			result.addObject("companies", companies);
+			result.addObject("requestURI", "anonymous/company/list.do");
 
-		result = new ModelAndView("anonymous/company/list");
-		result.addObject("companies", companies);
-		result.addObject("requestURI", "anonymous/company/list.do");
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/company/positions", method = RequestMethod.GET)
 	public ModelAndView listPositionsOfCompany(@RequestParam int idCompany) {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			List<Position> positions = this.companyService.positionsOfCompanyInFinalNotCancelled(idCompany);
 
-		List<Position> positions = this.companyService.positionsOfCompanyInFinalNotCancelled(idCompany);
+			Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
+			for (Position p : positions)
+				if (!p.getSponsorships().isEmpty()) {
+					Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+					if (this.actorService.loggedAsActorBoolean())
+						if (spo.getProvider() != null && (this.providerService.loggedProvider() != spo.getProvider()))
+							this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+					randomSpo.put(p.getId(), spo);
+				}
 
-		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
-		for (Position p : positions)
-			if (!p.getSponsorships().isEmpty()) {
-				Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
-				if (this.actorService.loggedAsActorBoolean())
-					if (spo.getProvider() != null && (this.providerService.loggedProvider() != spo.getProvider()))
-						this.sponsorshipService.sendMessageToProvider(spo.getProvider());
-				randomSpo.put(p.getId(), spo);
-			}
+			result = new ModelAndView("anonymous/company/positions");
+			result.addObject("publicPositionsSize", positions.size());
+			result.addObject("publicPositions", positions);
+			result.addObject("randomSpo", randomSpo);
+			result.addObject("requestURI", "anonymous/company/positions.do");
 
-		result = new ModelAndView("anonymous/company/positions");
-		result.addObject("publicPositionsSize", positions.size());
-		result.addObject("publicPositions", positions);
-		result.addObject("randomSpo", randomSpo);
-		result.addObject("requestURI", "anonymous/company/positions.do");
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/filtered/create", method = RequestMethod.GET)
 	public ModelAndView newWord() {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		List<Position> filteredPositions = new ArrayList<Position>();
-		filteredPositions = this.companyService.AllPositionsInFinal();
+			List<Position> filteredPositions = new ArrayList<Position>();
+			filteredPositions = this.companyService.AllPositionsInFinal();
 
-		result = new ModelAndView("anonymous/filtered/positions");
-		result.addObject("publicPositions", filteredPositions);
-		result.addObject("requestURI", "anonymous/filtered/positions.do");
+			result = new ModelAndView("anonymous/filtered/positions");
+			result.addObject("publicPositions", filteredPositions);
+			result.addObject("requestURI", "anonymous/filtered/positions.do");
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/filtered/positions", method = RequestMethod.POST, params = "save")
 	public ModelAndView listPositionsOfCompany(String word) {
+		try {
+			ModelAndView result;
+			List<Position> filteredPositions = new ArrayList<Position>();
 
-		ModelAndView result;
-		List<Position> filteredPositions = new ArrayList<Position>();
+			filteredPositions = this.positionService.positionsFiltered(word);
 
-		filteredPositions = this.positionService.positionsFiltered(word);
+			Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
+			for (Position p : filteredPositions)
+				if (!p.getSponsorships().isEmpty()) {
+					Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+					if (this.actorService.loggedAsActorBoolean())
+						if (spo.getProvider() != null && (this.providerService.loggedProvider() != spo.getProvider()))
+							this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+					randomSpo.put(p.getId(), spo);
+				}
 
-		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
-		for (Position p : filteredPositions)
-			if (!p.getSponsorships().isEmpty()) {
-				Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
-				if (this.actorService.loggedAsActorBoolean())
-					if (spo.getProvider() != null && (this.providerService.loggedProvider() != spo.getProvider()))
-						this.sponsorshipService.sendMessageToProvider(spo.getProvider());
-				randomSpo.put(p.getId(), spo);
-			}
+			result = new ModelAndView("anonymous/filtered/positions");
+			result.addObject("publicPositions", filteredPositions);
+			result.addObject("randomSpo", randomSpo);
+			result.addObject("requestURI", "anonymous/filtered/positions.do");
 
-		result = new ModelAndView("anonymous/filtered/positions");
-		result.addObject("publicPositions", filteredPositions);
-		result.addObject("randomSpo", randomSpo);
-		result.addObject("requestURI", "anonymous/filtered/positions.do");
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// PROVIDERS
 	@RequestMapping(value = "/provider/list", method = RequestMethod.GET)
 	public ModelAndView listProviders() {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			List<Provider> providers = this.providerService.findAll();
 
-		List<Provider> providers = this.providerService.findAll();
+			result = new ModelAndView("anonymous/provider/list");
+			result.addObject("providers", providers);
+			result.addObject("requestURI", "anonymous/provider/list.do");
 
-		result = new ModelAndView("anonymous/provider/list");
-		result.addObject("providers", providers);
-		result.addObject("requestURI", "anonymous/provider/list.do");
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// Items
 	@RequestMapping(value = "/item/list", method = RequestMethod.GET)
 	public ModelAndView itemList(@RequestParam(required = false) Integer providerId) {
+		try {
+			ModelAndView result;
+			List<Item> items;
+			Boolean publicData = false;
 
-		ModelAndView result;
-		List<Item> items;
-		Boolean publicData = false;
+			if (providerId == null)
+				items = this.itemService.findAll();
+			else {
+				items = this.itemService.getItemsFromProvider(providerId);
+				Provider provider = this.providerService.findOne(providerId);
+				Assert.isTrue(provider.getItems().containsAll(items));
+				publicData = true;
+			}
+			Map<Item, Provider> providersByItem = this.itemService.getProvidersByItem(items);
 
-		if (providerId == null)
-			items = this.itemService.findAll();
-		else {
-			items = this.itemService.getItemsFromProvider(providerId);
-			Provider provider = this.providerService.findOne(providerId);
-			Assert.isTrue(provider.getItems().containsAll(items));
-			publicData = true;
+			result = new ModelAndView("anonymous/item/list");
+			result.addObject("publicData", publicData);
+			result.addObject("items", items);
+			result.addObject("providersByItem", providersByItem);
+			result.addObject("requestURI", "anonymous/item/list.do");
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-		Map<Item, Provider> providersByItem = this.itemService.getProvidersByItem(items);
-
-		result = new ModelAndView("anonymous/item/list");
-		result.addObject("publicData", publicData);
-		result.addObject("items", items);
-		result.addObject("providersByItem", providersByItem);
-		result.addObject("requestURI", "anonymous/item/list.do");
-
-		return result;
 	}
 
 	@RequestMapping(value = "/item/listLinks", method = RequestMethod.GET)
 	public ModelAndView listLinks(@RequestParam int itemId) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		List<String> links = this.itemService.findOne(itemId).getLinks();
+			List<String> links = this.itemService.findOne(itemId).getLinks();
 
-		result = new ModelAndView("anonymous/item/listLinks");
-		result.addObject("links", links);
+			result = new ModelAndView("anonymous/item/listLinks");
+			result.addObject("links", links);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/item/listPictures", method = RequestMethod.GET)
 	public ModelAndView listPictures(@RequestParam int itemId) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		List<String> pictures = this.itemService.findOne(itemId).getPictures();
+			List<String> pictures = this.itemService.findOne(itemId).getPictures();
 
-		result = new ModelAndView("anonymous/item/listPictures");
-		result.addObject("pictures", pictures);
+			result = new ModelAndView("anonymous/item/listPictures");
+			result.addObject("pictures", pictures);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/provider/listOne", method = RequestMethod.GET)
 	public ModelAndView listProvider(@RequestParam int providerId) {
+		try {
+			ModelAndView result;
+			List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
 
-		ModelAndView result;
-		List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
+			Provider provider = this.providerService.findOne(providerId);
+			List<Item> items = provider.getItems();
 
-		Provider provider = this.providerService.findOne(providerId);
-		List<Item> items = provider.getItems();
+			Actor loggedActor = this.actorService.loggedActor();
+			Boolean sameActorLogged;
+			socialProfiles = provider.getSocialProfiles();
 
-		Actor loggedActor = this.actorService.loggedActor();
-		Boolean sameActorLogged;
-		socialProfiles = provider.getSocialProfiles();
+			if (loggedActor.equals(provider))
+				sameActorLogged = true;
+			else
+				sameActorLogged = false;
 
-		if (loggedActor.equals((Actor) provider))
-			sameActorLogged = true;
-		else
-			sameActorLogged = false;
+			Boolean itemValues = true;
 
-		Boolean itemValues = true;
+			result = new ModelAndView("anonymous/provider/listOne");
+			result.addObject("actor", provider);
+			result.addObject("socialProfiles", socialProfiles);
+			result.addObject("itemValues", itemValues);
+			result.addObject("sameActorLogged", sameActorLogged);
+			result.addObject("items", items);
+			result.addObject("requestURI", "anonymous/provider/listOne.do");
 
-		result = new ModelAndView("anonymous/provider/listOne");
-		result.addObject("actor", provider);
-		result.addObject("socialProfiles", socialProfiles);
-		result.addObject("itemValues", itemValues);
-		result.addObject("sameActorLogged", sameActorLogged);
-		result.addObject("items", items);
-		result.addObject("requestURI", "anonymous/provider/listOne.do");
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 }

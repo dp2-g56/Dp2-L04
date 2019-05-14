@@ -38,91 +38,109 @@ public class MessageController extends AbstractController {
 	//List
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
+		try {
+			this.actorService.loggedAsActor();
 
-		this.actorService.loggedAsActor();
+			ModelAndView result;
 
-		ModelAndView result;
+			List<Message> messages = new ArrayList<Message>();
 
-		List<Message> messages = new ArrayList<Message>();
+			messages = this.messageService.showMessages();
 
-		messages = this.messageService.showMessages();
+			result = new ModelAndView("message/actor/list");
+			result.addObject("messages", messages);
+			result.addObject("requestURI", "message/actor/list.do");
 
-		result = new ModelAndView("message/actor/list");
-		result.addObject("messages", messages);
-		result.addObject("requestURI", "message/actor/list.do");
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
-		this.actorService.loggedAsActor();
-		ModelAndView result;
-		Message message;
+		try {
+			this.actorService.loggedAsActor();
+			ModelAndView result;
+			Message message;
 
-		message = this.messageService.create();
-		result = this.createEditModelAndView(message);
+			message = this.messageService.create();
+			result = this.createEditModelAndView(message);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@ModelAttribute("messageTest") domain.Message messageTest, BindingResult binding) {
+		try {
+			this.actorService.loggedAsActor();
+			ModelAndView result;
+			UserAccount userAccount = LoginService.getPrincipal();
 
-		this.actorService.loggedAsActor();
-		ModelAndView result;
-		UserAccount userAccount = LoginService.getPrincipal();
+			messageTest = this.messageService.reconstruct(messageTest, binding);
 
-		messageTest = this.messageService.reconstruct(messageTest, binding);
+			Assert.isTrue(userAccount.getUsername().equals(messageTest.getSender()));
 
-		Assert.isTrue(userAccount.getUsername().equals(messageTest.getSender()));
-
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(messageTest);
-		else
-			try {
-				this.messageService.sendMessage(messageTest);
-				result = new ModelAndView("redirect: list.do");
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(messageTest, "message.commit.error");
-			}
-		return result;
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(messageTest);
+			else
+				try {
+					this.messageService.sendMessage(messageTest);
+					result = new ModelAndView("redirect: list.do");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(messageTest, "message.commit.error");
+				}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam int rowId) {
-		this.actorService.loggedAsActor();
-		ModelAndView result;
-		Message message;
+		try {
+			this.actorService.loggedAsActor();
+			ModelAndView result;
+			Message message;
 
-		message = this.messageService.findOne(rowId);
+			message = this.messageService.findOne(rowId);
 
-		Assert.notNull(message);
-		result = this.createEditModelAndView(message);
+			Assert.notNull(message);
+			result = this.createEditModelAndView(message);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@RequestParam int rowId) {
-		this.actorService.loggedAsActor();
-		UserAccount userAccount = LoginService.getPrincipal();
-		ModelAndView result;
-
-		Message message = this.messageService.findOne(rowId);
-
-		if (!(userAccount.getUsername().equals(message.getSender()) || userAccount.getUsername().equals(message.getReceiver())))
-			return this.list();
-
 		try {
+			this.actorService.loggedAsActor();
+			UserAccount userAccount = LoginService.getPrincipal();
+			ModelAndView result;
 
-			this.messageService.deleteMessage(message);
-			result = new ModelAndView("redirect: list.do");
+			Message message = this.messageService.findOne(rowId);
+
+			if (!(userAccount.getUsername().equals(message.getSender()) || userAccount.getUsername().equals(message.getReceiver())))
+				return this.list();
+
+			try {
+
+				this.messageService.deleteMessage(message);
+				result = new ModelAndView("redirect: list.do");
+			} catch (Throwable oops) {
+				result = this.createEditModelAndView(message, "message.commit.error");
+
+			}
+			return result;
 		} catch (Throwable oops) {
-			result = this.createEditModelAndView(message, "message.commit.error");
-
+			return new ModelAndView("redirect:/");
 		}
-		return result;
 	}
 
 	protected ModelAndView createEditModelAndView(Message messageTest) {

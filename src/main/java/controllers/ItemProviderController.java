@@ -16,19 +16,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import domain.Item;
-import forms.FormObjectItem;
 import services.ItemService;
 import services.ProviderService;
+import domain.Item;
+import forms.FormObjectItem;
 
 @Controller
 @RequestMapping("/item/provider")
 public class ItemProviderController extends AbstractController {
 
 	@Autowired
-	private ItemService itemService;
+	private ItemService		itemService;
 	@Autowired
-	private ProviderService providerService;
+	private ProviderService	providerService;
+
 
 	public ItemProviderController() {
 		super();
@@ -131,54 +132,52 @@ public class ItemProviderController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
-	public ModelAndView saveItem(@ModelAttribute("formObjectItem") @Valid FormObjectItem formObjectItem,
-			BindingResult binding) {
+	public ModelAndView saveItem(@ModelAttribute("formObjectItem") @Valid FormObjectItem formObjectItem, BindingResult binding) {
 		ModelAndView result;
+		try {
+			String tiles;
+			if (formObjectItem.getId() > 0)
+				tiles = "provider/editItem";
+			else
+				tiles = "provider/createItem";
 
-		String tiles;
-		if (formObjectItem.getId() > 0)
-			tiles = "provider/editItem";
-		else
-			tiles = "provider/createItem";
+			Item item = new Item();
 
-		Item item = new Item();
+			item = this.itemService.reconstructItem(formObjectItem);
 
-		item = this.itemService.reconstructItem(formObjectItem);
+			String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 
-		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
+			// Links URL
+			if (!formObjectItem.getLinks().isEmpty())
+				for (String s : item.getLinks())
+					if (!this.itemService.isUrl(s))
+						if (locale.contains("ES"))
+							binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false, null, null, "URLs incorrecta"));
+						else
+							binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false, null, null, "Wrong URLs"));
 
-		// Links URL
-		if (!formObjectItem.getLinks().isEmpty())
-			for (String s : item.getLinks())
-				if (!this.itemService.isUrl(s))
-					if (locale.contains("ES"))
-						binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false,
-								null, null, "URLs incorrecta"));
-					else
-						binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false,
-								null, null, "Wrong URLs"));
+			// Links URL
+			if (!formObjectItem.getPictures().isEmpty())
+				for (String s : item.getPictures())
+					if (!this.itemService.isUrl(s))
+						if (locale.contains("ES"))
+							binding.addError(new FieldError("formObjectItem", "pictures", formObjectItem.getPictures(), false, null, null, "URLs incorrecta"));
+						else
+							binding.addError(new FieldError("formObjectItem", "pictures", formObjectItem.getPictures(), false, null, null, "Wrong URLs"));
 
-		// Links URL
-		if (!formObjectItem.getPictures().isEmpty())
-			for (String s : item.getPictures())
-				if (!this.itemService.isUrl(s))
-					if (locale.contains("ES"))
-						binding.addError(new FieldError("formObjectItem", "pictures", formObjectItem.getPictures(),
-								false, null, null, "URLs incorrecta"));
-					else
-						binding.addError(new FieldError("formObjectItem", "pictures", formObjectItem.getPictures(),
-								false, null, null, "Wrong URLs"));
-
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(tiles, formObjectItem);
-		else
-			try {
-				this.itemService.addOrUpdateItem(item);
-				result = new ModelAndView("redirect:list.do");
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(tiles, formObjectItem, "commit.error");
-			}
-		return result;
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(tiles, formObjectItem);
+			else
+				try {
+					this.itemService.addOrUpdateItem(item);
+					result = new ModelAndView("redirect:list.do");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(tiles, formObjectItem, "commit.error");
+				}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	private ModelAndView createEditModelAndView(String tiles, FormObjectItem formObjectItem) {

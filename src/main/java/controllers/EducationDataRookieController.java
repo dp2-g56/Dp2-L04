@@ -14,23 +14,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import domain.Curriculum;
-import domain.EducationData;
-import domain.Rookie;
 import services.CurriculumService;
 import services.EducationDataService;
 import services.RookieService;
+import domain.Curriculum;
+import domain.EducationData;
+import domain.Rookie;
 
 @Controller
 @RequestMapping("/educationData/rookie")
 public class EducationDataRookieController extends AbstractController {
 
 	@Autowired
-	private CurriculumService curriculumService;
+	private CurriculumService		curriculumService;
 	@Autowired
-	private EducationDataService educationDataService;
+	private EducationDataService	educationDataService;
 	@Autowired
-	private RookieService rookieService;
+	private RookieService			rookieService;
+
 
 	public EducationDataRookieController() {
 		super();
@@ -38,13 +39,17 @@ public class EducationDataRookieController extends AbstractController {
 
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public ModelAndView newEducationData(@RequestParam int curriculumId) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		EducationData educationData = new EducationData();
+			EducationData educationData = new EducationData();
 
-		result = this.createEditModelAndView("rookie/createEducationData", educationData, curriculumId);
+			result = this.createEditModelAndView("rookie/createEducationData", educationData, curriculumId);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
@@ -69,9 +74,8 @@ public class EducationDataRookieController extends AbstractController {
 	public ModelAndView deleteEducationData(@RequestParam int educationDataId) {
 		ModelAndView result = null;
 
-		Curriculum curriculum = this.curriculumService.getCurriculumOfEducationData(educationDataId);
-
 		try {
+			Curriculum curriculum = this.curriculumService.getCurriculumOfEducationData(educationDataId);
 			this.educationDataService.deleteEducationDataAsRookie(educationDataId);
 			result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculum.getId());
 		} catch (Throwable oops) {
@@ -82,39 +86,39 @@ public class EducationDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
-	public ModelAndView savePositionData(@Valid EducationData educationData, BindingResult binding,
-			@Valid int curriculumId) {
+	public ModelAndView savePositionData(@Valid EducationData educationData, BindingResult binding, @Valid int curriculumId) {
 		ModelAndView result;
+		try {
+			String tiles;
+			if (educationData.getId() == 0)
+				tiles = "rookie/createEducationData";
+			else
+				tiles = "rookie/editEducationData";
 
-		String tiles;
-		if (educationData.getId() == 0)
-			tiles = "rookie/createEducationData";
-		else
-			tiles = "rookie/editEducationData";
+			if (educationData.getEndDate() != null && educationData.getStartDate() != null) {
+				String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 
-		if (educationData.getEndDate() != null && educationData.getStartDate() != null) {
-			String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
-
-			if (educationData.getStartDate().after(educationData.getEndDate()))
-				if (locale.contains("ES"))
-					binding.addError(new FieldError("educationData", "startDate", educationData.getStartDate(), false,
-							null, null, "La fecha de fin no puede ser anterior a la de inicio"));
-				else
-					binding.addError(new FieldError("educationData", "startDate", educationData.getStartDate(), false,
-							null, null, "The end date can not be before the start date"));
-		}
-
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(tiles, educationData, curriculumId);
-		else
-			try {
-				this.educationDataService.addOrUpdateEducationDataAsRookie(educationData, curriculumId);
-				result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumId);
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(tiles, educationData, curriculumId, "commit.error");
+				if (educationData.getStartDate().after(educationData.getEndDate()))
+					if (locale.contains("ES"))
+						binding.addError(new FieldError("educationData", "startDate", educationData.getStartDate(), false, null, null, "La fecha de fin no puede ser anterior a la de inicio"));
+					else
+						binding.addError(new FieldError("educationData", "startDate", educationData.getStartDate(), false, null, null, "The end date can not be before the start date"));
 			}
 
-		return result;
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(tiles, educationData, curriculumId);
+			else
+				try {
+					this.educationDataService.addOrUpdateEducationDataAsRookie(educationData, curriculumId);
+					result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumId);
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(tiles, educationData, curriculumId, "commit.error");
+				}
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	private ModelAndView createEditModelAndView(String tiles, EducationData educationData, int curriculumId) {
@@ -124,8 +128,7 @@ public class EducationDataRookieController extends AbstractController {
 		return result;
 	}
 
-	private ModelAndView createEditModelAndView(String tiles, EducationData educationData, int curriculumId,
-			String message) {
+	private ModelAndView createEditModelAndView(String tiles, EducationData educationData, int curriculumId, String message) {
 		ModelAndView result = this.createEditModelAndView(tiles, educationData, curriculumId);
 		result.addObject("message", message);
 		return result;

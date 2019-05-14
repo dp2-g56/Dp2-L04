@@ -22,8 +22,8 @@ import security.Authority;
 import services.ActorService;
 import services.AuditorService;
 import services.CompanyService;
-import services.RookieService;
 import services.ProviderService;
+import services.RookieService;
 import domain.Actor;
 
 @Controller
@@ -50,27 +50,31 @@ public class DeleteUserController extends AbstractController {
 
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
 	public ModelAndView deleteUser() {
-		ModelAndView result;
-
-		Actor actor = this.actorService.loggedActor();
-
-		List<Authority> authorities = (List<Authority>) actor.getUserAccount().getAuthorities();
-
 		try {
-			if (authorities.get(0).toString().equals("ROOKIE"))
-				this.rookieService.deleteRookie();
-			else if (authorities.get(0).toString().equals("COMPANY"))
-				this.companyService.deleteCompany();
-			else if (authorities.get(0).toString().equals("AUDITOR"))
-				this.auditorService.deleteAuditor();
-			else if (authorities.get(0).toString().equals("PROVIDER"))
-				this.providerService.deleteProvider();
+			ModelAndView result;
 
-			result = new ModelAndView("redirect:/j_spring_security_logout");
+			Actor actor = this.actorService.loggedActor();
+
+			List<Authority> authorities = (List<Authority>) actor.getUserAccount().getAuthorities();
+
+			try {
+				if (authorities.get(0).toString().equals("ROOKIE"))
+					this.rookieService.deleteRookie();
+				else if (authorities.get(0).toString().equals("COMPANY"))
+					this.companyService.deleteCompany();
+				else if (authorities.get(0).toString().equals("AUDITOR"))
+					this.auditorService.deleteAuditor();
+				else if (authorities.get(0).toString().equals("PROVIDER"))
+					this.providerService.deleteProvider();
+
+				result = new ModelAndView("redirect:/j_spring_security_logout");
+			} catch (Throwable oops) {
+				result = new ModelAndView("redirect:/");
+			}
+
+			return result;
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/");
 		}
-
-		return result;
 	}
 }
