@@ -178,7 +178,7 @@ public class AnonymousController extends AbstractController {
 					result = new ModelAndView("redirect:/");
 
 				} catch (Throwable oops) {
-					result = this.createEditModelAndView(formObjectRookie, "company.commit.error");
+					result = this.createEditModelAndView(formObjectRookie, "company.duplicated.user");
 
 				}
 			return result;
@@ -266,7 +266,7 @@ public class AnonymousController extends AbstractController {
 					result = new ModelAndView("redirect:/");
 
 				} catch (Throwable oops) {
-					result = this.createEditModelAndView(formObjectCompany, "company.commit.error");
+					result = this.createEditModelAndView(formObjectCompany, "company.duplicated.user");
 
 				}
 			return result;
@@ -354,7 +354,7 @@ public class AnonymousController extends AbstractController {
 					result = new ModelAndView("redirect:/");
 
 				} catch (Throwable oops) {
-					result = this.createEditModelAndView(formObjectProvider, "company.commit.error");
+					result = this.createEditModelAndView(formObjectProvider, "company.duplicated.user");
 
 				}
 			return result;

@@ -149,7 +149,7 @@ public class AdministratorController extends AbstractController {
 					result = new ModelAndView("redirect:/");
 
 				} catch (Throwable oops) {
-					result = this.createEditModelAndView(formObjectAdmin, "company.commit.error");
+					result = this.createEditModelAndView(formObjectAdmin, "company.duplicated.user");
 
 				}
 			return result;
@@ -280,7 +280,7 @@ public class AdministratorController extends AbstractController {
 					result = new ModelAndView("redirect:/");
 
 				} catch (Throwable oops) {
-					result = this.createEditModelAndView(formObjectAuditor, "company.commit.error");
+					result = this.createEditModelAndView(formObjectAuditor, "company.duplicated.user");
 
 				}
 			return result;
