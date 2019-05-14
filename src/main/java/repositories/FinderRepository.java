@@ -15,7 +15,7 @@ import domain.Rookie;
 @Repository
 public interface FinderRepository extends JpaRepository<Finder, Integer> {
 
-	@Query("select distinct(p) from Position p join p.requiredTecnologies rt join p.requiredSkills rs where (rs like ?1 or rt like ?1 or p.title like ?1 or p.description like ?1 or p.requiredProfile like ?1 or p.ticker like ?1) and p.isDraftMode = false or p.isCancelled = false")
+	@Query("select distinct(p) from Position p join p.requiredTecnologies rt join p.requiredSkills rs where (rs like ?1 or rt like ?1 or p.title like ?1 or p.description like ?1 or p.requiredProfile like ?1 or p.ticker like ?1) and p.isDraftMode = false and p.isCancelled = false")
 	public List<Position> getPositionsByKeyWord(String keyWord);
 
 	@Query("select distinct(h) from Rookie h join h.finder f where (f.keyWord like ?1 or f.keyWord like ?2  or  f.keyWord like ?3  or f.keyWord like ?4 or f.keyWord like ?5 or f.keyWord like ?6)")
