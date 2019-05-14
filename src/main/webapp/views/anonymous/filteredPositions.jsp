@@ -111,21 +111,6 @@
 				alt="<spring:message code='position.sponsorship'/>" /></a>
 		</jstl:if>
 		</display:column>
-		
-		<security:authorize access="hasRole('AUDITOR')">
-			<display:column>
-			
-				<spring:url var="createAuditUrl" value="/audit/auditor/create.do?positionId={positionId}">
-            	<spring:param name="positionId" value="${row.id}"/>
-        	</spring:url>
-        	
-        	<a href="${createAuditUrl}">
-              <spring:message var ="createAudit" code="position.createAudit" />
-             <jstl:out value="${createAudit}" />   
-        	</a>
-				
-			</display:column>
-		</security:authorize>
 	
 	</display:table>
 	
