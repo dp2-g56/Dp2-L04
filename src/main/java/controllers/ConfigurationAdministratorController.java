@@ -38,48 +38,59 @@ public class ConfigurationAdministratorController extends AbstractController {
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView configurationList() {
-		ModelAndView result;
-		Configuration configuration;
+		try {
+			ModelAndView result;
+			Configuration configuration;
 
-		configuration = this.configurationService.getConfiguration();
+			configuration = this.configurationService.getConfiguration();
 
-		result = new ModelAndView("administrator/configuration");
-		result.addObject("configuration", configuration);
-		result.addObject("requestURI", "configuration/administrator/list.do");
+			result = new ModelAndView("administrator/configuration");
+			result.addObject("configuration", configuration);
+			result.addObject("requestURI", "configuration/administrator/list.do");
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView configurationEdit() {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Configuration configuration = this.configurationService.getConfiguration();
+			Configuration configuration = this.configurationService.getConfiguration();
 
-		result = new ModelAndView("administrator/editConfiguration");
-		result.addObject("configuration", configuration);
+			result = new ModelAndView("administrator/editConfiguration");
+			result.addObject("configuration", configuration);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(Configuration configuration, BindingResult binding) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Configuration configurationR = this.configurationService.reconstruct(configuration, binding);
+			Configuration configurationR = this.configurationService.reconstruct(configuration, binding);
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(configuration);
-		} else {
-			try {
-				this.configurationService.save(configurationR);
-				result = new ModelAndView("redirect:list.do");
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(configuration, "company.commit.error");
-			}
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(configuration);
+			else
+				try {
+					this.configurationService.save(configurationR);
+					result = new ModelAndView("redirect:list.do");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(configuration, "company.commit.error");
+				}
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-
-		return result;
 	}
 
 	protected ModelAndView createEditModelAndView(Configuration configuration) {

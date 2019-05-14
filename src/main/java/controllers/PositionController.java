@@ -20,11 +20,7 @@ import services.ActorService;
 import services.ApplicationService;
 import services.CompanyService;
 import services.CurriculumService;
-
 import services.FinderService;
-
-import services.MessageService;
-
 import services.PositionService;
 import services.ProblemService;
 import services.SponsorshipService;
@@ -43,28 +39,29 @@ import forms.FormObjectPositionProblemCheckbox;
 public class PositionController extends AbstractController {
 
 	@Autowired
-	private CompanyService companyService;
+	private CompanyService		companyService;
 
 	@Autowired
-	private PositionService positionService;
+	private PositionService		positionService;
 
 	@Autowired
-	private ProblemService problemService;
+	private ProblemService		problemService;
 
 	@Autowired
-	private ApplicationService applicationService;
+	private ApplicationService	applicationService;
 
 	@Autowired
-	private ActorService actorService;
+	private ActorService		actorService;
 
 	@Autowired
-	private FinderService finderService;
+	private FinderService		finderService;
 
 	@Autowired
-	private CurriculumService curriculumService;
+	private CurriculumService	curriculumService;
 
 	@Autowired
-	private SponsorshipService sponsorshipService;
+	private SponsorshipService	sponsorshipService;
+
 
 	public PositionController() {
 		super();
@@ -76,29 +73,31 @@ public class PositionController extends AbstractController {
 	// Listar Positions
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
+		try {
+			ModelAndView result;
+			List<Position> positions;
 
-		ModelAndView result;
-		List<Position> positions;
+			Company loggedCompany = this.companyService.loggedCompany();
 
-		Company loggedCompany = this.companyService.loggedCompany();
+			positions = loggedCompany.getPositions();
 
-		positions = loggedCompany.getPositions();
+			Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
+			for (Position p : positions)
+				if (!p.getSponsorships().isEmpty()) {
+					Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
+					this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+					randomSpo.put(p.getId(), spo);
+				}
 
-		Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
-		for (Position p : positions) {
-			if (!p.getSponsorships().isEmpty()) {
-				Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
-				this.sponsorshipService.sendMessageToProvider(spo.getProvider());
-				randomSpo.put(p.getId(), spo);
-			}
+			result = new ModelAndView("position/company/list");
+			result.addObject("randomSpo", randomSpo);
+			result.addObject("positions", positions);
+			result.addObject("requestURI", "position/company/list.do");
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-
-		result = new ModelAndView("position/company/list");
-		result.addObject("randomSpo", randomSpo);
-		result.addObject("positions", positions);
-		result.addObject("requestURI", "position/company/list.do");
-
-		return result;
 	}
 
 	// --------------------------LISTA DE PROBLEMAS----------------------------
@@ -106,22 +105,25 @@ public class PositionController extends AbstractController {
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
 	public ModelAndView list(@RequestParam int positionId) {
 		ModelAndView result;
+		try {
+			Company loggedCompany = this.companyService.loggedCompany();
 
-		Company loggedCompany = this.companyService.loggedCompany();
+			List<Problem> allProblems = new ArrayList<>();
 
-		List<Problem> allProblems = new ArrayList<>();
+			Position position = this.positionService.findOne(positionId);
 
-		Position position = this.positionService.findOne(positionId);
+			allProblems = position.getProblems();
 
-		allProblems = position.getProblems();
+			result = new ModelAndView("problemPosition/company/list");
 
-		result = new ModelAndView("problemPosition/company/list");
+			result.addObject("allProblems", allProblems);
+			result.addObject("requestURI", "problem/company/list.do");
+			result.addObject("positionId", positionId);
 
-		result.addObject("allProblems", allProblems);
-		result.addObject("requestURI", "problem/company/list.do");
-		result.addObject("positionId", positionId);
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// --------------------------LISTA DE APPLICATIONS----------------------------
@@ -129,35 +131,38 @@ public class PositionController extends AbstractController {
 	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
 	public ModelAndView listApplication(@RequestParam int positionId) {
 		ModelAndView result;
+		try {
+			Company loggedCompany = this.companyService.loggedCompany();
 
-		Company loggedCompany = this.companyService.loggedCompany();
+			List<Application> allApplications = new ArrayList<>();
 
-		List<Application> allApplications = new ArrayList<>();
+			Position position = this.positionService.findOne(positionId);
 
-		Position position = this.positionService.findOne(positionId);
+			if (position.getIsDraftMode())
+				return this.list();
 
-		if (position.getIsDraftMode())
-			return this.list();
+			allApplications = this.applicationService.getApplicationsCompany(positionId);
+			Actor actor = this.positionService.getActorWithPosition(position.getId());
 
-		allApplications = this.applicationService.getApplicationsCompany(positionId);
-		Actor actor = this.positionService.getActorWithPosition(position.getId());
+			Actor loggedActor = this.actorService.loggedActor();
+			Boolean sameActorLogged;
 
-		Actor loggedActor = this.actorService.loggedActor();
-		Boolean sameActorLogged;
+			if (loggedActor.equals(actor))
+				sameActorLogged = true;
+			else
+				sameActorLogged = false;
 
-		if (loggedActor.equals(actor))
-			sameActorLogged = true;
-		else
-			sameActorLogged = false;
+			result = new ModelAndView("applicationPosition/company/list");
 
-		result = new ModelAndView("applicationPosition/company/list");
+			result.addObject("allApplications", allApplications);
+			result.addObject("sameActorLogged", sameActorLogged);
+			result.addObject("requestURI", "application/company/list.do");
+			result.addObject("positionId", positionId);
 
-		result.addObject("allApplications", allApplications);
-		result.addObject("sameActorLogged", sameActorLogged);
-		result.addObject("requestURI", "application/company/list.do");
-		result.addObject("positionId", positionId);
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// ------------------------------SHOW
@@ -199,69 +204,80 @@ public class PositionController extends AbstractController {
 	@RequestMapping(value = "/application/accept", method = RequestMethod.GET)
 	public ModelAndView acceptApplication(@RequestParam int applicationId) {
 		ModelAndView result;
-		Application application;
-		application = this.applicationService.findOne(applicationId);
-		Position position = application.getPosition();
-		Company company = this.companyService.loggedCompany();
-		List<Position> positions = company.getPositions();
+		try {
+			Application application;
+			application = this.applicationService.findOne(applicationId);
+			Position position = application.getPosition();
+			Company company = this.companyService.loggedCompany();
+			List<Position> positions = company.getPositions();
 
-		if (application.getStatus() != Status.SUBMITTED)
+			if (application.getStatus() != Status.SUBMITTED)
+				return this.list();
+
+			if (!(company.getPositions().contains(position)))
+				return this.list();
+
+			this.applicationService.editApplicationCompany(application, true);
+
 			return this.list();
-
-		if (!(company.getPositions().contains(position)))
-			return this.list();
-
-		this.applicationService.editApplicationCompany(application, true);
-
-		return this.list();
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// REJECT APPLICATION
 	@RequestMapping(value = "/application/reject", method = RequestMethod.GET)
 	public ModelAndView rejectApplication(@RequestParam int applicationId) {
 		ModelAndView result;
-		Application application;
-		application = this.applicationService.findOne(applicationId);
-		Position position = application.getPosition();
-		Company company = this.companyService.loggedCompany();
-		List<Position> positions = company.getPositions();
+		try {
+			Application application;
+			application = this.applicationService.findOne(applicationId);
+			Position position = application.getPosition();
+			Company company = this.companyService.loggedCompany();
+			List<Position> positions = company.getPositions();
 
-		if (application.getStatus() != Status.SUBMITTED)
+			if (application.getStatus() != Status.SUBMITTED)
+				return this.list();
+
+			if (!(company.getPositions().contains(position)))
+				return this.list();
+
+			this.applicationService.editApplicationCompany(application, false);
+
 			return this.list();
-
-		if (!(company.getPositions().contains(position)))
-			return this.list();
-
-		this.applicationService.editApplicationCompany(application, false);
-
-		return this.list();
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// --------------------------LISTA DE ATTACHEMENTS----------------------------
 	// ---------------------------------------------------------------------------
 	@RequestMapping(value = "/attachement/list", method = RequestMethod.GET)
 	public ModelAndView listAttachement(@RequestParam int problemId) {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			List<String> list;
 
-		List<String> list;
+			Company loggedCompany = this.companyService.loggedCompany();
 
-		Company loggedCompany = this.companyService.loggedCompany();
+			Problem problem = this.problemService.findOne(problemId);
 
-		Problem problem = this.problemService.findOne(problemId);
+			if (!loggedCompany.getProblems().contains(problem))
+				return this.list();
 
-		if (!loggedCompany.getProblems().contains(problem))
-			return this.list();
+			list = problem.getAttachments();
 
-		list = problem.getAttachments();
+			result = new ModelAndView("problemPosition/company/attachement/list");
 
-		result = new ModelAndView("problemPosition/company/attachement/list");
+			result.addObject("list", list);
+			result.addObject("requestURI", "problemPosition/company/attachement/list.do");
+			result.addObject("problemId", problemId);
 
-		result.addObject("list", list);
-		result.addObject("requestURI", "problemPosition/company/attachement/list.do");
-		result.addObject("problemId", problemId);
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// ---------------------------REQUIRED TECH-----------------------------------
@@ -271,25 +287,28 @@ public class PositionController extends AbstractController {
 	public ModelAndView listTech(@RequestParam int positionId) {
 
 		ModelAndView result;
+		try {
+			List<String> list;
 
-		List<String> list;
+			Company loggedCompany = this.companyService.loggedCompany();
 
-		Company loggedCompany = this.companyService.loggedCompany();
+			Position position = this.positionService.findOne(positionId);
 
-		Position position = this.positionService.findOne(positionId);
+			if (!loggedCompany.getPositions().contains(position))
+				return this.list();
 
-		if (!loggedCompany.getPositions().contains(position))
-			return this.list();
+			list = position.getRequiredTecnologies();
 
-		list = position.getRequiredTecnologies();
+			result = new ModelAndView("position/company/technology/list");
 
-		result = new ModelAndView("position/company/technology/list");
+			result.addObject("list", list);
+			result.addObject("requestURI", "position/company/technology/list.do");
+			result.addObject("positionId", positionId);
 
-		result.addObject("list", list);
-		result.addObject("requestURI", "position/company/technology/list.do");
-		result.addObject("positionId", positionId);
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// ---------------------------REQUIRED SKILL-----------------------------
@@ -299,124 +318,140 @@ public class PositionController extends AbstractController {
 	public ModelAndView listSkill(@RequestParam int positionId) {
 
 		ModelAndView result;
+		try {
+			List<String> list;
 
-		List<String> list;
+			Company loggedCompany = this.companyService.loggedCompany();
 
-		Company loggedCompany = this.companyService.loggedCompany();
+			Position position = this.positionService.findOne(positionId);
 
-		Position position = this.positionService.findOne(positionId);
+			if (!loggedCompany.getPositions().contains(position))
+				return this.list();
 
-		if (!loggedCompany.getPositions().contains(position))
-			return this.list();
+			list = position.getRequiredSkills();
 
-		list = position.getRequiredSkills();
+			result = new ModelAndView("position/company/skill/list");
 
-		result = new ModelAndView("position/company/skill/list");
+			result.addObject("list", list);
+			result.addObject("requestURI", "position/company/skill/list.do");
+			result.addObject("positionId", positionId);
 
-		result.addObject("list", list);
-		result.addObject("requestURI", "position/company/skill/list.do");
-		result.addObject("positionId", positionId);
-
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// CREATE POSITION
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView createPosition() {
-		ModelAndView result;
-		FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox = new FormObjectPositionProblemCheckbox();
+		try {
+			ModelAndView result;
+			FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox = new FormObjectPositionProblemCheckbox();
 
-		List<Integer> problems = new ArrayList<>();
-		formObjectPositionProblemCheckbox.setProblems(problems);
+			List<Integer> problems = new ArrayList<>();
+			formObjectPositionProblemCheckbox.setProblems(problems);
 
-		result = this.createEditModelAndView(formObjectPositionProblemCheckbox);
+			result = this.createEditModelAndView(formObjectPositionProblemCheckbox);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// EDIT POSITION
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam int positionId) {
 		ModelAndView result;
-		Position position;
-		position = this.positionService.findOne(positionId);
-		Company company = this.companyService.loggedCompany();
+		try {
+			Position position;
+			position = this.positionService.findOne(positionId);
+			Company company = this.companyService.loggedCompany();
 
-		if (company.getPositions().contains(position)) {
+			if (company.getPositions().contains(position)) {
 
-			if (!position.getIsDraftMode() || position.getIsCancelled())
-				return this.list();
+				if (!position.getIsDraftMode() || position.getIsCancelled())
+					return this.list();
 
-			if (!(company.getPositions().contains(position)))
-				return this.list();
+				if (!(company.getPositions().contains(position)))
+					return this.list();
 
-			FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox = this.positionService
-					.prepareFormObjectPositionProblemCheckbox(positionId);
+				FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox = this.positionService.prepareFormObjectPositionProblemCheckbox(positionId);
 
-			result = this.createEditModelAndView(formObjectPositionProblemCheckbox);
+				result = this.createEditModelAndView(formObjectPositionProblemCheckbox);
 
-		} else
-			result = new ModelAndView("redirect:list.do");
+			} else
+				result = new ModelAndView("redirect:list.do");
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// CANCEL POSITION
 	@RequestMapping(value = "/cancel", method = RequestMethod.GET)
 	public ModelAndView cancel(@RequestParam int positionId) {
 		ModelAndView result;
-		Position position;
-		position = this.positionService.findOne(positionId);
-		Company company = this.companyService.loggedCompany();
+		try {
+			Position position;
+			position = this.positionService.findOne(positionId);
+			Company company = this.companyService.loggedCompany();
 
-		if (position.getIsDraftMode() || position.getIsCancelled())
+			if (position.getIsDraftMode() || position.getIsCancelled())
+				return this.list();
+
+			if (!(company.getPositions().contains(position)))
+				return this.list();
+
+			this.positionService.cancelPosition(position);
+
 			return this.list();
-
-		if (!(company.getPositions().contains(position)))
-			return this.list();
-
-		this.positionService.cancelPosition(position);
-
-		return this.list();
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// SAVE POSITION
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox,
-			BindingResult binding) {
+	public ModelAndView save(@Valid FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox, BindingResult binding) {
 
 		ModelAndView result;
+		try {
+			Position position = new Position();
+			position = this.positionService.createPosition();
+			List<Problem> problems = new ArrayList<>();
+			Position positionSaved = new Position();
 
-		Position position = new Position();
-		position = this.positionService.createPosition();
-		List<Problem> problems = new ArrayList<>();
-		Position positionSaved = new Position();
+			problems = this.problemService.reconstructList(formObjectPositionProblemCheckbox);
+			position = this.positionService.reconstructCheckBox(formObjectPositionProblemCheckbox, binding);
+			Boolean errorProblems = false;
 
-		problems = this.problemService.reconstructList(formObjectPositionProblemCheckbox);
-		position = this.positionService.reconstructCheckBox(formObjectPositionProblemCheckbox, binding);
-		Boolean errorProblems = false;
+			if (formObjectPositionProblemCheckbox.getIsDraftMode() != null)
+				if (!formObjectPositionProblemCheckbox.getIsDraftMode())
+					errorProblems = !(problems.size() >= 2);
 
-		if (formObjectPositionProblemCheckbox.getIsDraftMode() != null)
-			if (!formObjectPositionProblemCheckbox.getIsDraftMode())
-				errorProblems = !(problems.size() >= 2);
+			if (binding.hasErrors() || errorProblems) {
+				result = this.createEditModelAndView(position);
+				if (errorProblems)
+					result.addObject("message", "position.problemsError");
+			} else
+				try {
+					positionSaved = this.positionService.saveAssignList(position, problems);
+					if (positionSaved.getIsDraftMode() == false)
+						this.finderService.sendNotificationPosition(position);
+					result = new ModelAndView("redirect:/position/company/list.do");
 
-		if (binding.hasErrors() || errorProblems) {
-			result = this.createEditModelAndView(position);
-			if (errorProblems)
-				result.addObject("message", "position.problemsError");
-		} else
-			try {
-				positionSaved = this.positionService.saveAssignList(position, problems);
-				if (positionSaved.getIsDraftMode() == false)
-					this.finderService.sendNotificationPosition(position);
-				result = new ModelAndView("redirect:/position/company/list.do");
+				} catch (Throwable oops) {
 
-			} catch (Throwable oops) {
+					result = this.createEditModelAndView(position, "commit.error");
 
-				result = this.createEditModelAndView(position, "commit.error");
-
-			}
-		return result;
+				}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// MODEL AND VIEW POSITION CHECKBOX
@@ -428,8 +463,7 @@ public class PositionController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox,
-			String messageCode) {
+	protected ModelAndView createEditModelAndView(FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox, String messageCode) {
 		ModelAndView result;
 
 		Map<Integer, String> map = new HashMap<>();
@@ -473,8 +507,7 @@ public class PositionController extends AbstractController {
 	// -------------------------------------------------------------------
 	// ---------------------------DELETE----------------------------------
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox,
-			BindingResult binding) {
+	public ModelAndView delete(FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox, BindingResult binding) {
 
 		ModelAndView result;
 

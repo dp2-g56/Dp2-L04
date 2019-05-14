@@ -42,100 +42,119 @@ public class AuditController extends AbstractController {
 	// Listar MIS Audits en vista privada, NO en public data
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
+		try {
 
-		ModelAndView result;
-		List<Audit> audits;
+			ModelAndView result;
+			List<Audit> audits;
 
-		Auditor loggedAuditor = this.auditorService.loggedAuditor();
-		audits = loggedAuditor.getAudits();
+			Auditor loggedAuditor = this.auditorService.loggedAuditor();
+			audits = loggedAuditor.getAudits();
 
-		result = new ModelAndView("audit/auditor/list");
-		result.addObject("audits", audits);
-		result.addObject("requestURI", "audit/auditor/list.do");
+			result = new ModelAndView("audit/auditor/list");
+			result.addObject("audits", audits);
+			result.addObject("requestURI", "audit/auditor/list.do");
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// CREATE AUDIT
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView createAudit(@RequestParam int positionId) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Position position = this.positionService.findOne(positionId);
+			Position position = this.positionService.findOne(positionId);
 
-		//Si la position no esta cancelada ni en draft y no tiene ya un audit del auditor logueado
-		if (!this.auditorService.showAssignablePositions().contains(position))
-			return this.list();
+			//Si la position no esta cancelada ni en draft y no tiene ya un audit del auditor logueado
+			if (!this.auditorService.showAssignablePositions().contains(position))
+				return this.list();
 
-		Audit audit = this.auditService.create(position);
+			Audit audit = this.auditService.create(position);
 
-		result = this.createEditModelAndView(audit);
-		result.addObject("audit", audit);
+			result = this.createEditModelAndView(audit);
+			result.addObject("audit", audit);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// EDIT AUDIT
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam int auditId) {
-		ModelAndView result;
-		Position position;
-		Audit audit = this.auditService.findOne(auditId);
-		Auditor loggedAuditor = this.auditorService.loggedAuditor();
+		try {
+			ModelAndView result;
+			Position position;
+			Audit audit = this.auditService.findOne(auditId);
+			Auditor loggedAuditor = this.auditorService.loggedAuditor();
 
-		if (audit == null)
-			return this.list();
+			if (audit == null)
+				return this.list();
 
-		position = audit.getPosition();
+			position = audit.getPosition();
 
-		if (position == null || audit == null || position.getIsDraftMode() || position.getIsCancelled() || (!audit.getIsDraftMode()) || !(loggedAuditor.getAudits().contains(audit)))
-			return this.list();
+			if (position == null || audit == null || position.getIsDraftMode() || position.getIsCancelled() || (!audit.getIsDraftMode()) || !(loggedAuditor.getAudits().contains(audit)))
+				return this.list();
 
-		result = this.createEditModelAndView(audit);
-		return result;
+			result = this.createEditModelAndView(audit);
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	//SAVE AUDIT
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(Audit audit, BindingResult binding) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Audit a = new Audit();
+			Audit a = new Audit();
 
-		a = this.auditService.reconstruct(audit, binding);
+			a = this.auditService.reconstruct(audit, binding);
 
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(audit);
-		else
-			try {
-				this.auditorService.saveAudit(a);
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(audit);
+			else
+				try {
+					this.auditorService.saveAudit(a);
 
-				result = new ModelAndView("redirect:list.do");
+					result = new ModelAndView("redirect:list.do");
 
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(audit, "commit.error");
-			}
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(audit, "commit.error");
+				}
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	//DELETE AUDIT
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
 	public ModelAndView delete(Audit audit2) {
-
-		ModelAndView result;
-
-		Audit audit = this.auditService.findOne(audit2.getId());
-
 		try {
-			this.auditService.deleteAudit(audit);
+			ModelAndView result;
 
-			result = new ModelAndView("redirect:list.do");
+			Audit audit = this.auditService.findOne(audit2.getId());
+
+			try {
+				this.auditService.deleteAudit(audit);
+
+				result = new ModelAndView("redirect:list.do");
+			} catch (Throwable oops) {
+				result = this.createEditModelAndView(audit, "commit.error");
+
+			}
+			return result;
 		} catch (Throwable oops) {
-			result = this.createEditModelAndView(audit, "commit.error");
-
+			return new ModelAndView("redirect:/");
 		}
-		return result;
 	}
 
 	//PROTECTED MODEL AND VIEW
