@@ -25,7 +25,7 @@ import services.PositionService;
 @Controller
 @RequestMapping("/position/rookie")
 public class PositionRookieController extends AbstractController {
-	
+
 	@Autowired
 	private PositionService positionService;
 
@@ -35,33 +35,41 @@ public class PositionRookieController extends AbstractController {
 
 	@RequestMapping(value = "/listSkills", method = RequestMethod.GET)
 	public ModelAndView listSkills(@RequestParam int positionId) {
-		ModelAndView result;
-		
 		try {
-			List<String> skills = this.positionService.getSkillsAsRookie(positionId);
-			
-			result = new ModelAndView("rookie/skills");
-			result.addObject("skills", skills);
-		} catch(Throwable oops) {
-			result = new ModelAndView("redirect:/finder/rookie/list.do");
+			ModelAndView result;
+
+			try {
+				List<String> skills = this.positionService.getSkillsAsRookie(positionId);
+
+				result = new ModelAndView("rookie/skills");
+				result.addObject("skills", skills);
+			} catch (Throwable oops) {
+				result = new ModelAndView("redirect:/finder/rookie/list.do");
+			}
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-		
-		return result;	
 	}
-	
+
 	@RequestMapping(value = "/listTechnologies", method = RequestMethod.GET)
 	public ModelAndView listTechnologies(@RequestParam int positionId) {
-		ModelAndView result;
-		
 		try {
-			List<String> technologies = this.positionService.getTechnologiesAsRookie(positionId);
-			
-			result = new ModelAndView("rookie/technologies");
-			result.addObject("technologies", technologies);
-		} catch(Throwable oops) {
-			result = new ModelAndView("redirect:/finder/rookie/list.do");
+			ModelAndView result;
+
+			try {
+				List<String> technologies = this.positionService.getTechnologiesAsRookie(positionId);
+
+				result = new ModelAndView("rookie/technologies");
+				result.addObject("technologies", technologies);
+			} catch (Throwable oops) {
+				result = new ModelAndView("redirect:/finder/rookie/list.do");
+			}
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-		
-		return result;	
 	}
 }

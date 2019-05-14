@@ -51,143 +51,165 @@ public class SponsorshipController {
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Provider provider = this.providerService.loggedProvider();
+			Provider provider = this.providerService.loggedProvider();
 
-		List<Sponsorship> sponsorships = this.sponsorshipService.findProviderSponsorships(provider);
+			List<Sponsorship> sponsorships = this.sponsorshipService.findProviderSponsorships(provider);
 
-		result = new ModelAndView("provider/sponsorships");
+			result = new ModelAndView("provider/sponsorships");
 
-		result.addObject("sponsorships", sponsorships);
-		result.addObject("requestURI", "sponsorship/provider/list.do");
+			result.addObject("sponsorships", sponsorships);
+			result.addObject("requestURI", "sponsorship/provider/list.do");
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		this.providerService.loggedAsProvider();
-		FormObjectSponsorshipCreditCard formObject = new FormObjectSponsorshipCreditCard();
+			this.providerService.loggedAsProvider();
+			FormObjectSponsorshipCreditCard formObject = new FormObjectSponsorshipCreditCard();
 
-		List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
+			List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
 
-		result = this.createEditModelAndView("sponsorship/create", formObject);
-		result.addObject("positions", positions);
+			result = this.createEditModelAndView("sponsorship/create", formObject);
+			result.addObject("positions", positions);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam int sponsorshipId) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Provider provider = this.providerService.loggedProvider();
+			Provider provider = this.providerService.loggedProvider();
 
-		Sponsorship sponsorship = this.sponsorshipService.findOne(sponsorshipId);
+			Sponsorship sponsorship = this.sponsorshipService.findOne(sponsorshipId);
 
-		if (provider.getSponsorships().contains(sponsorship)) {
+			if (provider.getSponsorships().contains(sponsorship)) {
 
-			List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
+				List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
 
-			FormObjectSponsorshipCreditCard formObject = new FormObjectSponsorshipCreditCard();
+				FormObjectSponsorshipCreditCard formObject = new FormObjectSponsorshipCreditCard();
 
-			formObject.setId(sponsorship.getId());
-			formObject.setBanner(sponsorship.getBanner());
-			formObject.setTargetURL(sponsorship.getTargetUrl());
+				formObject.setId(sponsorship.getId());
+				formObject.setBanner(sponsorship.getBanner());
+				formObject.setTargetURL(sponsorship.getTargetUrl());
 
-			result = this.createEditModelAndView("sponsorship/edit", formObject);
-			result.addObject("positions", positions);
+				result = this.createEditModelAndView("sponsorship/edit", formObject);
+				result.addObject("positions", positions);
 
-		} else {
-			result = this.list();
+			} else {
+				result = this.list();
+			}
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-
-		return result;
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@ModelAttribute("formObject") @Valid FormObjectSponsorshipCreditCard formObject,
 			BindingResult binding, @RequestParam Position position) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		this.providerService.loggedAsProvider();
+			this.providerService.loggedAsProvider();
 
-		Sponsorship sponsorship = new Sponsorship();
-		CreditCard creditCard = new CreditCard();
+			Sponsorship sponsorship = new Sponsorship();
+			CreditCard creditCard = new CreditCard();
 
-		List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
+			List<Position> positions = this.positionService.getFinalPositionsAndNotCancelled();
 
-		Position pos;
-		if (position.getId() > 0)
-			pos = this.positionService.findOne(position.getId());
-		else
-			pos = null;
-
-		creditCard = this.creditCardService.reconstruct(formObject, binding);
-		sponsorship = this.sponsorshipService.reconstruct(formObject, binding, creditCard, pos);
-
-		if (creditCard.getNumber() != null)
-			if (!this.creditCardService.validateNumberCreditCard(creditCard))
-				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "number", formObject.getNumber(), false, null, null,
-							"El numero de la tarjeta es invalido"));
-				else
-					binding.addError(new FieldError("formObject", "number", formObject.getNumber(), false, null, null,
-							"The card number is invalid"));
-
-		if (creditCard.getExpirationMonth() != null && creditCard.getExpirationYear() != null)
-			if (!this.creditCardService.validateDateCreditCard(creditCard))
-				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "expirationMonth", creditCard.getExpirationMonth(),
-							false, null, null, "La tarjeta no puede estar caducada"));
-				else
-					binding.addError(new FieldError("formObject", "expirationMonth", creditCard.getExpirationMonth(),
-							false, null, null, "The credit card can not be expired"));
-
-		List<String> cardType = this.configurationService.getConfiguration().getCardType();
-
-		if (!cardType.contains(sponsorship.getCreditCard().getBrandName()))
-			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-				binding.addError(new FieldError("formObject", "brandName", creditCard.getBrandName(), false, null, null,
-						"Tarjeta no admitida"));
+			Position pos;
+			if (position.getId() > 0)
+				pos = this.positionService.findOne(position.getId());
 			else
-				binding.addError(new FieldError("formObject", "brandName", creditCard.getBrandName(), false, null, null,
-						"The credit card is not accepted"));
+				pos = null;
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView("sponsorship/create", formObject);
-			result.addObject("positions", positions);
-		} else {
-			try {
-				this.sponsorshipService.addOrUpdateSponsorship(sponsorship);
+			creditCard = this.creditCardService.reconstruct(formObject, binding);
+			sponsorship = this.sponsorshipService.reconstruct(formObject, binding, creditCard, pos);
 
-				result = new ModelAndView("redirect:/sponsorship/provider/list.do");
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView("sponsorship/create", formObject, "sponsorship.commit.error");
+			if (creditCard.getNumber() != null)
+				if (!this.creditCardService.validateNumberCreditCard(creditCard))
+					if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
+						binding.addError(new FieldError("formObject", "number", formObject.getNumber(), false, null,
+								null, "El numero de la tarjeta es invalido"));
+					else
+						binding.addError(new FieldError("formObject", "number", formObject.getNumber(), false, null,
+								null, "The card number is invalid"));
+
+			if (creditCard.getExpirationMonth() != null && creditCard.getExpirationYear() != null)
+				if (!this.creditCardService.validateDateCreditCard(creditCard))
+					if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
+						binding.addError(
+								new FieldError("formObject", "expirationMonth", creditCard.getExpirationMonth(), false,
+										null, null, "La tarjeta no puede estar caducada"));
+					else
+						binding.addError(
+								new FieldError("formObject", "expirationMonth", creditCard.getExpirationMonth(), false,
+										null, null, "The credit card can not be expired"));
+
+			List<String> cardType = this.configurationService.getConfiguration().getCardType();
+
+			if (!cardType.contains(sponsorship.getCreditCard().getBrandName()))
+				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
+					binding.addError(new FieldError("formObject", "brandName", creditCard.getBrandName(), false, null,
+							null, "Tarjeta no admitida"));
+				else
+					binding.addError(new FieldError("formObject", "brandName", creditCard.getBrandName(), false, null,
+							null, "The credit card is not accepted"));
+
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView("sponsorship/create", formObject);
 				result.addObject("positions", positions);
-			}
-		}
+			} else {
+				try {
+					this.sponsorshipService.addOrUpdateSponsorship(sponsorship);
 
-		return result;
+					result = new ModelAndView("redirect:/sponsorship/provider/list.do");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView("sponsorship/create", formObject, "sponsorship.commit.error");
+					result.addObject("positions", positions);
+				}
+			}
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@RequestParam int sponsorshipId) {
-		ModelAndView result;
-		this.providerService.loggedAsProvider();
-
 		try {
-			this.sponsorshipService.deleteSponsorship(sponsorshipId);
-			result = new ModelAndView("redirect:list.do");
-		} catch (Throwable oops) {
-			result = this.list();
-			result.addObject("message", "sponsorship.delete.error");
-		}
+			ModelAndView result;
+			this.providerService.loggedAsProvider();
 
-		return result;
+			try {
+				this.sponsorshipService.deleteSponsorship(sponsorshipId);
+				result = new ModelAndView("redirect:list.do");
+			} catch (Throwable oops) {
+				result = this.list();
+				result.addObject("message", "sponsorship.delete.error");
+			}
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	private ModelAndView createEditModelAndView(String tiles, FormObjectSponsorshipCreditCard formObject) {
