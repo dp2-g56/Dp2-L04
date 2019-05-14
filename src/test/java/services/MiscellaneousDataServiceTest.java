@@ -33,6 +33,12 @@ public class MiscellaneousDataServiceTest extends AbstractTest {
 	 * miscellaneous data that does belongs to the rookie logged in or not.
 	 *
 	 **/
+	
+	/**
+	 * Sentence Coverage:
+	 * 		MiscellaneousDataService: 79%
+	 * 
+	 */
 	@Test
 	public void driverDeleteMiscellaneousData() {
 

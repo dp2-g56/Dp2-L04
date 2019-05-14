@@ -38,6 +38,13 @@ public class CreateRookieServiceTest extends AbstractTest {
 	 * Total test = 16
 	 * Total coverage of the problem = 100%
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		RookieService: 10.7%
+	 * 		CreditCardService: 71.1%
+	 * 
+	 */
 
 	@Test
 	public void driverCreateRookie() {

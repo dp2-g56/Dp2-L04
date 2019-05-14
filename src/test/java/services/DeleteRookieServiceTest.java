@@ -26,6 +26,14 @@ public class DeleteRookieServiceTest extends AbstractTest {
 	 * Total test = 2
 	 * Total coverage of the problem = 100%
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		RookieService: 4.9%
+	 * 		ApplicationService: 14.4%
+	 * 		
+	 * 
+	 */
 
 	@Test
 	public void driverDeleteRookie() {

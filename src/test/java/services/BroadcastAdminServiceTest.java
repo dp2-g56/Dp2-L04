@@ -43,6 +43,12 @@ public class BroadcastAdminServiceTest extends AbstractTest {
 	 * SendMessageTest Positive tes + Constratins = 2 Total test = 3 Coverage = 3/2
 	 * = 1.5 = 150%
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		AdminService: 14.4%
+	 * 
+	 */
 
 	@Test
 	public void driverUpdateMessage() {

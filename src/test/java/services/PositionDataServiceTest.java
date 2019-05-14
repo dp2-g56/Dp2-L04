@@ -45,6 +45,12 @@ public class PositionDataServiceTest extends AbstractTest {
 	 *  - Delete a postion data that does belong to the rookie logged in or not.
 	 * 
 	 **/
+	
+	/**
+	 * Sentence Coverage:
+	 * 		PositionDataService: 95.5%
+	 * 
+	 */
 	@Test
 	public void driverDeletePositionData() {
 

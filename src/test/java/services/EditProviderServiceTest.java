@@ -22,6 +22,12 @@ public class EditProviderServiceTest extends AbstractTest {
 	 * 100% 
 	 * Data coverage: 94,1%
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		ProviderService: 6.2%
+	 * 
+	 */
 
 	@Test
 	public void driverUpdateProvider() {

@@ -33,6 +33,12 @@ public class SendMessageServiceTest extends AbstractTest {
 	 * Total test = 5
 	 * Total coverage of the problem = 100%
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		MessageService: 27.2%
+	 * 
+	 */
 
 	@Test
 	public void driverSendMessage() {

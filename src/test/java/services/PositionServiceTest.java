@@ -45,11 +45,7 @@ public class PositionServiceTest extends AbstractTest{
 	 * 
 	 * 
 	 * SENTENCES COVERAGE: 
-	 * 
-	 * 		Coverage: 73.8%
-	 * 		Covered Instructions: 553
-	 * 		Missed Instructions: 196
-	 * 		Total: 749
+	 * 		PositionService: 57.9%
 	 * 
 	 *  **/
 	

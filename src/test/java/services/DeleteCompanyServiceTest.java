@@ -26,6 +26,13 @@ public class DeleteCompanyServiceTest extends AbstractTest {
 	 * Total test = 2
 	 * Total coverage of the problem = 100%
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		CompanyService: 14.6%
+	 * 		
+	 * 
+	 */
 
 	@Test
 	public void driverDeleteCompany() {

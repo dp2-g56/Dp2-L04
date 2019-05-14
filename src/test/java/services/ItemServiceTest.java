@@ -34,11 +34,9 @@ public class ItemServiceTest extends AbstractTest{
 	 * 
 	 * 		-Data Coverage: 100%
 	 * 
-	 * 		-Sentence Coverage: 71.2%:
-	 * 
-	 * 				Covered Instructions 250
-	 * 				Missed Instructions 101
-	 * 				Total Instructions 351
+	 * 		-Sentence Coverage:
+	 * 				ItemService: 64.8%
+
 	 */
 	
 	@Test
