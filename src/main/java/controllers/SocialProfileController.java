@@ -45,70 +45,77 @@ import forms.FormObjectEditRookie;
 public class SocialProfileController extends AbstractController {
 
 	@Autowired
-	private ActorService			actorService;
+	private ActorService actorService;
 
 	@Autowired
-	private SocialProfileService	socialProfileService;
+	private SocialProfileService socialProfileService;
 
 	@Autowired
-	private CompanyService			companyService;
+	private CompanyService companyService;
 
 	@Autowired
-	private ConfigurationService	configurationService;
+	private ConfigurationService configurationService;
 
 	@Autowired
-	private AdminService			adminService;
+	private AdminService adminService;
 
 	@Autowired
-	private RookieService			rookieService;
+	private RookieService rookieService;
 
 	@Autowired
-	private AuditorService			auditorService;
+	private AuditorService auditorService;
 
 	@Autowired
-	private ProviderService			providerService;
-
+	private ProviderService providerService;
 
 	// -------------------------------------------------------------------
 	// ---------------------------LIST
 	// BROTHERHOOD------------------------------------
 	@RequestMapping(value = "/showProfile", method = RequestMethod.GET)
 	public ModelAndView list() {
-		ModelAndView result;
-		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
-		Actor logguedActor = new Actor();
-		List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
-		List<Authority> authorities = (List<Authority>) userAccount.getAuthorities();
-		Boolean score = false;
-		result = new ModelAndView("authenticated/showProfile");
+		try {
+			ModelAndView result;
+			UserAccount userAccount;
+			userAccount = LoginService.getPrincipal();
+			Actor logguedActor = new Actor();
+			List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
+			List<Authority> authorities = (List<Authority>) userAccount.getAuthorities();
+			Boolean score = false;
+			result = new ModelAndView("authenticated/showProfile");
 
-		logguedActor = this.actorService.getActorByUsername(userAccount.getUsername());
-		socialProfiles = logguedActor.getSocialProfiles();
-		Boolean trueValue = true;
+			logguedActor = this.actorService.getActorByUsername(userAccount.getUsername());
+			socialProfiles = logguedActor.getSocialProfiles();
+			Boolean trueValue = true;
 
-		if (authorities.get(0).toString().equals("COMPANY"))
-			score = true;
+			if (authorities.get(0).toString().equals("COMPANY"))
+				score = true;
 
-		result.addObject("socialProfiles", socialProfiles);
-		result.addObject("actor", logguedActor);
-		result.addObject("trueValue", trueValue);
-		result.addObject("score", score);
-		result.addObject("requestURI", "authenticated/showProfile.do");
+			result.addObject("socialProfiles", socialProfiles);
+			result.addObject("actor", logguedActor);
+			result.addObject("trueValue", trueValue);
+			result.addObject("score", score);
+			result.addObject("requestURI", "authenticated/showProfile.do");
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// ---------------------------------------------------------------------
 	@RequestMapping(value = "/socialProfile/create", method = RequestMethod.GET)
 	public ModelAndView create() {
-		ModelAndView result;
-		SocialProfile socialProfile;
+		try {
+			ModelAndView result;
+			SocialProfile socialProfile;
 
-		socialProfile = this.socialProfileService.create();
-		result = this.createEditModelAndView(socialProfile);
+			socialProfile = this.socialProfileService.create();
+			result = this.createEditModelAndView(socialProfile);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// ------------------------------------------------------------------------------------
@@ -116,129 +123,142 @@ public class SocialProfileController extends AbstractController {
 	// PROFILE--------------------------------------
 	@RequestMapping(value = "/socialProfile/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam int socialProfileId) {
+		try {
+			ModelAndView result;
+			SocialProfile socialProfile;
 
-		ModelAndView result;
-		SocialProfile socialProfile;
+			Actor logged = this.actorService.getActorByUsername(LoginService.getPrincipal().getUsername());
 
-		Actor logged = this.actorService.getActorByUsername(LoginService.getPrincipal().getUsername());
+			List<SocialProfile> socialProfiles = logged.getSocialProfiles();
 
-		List<SocialProfile> socialProfiles = logged.getSocialProfiles();
+			socialProfile = this.socialProfileService.findOne(socialProfileId);
+			Assert.notNull(socialProfile);
+			result = this.createEditModelAndView(socialProfile);
 
-		socialProfile = this.socialProfileService.findOne(socialProfileId);
-		Assert.notNull(socialProfile);
-		result = this.createEditModelAndView(socialProfile);
-
-		if (!(socialProfiles.contains(socialProfile)))
-			result = this.list();
-		return result;
+			if (!(socialProfiles.contains(socialProfile)))
+				result = this.list();
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// ---------------------------------------------------------------------
 	// ---------------------------SAVE --------------------------------------
 	@RequestMapping(value = "/socialProfile/create", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(SocialProfile socialProfile, BindingResult binding) {
-		ModelAndView result;
-		Actor logguedActor = this.actorService.getActorByUsername(LoginService.getPrincipal().getUsername());
+		try {
+			ModelAndView result;
+			Actor logguedActor = this.actorService.getActorByUsername(LoginService.getPrincipal().getUsername());
 
-		socialProfile = this.socialProfileService.reconstruct(socialProfile, binding);
+			socialProfile = this.socialProfileService.reconstruct(socialProfile, binding);
 
-		System.out.println(binding);
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(socialProfile);
-		else
-			try {
+			System.out.println(binding);
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(socialProfile);
+			else
+				try {
 
-				SocialProfile saved = this.socialProfileService.save(socialProfile);
-				List<SocialProfile> socialProfiles = logguedActor.getSocialProfiles();
+					SocialProfile saved = this.socialProfileService.save(socialProfile);
+					List<SocialProfile> socialProfiles = logguedActor.getSocialProfiles();
 
-				if (socialProfiles.contains(socialProfile)) {
-					socialProfiles.remove(saved);
-					socialProfiles.add(saved);
-				} else
-					socialProfiles.add(saved);
+					if (socialProfiles.contains(socialProfile)) {
+						socialProfiles.remove(saved);
+						socialProfiles.add(saved);
+					} else
+						socialProfiles.add(saved);
 
-				logguedActor.setSocialProfiles(socialProfiles);
+					logguedActor.setSocialProfiles(socialProfiles);
 
-				this.actorService.save(logguedActor);
+					this.actorService.save(logguedActor);
 
-				result = new ModelAndView("redirect:/authenticated/showProfile.do");
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(socialProfile, "socialProfile.commit.error");
-			}
-		return result;
+					result = new ModelAndView("redirect:/authenticated/showProfile.do");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(socialProfile, "socialProfile.commit.error");
+				}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// ---------------------------------------------------------------------
 	// ---------------------------DELETE------------------------------------
 	@RequestMapping(value = "/socialProfile/create", method = RequestMethod.POST, params = "delete")
 	public ModelAndView delete(SocialProfile socialProfile, BindingResult binding) {
-
-		ModelAndView result;
-
-		socialProfile = this.socialProfileService.reconstruct(socialProfile, binding);
-
 		try {
+			ModelAndView result;
 
-			this.socialProfileService.deleteSocialProfile(socialProfile);
-			result = new ModelAndView("redirect:/authenticated/showProfile.do");
+			socialProfile = this.socialProfileService.reconstruct(socialProfile, binding);
 
+			try {
+
+				this.socialProfileService.deleteSocialProfile(socialProfile);
+				result = new ModelAndView("redirect:/authenticated/showProfile.do");
+
+			} catch (Throwable oops) {
+				result = this.createEditModelAndView(socialProfile, "socialProfile.commit.error");
+			}
+			return result;
 		} catch (Throwable oops) {
-			result = this.createEditModelAndView(socialProfile, "socialProfile.commit.error");
+			return new ModelAndView("redirect:/");
 		}
-		return result;
 	}
 	// ---------------------------------------------------------------------
 	// ---------------------------EDIT PERSONAL DAT-------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView editPersonalData() {
+		try {
+			ModelAndView result = null;
 
-		ModelAndView result = null;
+			UserAccount userAccount;
+			userAccount = LoginService.getPrincipal();
 
-		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
+			List<Authority> authorities = (List<Authority>) userAccount.getAuthorities();
 
-		List<Authority> authorities = (List<Authority>) userAccount.getAuthorities();
+			if (authorities.get(0).toString().equals("COMPANY")) {
+				Company company = this.companyService.loggedCompany();
+				Assert.notNull(company);
+				FormObjectEditCompany formCompany = this.companyService.getFormObjectEditCompany(company);
+				formCompany.setId(company.getId());
+				result = this.createEditModelAndView(formCompany);
 
-		if (authorities.get(0).toString().equals("COMPANY")) {
-			Company company = this.companyService.loggedCompany();
-			Assert.notNull(company);
-			FormObjectEditCompany formCompany = this.companyService.getFormObjectEditCompany(company);
-			formCompany.setId(company.getId());
-			result = this.createEditModelAndView(formCompany);
+			} else if (authorities.get(0).toString().equals("ADMIN")) {
+				Admin admin = this.adminService.loggedAdmin();
+				Assert.notNull(admin);
+				FormObjectEditAdmin formAdmin = this.adminService.getFormObjectEditadmin(admin);
+				formAdmin.setId(admin.getId());
+				result = this.createEditModelAndView(formAdmin);
+			} else if (authorities.get(0).toString().equals("ROOKIE")) {
+				Rookie rookie = this.rookieService.loggedRookie();
+				Assert.notNull(rookie);
+				FormObjectEditRookie formRookie = this.rookieService.getFormObjectEditRookie(rookie);
+				formRookie.setId(rookie.getId());
+				result = this.createEditModelAndView(formRookie);
+			} else if (authorities.get(0).toString().equals("AUDITOR")) {
+				Auditor auditor = this.auditorService.loggedAuditor();
+				Assert.notNull(auditor);
+				FormObjectEditAuditor formAuditor = this.auditorService.getFormObjectEditAuditor(auditor);
+				formAuditor.setId(auditor.getId());
+				result = this.createEditModelAndView(formAuditor);
+			} else if (authorities.get(0).toString().equals("PROVIDER")) {
+				Provider provider = this.providerService.loggedProvider();
+				Assert.notNull(provider);
+				FormObjectEditProvider formProvider = this.providerService.getFormObjectEditProvider(provider);
+				formProvider.setId(provider.getId());
+				result = this.createEditModelAndView(formProvider);
+			}
 
-		} else if (authorities.get(0).toString().equals("ADMIN")) {
-			Admin admin = this.adminService.loggedAdmin();
-			Assert.notNull(admin);
-			FormObjectEditAdmin formAdmin = this.adminService.getFormObjectEditadmin(admin);
-			formAdmin.setId(admin.getId());
-			result = this.createEditModelAndView(formAdmin);
-		} else if (authorities.get(0).toString().equals("ROOKIE")) {
-			Rookie rookie = this.rookieService.loggedRookie();
-			Assert.notNull(rookie);
-			FormObjectEditRookie formRookie = this.rookieService.getFormObjectEditRookie(rookie);
-			formRookie.setId(rookie.getId());
-			result = this.createEditModelAndView(formRookie);
-		} else if (authorities.get(0).toString().equals("AUDITOR")) {
-			Auditor auditor = this.auditorService.loggedAuditor();
-			Assert.notNull(auditor);
-			FormObjectEditAuditor formAuditor = this.auditorService.getFormObjectEditAuditor(auditor);
-			formAuditor.setId(auditor.getId());
-			result = this.createEditModelAndView(formAuditor);
-		} else if (authorities.get(0).toString().equals("PROVIDER")) {
-			Provider provider = this.providerService.loggedProvider();
-			Assert.notNull(provider);
-			FormObjectEditProvider formProvider = this.providerService.getFormObjectEditProvider(provider);
-			formProvider.setId(provider.getId());
-			result = this.createEditModelAndView(formProvider);
+			if (result == null)
+				result = this.list();
+
+			result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-
-		if (result == null)
-			result = this.list();
-
-		result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-
-		return result;
 	}
 	// ---------------------------------------------------------------------
 	// ---------------------------SAVE PERSONAL DATA------------------------
@@ -246,155 +266,177 @@ public class SocialProfileController extends AbstractController {
 	// Company
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView saveCompany(@Valid FormObjectEditCompany companyForm, BindingResult binding) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Company company = this.companyService.reconstructCompanyPersonalData(companyForm, binding);
-		Configuration configuration = this.configurationService.getConfiguration();
+			Company company = this.companyService.reconstructCompanyPersonalData(companyForm, binding);
+			Configuration configuration = this.configurationService.getConfiguration();
 
-		String prefix = configuration.getSpainTelephoneCode();
+			String prefix = configuration.getSpainTelephoneCode();
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(companyForm);
-			result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-		} else
-			try {
-				if (company.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
-						|| company.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
-					this.companyService.updateCompany(company);
-				else if (company.getPhone().matches("([0-9]{4,})$")) {
-					company.setPhone(prefix + company.getPhone());
-					this.companyService.updateCompany(company);
-				} else
-					this.companyService.updateCompany(company);
-				result = new ModelAndView("redirect:/authenticated/showProfile.do");
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(companyForm, "socialProfile.commit.error");
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(companyForm);
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-			}
+			} else
+				try {
+					if (company.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
+							|| company.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+						this.companyService.updateCompany(company);
+					else if (company.getPhone().matches("([0-9]{4,})$")) {
+						company.setPhone(prefix + company.getPhone());
+						this.companyService.updateCompany(company);
+					} else
+						this.companyService.updateCompany(company);
+					result = new ModelAndView("redirect:/authenticated/showProfile.do");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(companyForm, "socialProfile.commit.error");
+					result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
+				}
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/admin/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView saveCompany(@Valid FormObjectEditAdmin adminForm, BindingResult binding) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Admin admin = this.adminService.reconstructCompanyPersonalData(adminForm, binding);
-		Configuration configuration = this.configurationService.getConfiguration();
+			Admin admin = this.adminService.reconstructCompanyPersonalData(adminForm, binding);
+			Configuration configuration = this.configurationService.getConfiguration();
 
-		String prefix = configuration.getSpainTelephoneCode();
+			String prefix = configuration.getSpainTelephoneCode();
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(adminForm);
-			result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-		} else
-			try {
-				if (admin.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
-						|| admin.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
-					this.adminService.save(admin);
-				else if (admin.getPhone().matches("([0-9]{4,})$")) {
-					admin.setPhone(prefix + admin.getPhone());
-					this.adminService.save(admin);
-				} else
-					this.adminService.save(admin);
-				result = new ModelAndView("redirect:/authenticated/showProfile.do");
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(adminForm, "socialProfile.commit.error");
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(adminForm);
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-			}
+			} else
+				try {
+					if (admin.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
+							|| admin.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+						this.adminService.save(admin);
+					else if (admin.getPhone().matches("([0-9]{4,})$")) {
+						admin.setPhone(prefix + admin.getPhone());
+						this.adminService.save(admin);
+					} else
+						this.adminService.save(admin);
+					result = new ModelAndView("redirect:/authenticated/showProfile.do");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(adminForm, "socialProfile.commit.error");
+					result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
+				}
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/rookie/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView saveRookie(@Valid FormObjectEditRookie rookieForm, BindingResult binding) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Rookie rookie = this.rookieService.reconstructRookiePersonalData(rookieForm, binding);
-		Configuration configuration = this.configurationService.getConfiguration();
+			Rookie rookie = this.rookieService.reconstructRookiePersonalData(rookieForm, binding);
+			Configuration configuration = this.configurationService.getConfiguration();
 
-		String prefix = configuration.getSpainTelephoneCode();
+			String prefix = configuration.getSpainTelephoneCode();
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(rookieForm);
-			result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-		} else
-			try {
-				if (rookie.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
-						|| rookie.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
-					this.rookieService.save(rookie);
-				else if (rookie.getPhone().matches("([0-9]{4,})$")) {
-					rookie.setPhone(prefix + rookie.getPhone());
-					this.rookieService.save(rookie);
-				} else
-					this.rookieService.save(rookie);
-				result = new ModelAndView("redirect:/authenticated/showProfile.do");
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(rookieForm, "socialProfile.commit.error");
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(rookieForm);
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-			}
+			} else
+				try {
+					if (rookie.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
+							|| rookie.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+						this.rookieService.save(rookie);
+					else if (rookie.getPhone().matches("([0-9]{4,})$")) {
+						rookie.setPhone(prefix + rookie.getPhone());
+						this.rookieService.save(rookie);
+					} else
+						this.rookieService.save(rookie);
+					result = new ModelAndView("redirect:/authenticated/showProfile.do");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(rookieForm, "socialProfile.commit.error");
+					result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
+				}
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/auditor/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView saveAuditor(@Valid FormObjectEditAuditor auditorForm, BindingResult binding) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Auditor auditor = this.auditorService.reconstructAuditorPersonalData(auditorForm, binding);
-		Configuration configuration = this.configurationService.getConfiguration();
+			Auditor auditor = this.auditorService.reconstructAuditorPersonalData(auditorForm, binding);
+			Configuration configuration = this.configurationService.getConfiguration();
 
-		String prefix = configuration.getSpainTelephoneCode();
+			String prefix = configuration.getSpainTelephoneCode();
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(auditorForm);
-			result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-		} else
-			try {
-				if (auditor.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$") || auditor.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
-					this.auditorService.save(auditor);
-				else if (auditor.getPhone().matches("([0-9]{4,})$")) {
-					auditor.setPhone(prefix + auditor.getPhone());
-					this.auditorService.save(auditor);
-				} else
-					this.auditorService.save(auditor);
-				result = new ModelAndView("redirect:/authenticated/showProfile.do");
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(auditorForm, "socialProfile.commit.error");
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(auditorForm);
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-			}
+			} else
+				try {
+					if (auditor.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
+							|| auditor.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+						this.auditorService.save(auditor);
+					else if (auditor.getPhone().matches("([0-9]{4,})$")) {
+						auditor.setPhone(prefix + auditor.getPhone());
+						this.auditorService.save(auditor);
+					} else
+						this.auditorService.save(auditor);
+					result = new ModelAndView("redirect:/authenticated/showProfile.do");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(auditorForm, "socialProfile.commit.error");
+					result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
+				}
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/provider/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView saveProvider(@Valid FormObjectEditProvider providerForm, BindingResult binding) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Provider provider = this.providerService.reconstructAuditorPersonalData(providerForm, binding);
-		Configuration configuration = this.configurationService.getConfiguration();
+			Provider provider = this.providerService.reconstructAuditorPersonalData(providerForm, binding);
+			Configuration configuration = this.configurationService.getConfiguration();
 
-		String prefix = configuration.getSpainTelephoneCode();
+			String prefix = configuration.getSpainTelephoneCode();
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(providerForm);
-			result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-		} else
-			try {
-				if (provider.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$") || provider.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
-					this.providerService.updateProvider(provider);
-				else if (provider.getPhone().matches("([0-9]{4,})$")) {
-					provider.setPhone(prefix + provider.getPhone());
-					this.providerService.updateProvider(provider);
-				} else
-					this.providerService.updateProvider(provider);
-				result = new ModelAndView("redirect:/authenticated/showProfile.do");
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(providerForm, "socialProfile.commit.error");
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(providerForm);
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
-			}
+			} else
+				try {
+					if (provider.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
+							|| provider.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+						this.providerService.updateProvider(provider);
+					else if (provider.getPhone().matches("([0-9]{4,})$")) {
+						provider.setPhone(prefix + provider.getPhone());
+						this.providerService.updateProvider(provider);
+					} else
+						this.providerService.updateProvider(provider);
+					result = new ModelAndView("redirect:/authenticated/showProfile.do");
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(providerForm, "socialProfile.commit.error");
+					result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
+				}
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	// ---------------------------------------------------------------------
