@@ -15,7 +15,7 @@ import domain.Problem;
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Integer> {
 
-	@Query("select p from Position p where p.isDraftMode = false")
+	@Query("select p from Position p where p.isDraftMode = false and p.isCancelled = false")
 	List<Position> getFinalPositions();
 
 	@Query("select p.problems from Position p where p.id = ?1")

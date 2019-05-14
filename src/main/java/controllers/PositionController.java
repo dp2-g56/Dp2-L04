@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
 import services.ApplicationService;
+import services.AuditService;
 import services.CompanyService;
 import services.CurriculumService;
 import services.FinderService;
@@ -26,6 +28,7 @@ import services.ProblemService;
 import services.SponsorshipService;
 import domain.Actor;
 import domain.Application;
+import domain.Audit;
 import domain.Company;
 import domain.Curriculum;
 import domain.Position;
@@ -61,6 +64,9 @@ public class PositionController extends AbstractController {
 
 	@Autowired
 	private SponsorshipService	sponsorshipService;
+
+	@Autowired
+	private AuditService		auditService;
 
 
 	public PositionController() {
@@ -304,6 +310,34 @@ public class PositionController extends AbstractController {
 			result.addObject("list", list);
 			result.addObject("requestURI", "position/company/technology/list.do");
 			result.addObject("positionId", positionId);
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
+	}
+
+	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
+	public ModelAndView listAudits(@RequestParam int positionId) {
+		try {
+
+			ModelAndView result;
+
+			List<Audit> finalAudits = new ArrayList<Audit>();
+			finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
+			Position position = this.positionService.findOne(positionId);
+			Assert.isTrue(position.getAudits().containsAll(finalAudits));
+
+			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+				result = new ModelAndView("redirect:/position/company/application/list.do");
+			else {
+				result = new ModelAndView("position/company/audit/list");
+
+				result.addObject("finalAudits", finalAudits);
+				result.addObject("requestURI", "position/company/audit/list.do");
+				result.addObject("positionId", positionId);
+
+			}
 
 			return result;
 		} catch (Throwable oops) {

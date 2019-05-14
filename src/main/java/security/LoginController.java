@@ -10,6 +10,7 @@
 
 package security;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.ConfigurationService;
 import controllers.AbstractController;
 
 @Controller
@@ -29,7 +31,10 @@ public class LoginController extends AbstractController {
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	LoginService	service;
+	LoginService					service;
+
+	@Autowired
+	private ConfigurationService	configurationService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -41,11 +46,16 @@ public class LoginController extends AbstractController {
 	// Login ------------------------------------------------------------------
 
 	@RequestMapping("/login")
-	public ModelAndView login(@Valid final Credentials credentials, final BindingResult bindingResult, @RequestParam(required = false) final boolean showError) {
+	public ModelAndView login(@Valid final Credentials credentials, final BindingResult bindingResult, @RequestParam(required = false) final boolean showError, HttpServletRequest request) {
 		Assert.notNull(credentials);
 		Assert.notNull(bindingResult);
 
 		ModelAndView result;
+		Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+		String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+		request.getSession().setAttribute("imageURL", imageURL);
+		request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 
 		result = new ModelAndView("security/login");
 		result.addObject("credentials", credentials);
