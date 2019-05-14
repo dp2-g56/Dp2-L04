@@ -306,6 +306,111 @@
 		<property name="isNotLocked" value="True" />
 	</bean>
 	
+	<!-- AUDITOR4 -->
+	<bean id="userAccount17" class="security.UserAccount">
+		<property name="username" value="auditor4" />
+		<property name="password"
+			value="6cc8affcba51a854192a33af68c08f49" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<!-- AUDITOR5 -->
+	<bean id="userAccount18" class="security.UserAccount">
+		<property name="username" value="auditor5" />
+		<property name="password"
+			value="3775bf00262284e83013c9cea5f41431" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<!-- AUDITOR6 -->
+	<bean id="userAccount19" class="security.UserAccount">
+		<property name="username" value="auditor6" />
+		<property name="password"
+			value="5d78d53d65022ce05a759cd3c057782e" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<!-- AUDITOR7 -->
+	<bean id="userAccount20" class="security.UserAccount">
+		<property name="username" value="auditor7" />
+		<property name="password"
+			value="cb22ac7c563939f50b8b44ec70dfecb4" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<!-- AUDITOR8 -->
+	<bean id="userAccount21" class="security.UserAccount">
+		<property name="username" value="auditor8" />
+		<property name="password"
+			value="069f7c7f3a56f0dac98c04ed15be3eb8" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<!-- AUDITOR9 -->
+	<bean id="userAccount22" class="security.UserAccount">
+		<property name="username" value="auditor9" />
+		<property name="password"
+			value="85d2032079a1080ff6cda41e8b4e26c3" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
+	<!-- AUDITOR10 -->
+	<bean id="userAccount23" class="security.UserAccount">
+		<property name="username" value="auditor10" />
+		<property name="password"
+			value="0c57417643b323ea8721f3a222099384" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="AUDITOR" />
+				</bean>
+			</list>
+		</property>
+		<property name="isNotLocked" value="True" />
+	</bean>
+	
 	<bean id="userAccount16" class="security.UserAccount">
 		<property name="username" value="system" />
 		<property name="password"
@@ -404,6 +509,189 @@
 				</property>
 				<property name="userAccount" ref="userAccount14" />
 			</bean>
+			
+		<!-- AUDITOR4 -->
+			<bean id="auditor4" class="domain.Auditor">
+				<property name="name" value="Jacob" />
+				<property name="surname" value="Elmonzo" />
+				<property name="VATNumber" value="SE123666987" />
+				<property name="creditCard" ref="creditCard14" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor3@gmail.com" />
+				<property name="phone" value="+34609161921" />
+				<property name="address" value="Auditor3 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount17" />
+			</bean>
+			
+	<!-- AUDITOR5 -->
+			<bean id="auditor5" class="domain.Auditor">
+				<property name="name" value="Jacob" />
+				<property name="surname" value="Elmonzo" />
+				<property name="VATNumber" value="SE123666987" />
+				<property name="creditCard" ref="creditCard14" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor3@gmail.com" />
+				<property name="phone" value="+34609161921" />
+				<property name="address" value="Auditor3 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount18" />
+			</bean>
+			
+	<!-- AUDITOR6 -->
+			<bean id="auditor6" class="domain.Auditor">
+				<property name="name" value="Jacob" />
+				<property name="surname" value="Elmonzo" />
+				<property name="VATNumber" value="SE123666987" />
+				<property name="creditCard" ref="creditCard14" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor3@gmail.com" />
+				<property name="phone" value="+34609161921" />
+				<property name="address" value="Auditor3 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount19" />
+			</bean>
+	
+	<!-- AUDITOR7 -->
+			<bean id="auditor7" class="domain.Auditor">
+				<property name="name" value="Jacob" />
+				<property name="surname" value="Elmonzo" />
+				<property name="VATNumber" value="SE123666987" />
+				<property name="creditCard" ref="creditCard14" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor3@gmail.com" />
+				<property name="phone" value="+34609161921" />
+				<property name="address" value="Auditor3 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount20" />
+			</bean>
+	
+	<!-- AUDITOR8 -->
+			<bean id="auditor8" class="domain.Auditor">
+				<property name="name" value="Jacob" />
+				<property name="surname" value="Elmonzo" />
+				<property name="VATNumber" value="SE123666987" />
+				<property name="creditCard" ref="creditCard14" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor3@gmail.com" />
+				<property name="phone" value="+34609161921" />
+				<property name="address" value="Auditor3 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount21" />
+			</bean>
+			
+	<!-- AUDITOR9 -->
+			<bean id="auditor9" class="domain.Auditor">
+				<property name="name" value="Jacob" />
+				<property name="surname" value="Elmonzo" />
+				<property name="VATNumber" value="SE123666987" />
+				<property name="creditCard" ref="creditCard14" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor3@gmail.com" />
+				<property name="phone" value="+34609161921" />
+				<property name="address" value="Auditor3 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount22" />
+			</bean>
+	
+	<!-- AUDITOR10 -->
+			<bean id="auditor10" class="domain.Auditor">
+				<property name="name" value="Jacob" />
+				<property name="surname" value="Elmonzo" />
+				<property name="VATNumber" value="SE123666987" />
+				<property name="creditCard" ref="creditCard14" />
+				<property name="photo"
+					value="https://trello.com/c/unl0e9cp/1-requisitos" />
+				<property name="email" value="auditor3@gmail.com" />
+				<property name="phone" value="+34609161921" />
+				<property name="address" value="Auditor3 address" />
+				<property name="socialProfiles">
+					<list>
+					</list>
+				</property>
+				<property name="messages">
+					<list>
+					</list>
+				</property>
+				<property name="audits">
+					<list>
+					</list>
+				</property>
+				<property name="userAccount" ref="userAccount23" />
+			</bean>
+	
 	
 	<!-- PROVIDER -->
 
