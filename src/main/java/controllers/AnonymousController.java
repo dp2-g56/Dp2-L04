@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,10 +90,15 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/termsAndConditionsEN", method = RequestMethod.GET)
-	public ModelAndView listEN() {
+	public ModelAndView listEN(HttpServletRequest request) {
 		try {
 			ModelAndView result;
 
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 			result = new ModelAndView("termsAndConditionsEN");
 
 			return result;
@@ -102,10 +108,15 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/termsAndConditionsES", method = RequestMethod.GET)
-	public ModelAndView listES() {
+	public ModelAndView listES(HttpServletRequest request) {
 		try {
 			ModelAndView result;
 
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 			result = new ModelAndView("termsAndConditionsES");
 
 			return result;
@@ -118,12 +129,18 @@ public class AnonymousController extends AbstractController {
 	// ROOKIE-----------------------------------------------------------------------
 
 	@RequestMapping(value = "/rookie/create", method = RequestMethod.GET)
-	public ModelAndView createAdmin() {
+	public ModelAndView createAdmin(HttpServletRequest request) {
 		try {
 			ModelAndView result;
 
 			FormObjectRookie formObjectRookie = new FormObjectRookie();
 			formObjectRookie.setTermsAndConditions(false);
+
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 
 			result = new ModelAndView("anonymous/rookie/create");
 
@@ -200,12 +217,18 @@ public class AnonymousController extends AbstractController {
 	// COMPANY-----------------------------------------------------------------------
 
 	@RequestMapping(value = "/company/create", method = RequestMethod.GET)
-	public ModelAndView createCompany() {
+	public ModelAndView createCompany(HttpServletRequest request) {
 		try {
 			ModelAndView result;
 
 			FormObjectCompany formObjectCompany = new FormObjectCompany();
 			formObjectCompany.setTermsAndConditions(false);
+
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 
 			result = new ModelAndView("anonymous/company/create");
 
@@ -282,12 +305,18 @@ public class AnonymousController extends AbstractController {
 	// PROVIDER-----------------------------------------------------------------------------
 
 	@RequestMapping(value = "/provider/create", method = RequestMethod.GET)
-	public ModelAndView createProvider() {
+	public ModelAndView createProvider(HttpServletRequest request) {
 		try {
 			ModelAndView result;
 
 			FormObjectProvider formObjectProvider = new FormObjectProvider();
 			formObjectProvider.setTermsAndConditions(false);
+
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 
 			result = new ModelAndView("anonymous/provider/create");
 
@@ -361,9 +390,15 @@ public class AnonymousController extends AbstractController {
 	// --------------------------------------------------------------------
 
 	@RequestMapping(value = "/position/list", method = RequestMethod.GET)
-	public ModelAndView listPositions() {
+	public ModelAndView listPositions(HttpServletRequest request) {
 		try {
 			ModelAndView result;
+
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 
 			List<Position> publicPositions = new ArrayList<Position>();
 
@@ -391,15 +426,22 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/curriculum/list", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam int applicationId, @RequestParam boolean assignable) {
+	public ModelAndView show(@RequestParam int applicationId, HttpServletRequest request) {
 		ModelAndView result;
 
 		try {
+
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 
 			Application application = this.applicationService.findOne(applicationId);
 			Curriculum curriculum = application.getCurriculum();
 
 			Boolean publicData = true;
+			Boolean assignable = true;
 
 			result = new ModelAndView("anonymous/curriculum/list");
 			result.addObject("assignable", assignable);
@@ -418,8 +460,15 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
-	public ModelAndView listProblems(@RequestParam int positionId) {
+	public ModelAndView listProblems(@RequestParam int positionId, HttpServletRequest request) {
 		try {
+
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 
 			Boolean assignable = false;
@@ -459,8 +508,14 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/attachement/list", method = RequestMethod.GET)
-	public ModelAndView listAttachement(@RequestParam int problemId) {
+	public ModelAndView listAttachement(@RequestParam int problemId, HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 
 			List<String> list = new ArrayList<String>();
@@ -484,8 +539,15 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
-	public ModelAndView listAplications(@RequestParam int positionId) {
+	public ModelAndView listAplications(@RequestParam int positionId, HttpServletRequest request) {
 		try {
+
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 			Boolean assignable = false;
 
@@ -520,10 +582,16 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
-	public ModelAndView listAudits(@RequestParam int positionId) {
+	public ModelAndView listAudits(@RequestParam int positionId, HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
-			Boolean assignable = false;
+			Boolean assignable = true;
 
 			List<Audit> finalAudits = new ArrayList<Audit>();
 			finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
@@ -548,8 +616,14 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/listOne", method = RequestMethod.GET)
-	public ModelAndView listCompany(@RequestParam int positionId) {
+	public ModelAndView listCompany(@RequestParam int positionId, HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 			Boolean assignable = false;
 			List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
@@ -591,8 +665,14 @@ public class AnonymousController extends AbstractController {
 	// SIGUIENTE DESPLEGABLE
 
 	@RequestMapping(value = "/company/list", method = RequestMethod.GET)
-	public ModelAndView listCompanies() {
+	public ModelAndView listCompanies(HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 
 			List<Company> companies = this.companyService.allCompanies();
@@ -608,8 +688,14 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/positions", method = RequestMethod.GET)
-	public ModelAndView listPositionsOfCompany(@RequestParam int idCompany) {
+	public ModelAndView listPositionsOfCompany(@RequestParam int idCompany, HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 
 			List<Position> positions = this.companyService.positionsOfCompanyInFinalNotCancelled(idCompany);
@@ -637,8 +723,14 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/filtered/create", method = RequestMethod.GET)
-	public ModelAndView newWord() {
+	public ModelAndView newWord(HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 
 			List<Position> filteredPositions = new ArrayList<Position>();
@@ -655,8 +747,14 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/filtered/positions", method = RequestMethod.POST, params = "save")
-	public ModelAndView listPositionsOfCompany(String word) {
+	public ModelAndView listPositionsOfCompany(String word, HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 			List<Position> filteredPositions = new ArrayList<Position>();
 
@@ -685,8 +783,14 @@ public class AnonymousController extends AbstractController {
 
 	// PROVIDERS
 	@RequestMapping(value = "/provider/list", method = RequestMethod.GET)
-	public ModelAndView listProviders() {
+	public ModelAndView listProviders(HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 
 			List<Provider> providers = this.providerService.findAll();
@@ -703,8 +807,14 @@ public class AnonymousController extends AbstractController {
 
 	// Items
 	@RequestMapping(value = "/item/list", method = RequestMethod.GET)
-	public ModelAndView itemList(@RequestParam(required = false) Integer providerId) {
+	public ModelAndView itemList(@RequestParam(required = false) Integer providerId, HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 			List<Item> items;
 			Boolean publicData = false;
@@ -732,8 +842,14 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/item/listLinks", method = RequestMethod.GET)
-	public ModelAndView listLinks(@RequestParam int itemId) {
+	public ModelAndView listLinks(@RequestParam int itemId, HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 
 			List<String> links = this.itemService.findOne(itemId).getLinks();
@@ -748,8 +864,14 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/item/listPictures", method = RequestMethod.GET)
-	public ModelAndView listPictures(@RequestParam int itemId) {
+	public ModelAndView listPictures(@RequestParam int itemId, HttpServletRequest request) {
 		try {
+
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 			ModelAndView result;
 
 			List<String> pictures = this.itemService.findOne(itemId).getPictures();
@@ -764,8 +886,14 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/provider/listOne", method = RequestMethod.GET)
-	public ModelAndView listProvider(@RequestParam int providerId) {
+	public ModelAndView listProvider(@RequestParam int providerId, HttpServletRequest request) {
 		try {
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+			String imageURL = this.configurationService.getConfiguration().getImageURL();
+
+			request.getSession().setAttribute("imageURL", imageURL);
+			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
+
 			ModelAndView result;
 			List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
 

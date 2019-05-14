@@ -115,4 +115,9 @@
 		<put-attribute name="body" value="/views/rookie/technologies.jsp" />
 	</definition>
 	
+	<definition name="position/rookie/audit/list" extends="master.page">	
+		<put-attribute name="title" value="Audits" />
+		<put-attribute name="body" value="/views/anonymous/showAuditsPosition.jsp" />
+	</definition>
+	
 </tiles-definitions>

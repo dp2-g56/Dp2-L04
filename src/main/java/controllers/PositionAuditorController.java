@@ -1,19 +1,35 @@
 
 package controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.ActorService;
+import services.ApplicationService;
+import services.AuditService;
 import services.AuditorService;
+import services.CompanyService;
+import services.PositionService;
 import services.SponsorshipService;
+import domain.Actor;
+import domain.Application;
+import domain.Audit;
+import domain.Company;
 import domain.Position;
+import domain.Problem;
+import domain.SocialProfile;
 import domain.Sponsorship;
 
 @Controller
@@ -25,6 +41,21 @@ public class PositionAuditorController extends AbstractController {
 
 	@Autowired
 	private SponsorshipService	sponsorshipService;
+
+	@Autowired
+	private AuditService		auditService;
+
+	@Autowired
+	private PositionService		positionService;
+
+	@Autowired
+	private ActorService		actorService;
+
+	@Autowired
+	private ApplicationService	applicationService;
+
+	@Autowired
+	private CompanyService		companyService;
 
 
 	public PositionAuditorController() {
@@ -56,6 +87,156 @@ public class PositionAuditorController extends AbstractController {
 			result.addObject("positions", positions);
 			result.addObject("requestURI", "position/auditor/listAssignablePositions.do");
 
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
+	}
+
+	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
+	public ModelAndView listAudits(@RequestParam int positionId) {
+		try {
+
+			ModelAndView result;
+
+			List<Audit> finalAudits = new ArrayList<Audit>();
+			finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
+			Position position = this.positionService.findOne(positionId);
+			Assert.isTrue(position.getAudits().containsAll(finalAudits));
+			Boolean assignable = false;
+
+			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+				result = new ModelAndView("redirect:/position/auditor/listAssignablePositions.do");
+			else {
+				result = new ModelAndView("position/auditor/audit/list");
+
+				result.addObject("finalAudits", finalAudits);
+				result.addObject("requestURI", "position/auditor/audit/list.do");
+				result.addObject("positionId", positionId);
+				result.addObject("assignable", assignable);
+
+			}
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
+	}
+
+	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
+	public ModelAndView listProblems(@RequestParam int positionId, HttpServletRequest request) {
+		try {
+
+			ModelAndView result;
+
+			Boolean assignable = true;
+
+			List<Problem> allProblems = new ArrayList<>();
+			allProblems = this.positionService.getProblemsOfPosition(positionId);
+			Actor actor = this.positionService.getActorWithPosition(positionId);
+			Position position = this.positionService.findOne(positionId);
+			Assert.isTrue(position.getProblems().containsAll(allProblems));
+
+			Actor loggedActor = this.actorService.loggedActor();
+			Boolean sameActorLogged;
+			Boolean publicData = true;
+
+			if (loggedActor.equals(actor))
+				sameActorLogged = true;
+			else
+				sameActorLogged = false;
+
+			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+				result = new ModelAndView("redirect:/position/auditor/listAssignablePositions.do");
+			else {
+
+				result = new ModelAndView("position/auditor/problem/list");
+
+				result.addObject("problems", allProblems);
+				result.addObject("publicData", publicData);
+				result.addObject("sameActorLogged", sameActorLogged);
+				result.addObject("requestURI", "position/auditor/problem/list.do");
+				result.addObject("positionId", positionId);
+				result.addObject("assignable", assignable);
+			}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
+	}
+
+	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
+	public ModelAndView listAplications(@RequestParam int positionId, HttpServletRequest request) {
+		try {
+
+			ModelAndView result;
+			Boolean assignable = false;
+
+			List<Application> allApplications = new ArrayList<Application>();
+			allApplications = this.applicationService.getApplicationsCompany(positionId);
+			Actor actor = this.positionService.getActorWithPosition(positionId);
+			Position position = this.positionService.findOne(positionId);
+			Actor loggedActor = this.actorService.loggedActor();
+			Boolean sameActorLogged;
+
+			if (loggedActor.equals(actor))
+				sameActorLogged = true;
+			else
+				sameActorLogged = false;
+
+			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+				result = new ModelAndView("redirect:/position/auditor/listAssignablePositions.do");
+			else {
+
+				result = new ModelAndView("position/auditor/application/list");
+
+				result.addObject("allApplications", allApplications);
+				result.addObject("sameActorLogged", sameActorLogged);
+				result.addObject("requestURI", "position/auditor/application/list.do");
+				result.addObject("positionId", positionId);
+				result.addObject("assignable", assignable);
+			}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
+	}
+
+	@RequestMapping(value = "/company/listOne", method = RequestMethod.GET)
+	public ModelAndView listCompany(@RequestParam int positionId, HttpServletRequest request) {
+		try {
+			ModelAndView result;
+			Boolean assignable = true;
+			List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
+
+			Company company = this.companyService.companyOfRespectivePosition(positionId);
+			Actor actor = this.positionService.getActorWithPosition(positionId);
+			Position position = this.positionService.findOne(positionId);
+			Boolean score = true;
+
+			Actor loggedActor = this.actorService.loggedActor();
+			Boolean sameActorLogged;
+			socialProfiles = actor.getSocialProfiles();
+
+			if (loggedActor.equals(actor))
+				sameActorLogged = true;
+			else
+				sameActorLogged = false;
+
+			Boolean publicValue = true;
+
+			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
+				result = new ModelAndView("redirect:/position/auditor/listAssignablePositions.do");
+			else {
+				result = new ModelAndView("position/auditor/company/listOne");
+				result.addObject("actor", company);
+				result.addObject("socialProfiles", socialProfiles);
+				result.addObject("score", score);
+				result.addObject("publicValue", publicValue);
+				result.addObject("sameActorLogged", sameActorLogged);
+				result.addObject("requestURI", "position/auditor/company/listOne.do");
+				result.addObject("assignable", assignable);
+			}
 			return result;
 		} catch (Throwable oops) {
 			return new ModelAndView("redirect:/");

@@ -78,4 +78,9 @@
 		<put-attribute name="body" value="/views/company/curriculumOfApplication.jsp" />
 	</definition>
 	
+	<definition name="position/company/audit/list" extends="master.page">	
+		<put-attribute name="title" value="Auditoria" />
+		<put-attribute name="body" value="/views/anonymous/showAuditsPosition.jsp" />
+	</definition>
+	
 </tiles-definitions>

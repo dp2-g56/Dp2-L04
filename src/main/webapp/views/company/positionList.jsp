@@ -148,7 +148,7 @@
 	<display:column titleKey="position.audits">
 
 		<spring:url var="auditsUrl"
-			value="/anonymous/audit/list.do?positionId={positionId}">
+			value="/position/company/audit/list.do?positionId={positionId}">
 			<spring:param name="positionId" value="${row.id}" />
 			<spring:param name="assignable" value="${true}" />
 		</spring:url>
