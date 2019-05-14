@@ -36,6 +36,12 @@ public class SocialProfileServiceTest  extends AbstractTest{
 	 *	and deleting them.
 	 *
 	 */
+	/**
+	 * Sentence Coverage:
+	 * 		SocialProfileService: 	43.9%
+	 * 		ActorService:			25.7%
+	 * 
+	 */
 	
 	@Test
 	public void driverCreateSocialProfile() {

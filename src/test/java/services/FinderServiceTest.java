@@ -41,6 +41,14 @@ public class FinderServiceTest extends AbstractTest {
 	 * - Clean a finder that belongs to the rookie logged in or not.
 	 * 
 	 **/
+	
+	
+	/**
+	 * Sentence Coverage:
+	 * 			FinderService: 43.0%
+	 * 
+	 * 
+	 */
 	@Test
 	public void driverCleanFinder() {
 		Finder finder = this.rookieService.getRookieByUsername("rookie1").getFinder();

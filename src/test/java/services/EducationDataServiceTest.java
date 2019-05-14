@@ -45,6 +45,13 @@ public class EducationDataServiceTest extends AbstractTest {
 	 *  - Delete an education data that does belongs to the rookie logged in or not.
 	 * 
 	 **/
+	
+	/**
+	 * Sentence Coverage:
+	 * 		EducationDataService: 95.5%
+	 * 
+	 * 
+	 */
 	@Test
 	public void driverDeleteEducationData() {
 
