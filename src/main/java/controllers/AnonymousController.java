@@ -438,8 +438,9 @@ public class AnonymousController extends AbstractController {
 			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 
 			Application application = this.applicationService.findOne(applicationId);
-			Curriculum curriculum = application.getCurriculum();
 
+			Curriculum curriculum = application.getCurriculum();
+			Assert.isTrue(application.getCurriculum().equals(curriculum));
 			Boolean publicData = true;
 			Boolean assignable = true;
 
@@ -478,6 +479,7 @@ public class AnonymousController extends AbstractController {
 			Actor actor = this.positionService.getActorWithPosition(positionId);
 			Position position = this.positionService.findOne(positionId);
 			Assert.isTrue(position.getProblems().containsAll(allProblems));
+			Assert.isTrue(position.getIsCancelled() == false && position.getIsDraftMode() == false);
 
 			Actor loggedActor = this.actorService.loggedActor();
 			Boolean sameActorLogged;
@@ -506,7 +508,6 @@ public class AnonymousController extends AbstractController {
 			return new ModelAndView("redirect:/");
 		}
 	}
-
 	@RequestMapping(value = "/attachement/list", method = RequestMethod.GET)
 	public ModelAndView listAttachement(@RequestParam int problemId, HttpServletRequest request) {
 		try {
@@ -555,6 +556,7 @@ public class AnonymousController extends AbstractController {
 			allApplications = this.applicationService.getApplicationsCompany(positionId);
 			Actor actor = this.positionService.getActorWithPosition(positionId);
 			Position position = this.positionService.findOne(positionId);
+			Assert.isTrue(position.getIsCancelled() == false && position.getIsDraftMode() == false);
 			Actor loggedActor = this.actorService.loggedActor();
 			Boolean sameActorLogged;
 
@@ -597,6 +599,7 @@ public class AnonymousController extends AbstractController {
 			finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
 			Position position = this.positionService.findOne(positionId);
 			Assert.isTrue(position.getAudits().containsAll(finalAudits));
+			Assert.isTrue(position.getIsCancelled() == false && position.getIsDraftMode() == false);
 
 			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
 				result = new ModelAndView("redirect:/anonymous/position/list.do");
@@ -631,6 +634,7 @@ public class AnonymousController extends AbstractController {
 			Company company = this.companyService.companyOfRespectivePosition(positionId);
 			Actor actor = this.positionService.getActorWithPosition(positionId);
 			Position position = this.positionService.findOne(positionId);
+			Assert.isTrue(position.getIsCancelled() == false && position.getIsDraftMode() == false);
 			Boolean score = true;
 
 			Actor loggedActor = this.actorService.loggedActor();
@@ -761,7 +765,8 @@ public class AnonymousController extends AbstractController {
 			filteredPositions = this.positionService.positionsFiltered(word);
 
 			Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
-			for (Position p : filteredPositions)
+			for (Position p : filteredPositions) {
+				Assert.isTrue(p.getIsCancelled() == false && p.getIsDraftMode() == false);
 				if (!p.getSponsorships().isEmpty()) {
 					Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
 					if (this.actorService.loggedAsActorBoolean())
@@ -769,6 +774,7 @@ public class AnonymousController extends AbstractController {
 							this.sponsorshipService.sendMessageToProvider(spo.getProvider());
 					randomSpo.put(p.getId(), spo);
 				}
+			}
 
 			result = new ModelAndView("anonymous/filtered/positions");
 			result.addObject("publicPositions", filteredPositions);

@@ -35,6 +35,7 @@ public class ProblemController extends AbstractController {
 	public ModelAndView listProblems() {
 		try {
 			ModelAndView result;
+			Boolean assignable = true;
 
 			this.companyService.loggedAsCompany();
 
@@ -45,6 +46,7 @@ public class ProblemController extends AbstractController {
 			result = new ModelAndView("problem/company/list");
 			Boolean sameActorLogged = true;
 			result.addObject("problems", problems);
+			result.addObject("assignable", assignable);
 			result.addObject("sameActorLogged", sameActorLogged);
 			result.addObject("requestURI", "problem/company/list.do");
 
