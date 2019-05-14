@@ -88,6 +88,12 @@
 </jstl:if>
 </security:authorize>
 
+<security:authorize access="hasRole('AUDITOR')">
+<jstl:if test="${assignable}">
+<a href="position/auditor/listAssignablePositions.do"><spring:message code="position.back" /></a>
+</jstl:if>
+</security:authorize>
+
 
 
 

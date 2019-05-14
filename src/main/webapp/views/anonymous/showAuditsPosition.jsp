@@ -34,7 +34,7 @@
 
 <br />
 	<jstl:choose>
-		<jstl:when test="${!assignable}">
+		<jstl:when test="${assignable}">
 			<a href="anonymous/position/list.do"><spring:message code="position.backToPublicData" /></a>
 		</jstl:when>
 		
