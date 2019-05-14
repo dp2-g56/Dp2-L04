@@ -77,18 +77,20 @@
 		<property name="welcomeMessageEnglish" value="Welcome to Acme rookie !We´re IT rookie´s favourite job marketplace!" />
 		<property name="welcomeMessageSpanish" value="¡Bienvenidos a Acme Rookie ! ¡Somos el mercado de trabajo favorito de los profesionales de las TICs!" />
 		
-		<property name="systemName" value="Acme Rookie " />
-		<property name="imageURL" value="https://i.imgur.com/7b8lu4b.pngby" />
+		<property name="systemName" value="Acme Rookies" />
+		<property name="imageURL" value="https://i.imgur.com/PX5WdRH.png" />
 
 		<property name="VAT" value="21" />
 		<property name="fare" value="1" />
 		
+		<property name="isRebrandingBroadcasted" value="false" />
+		
 	</bean>
 
 	<bean id="userAccount1" class="security.UserAccount">
-		<property name="username" value="admin" />
+		<property name="username" value="admin1" />
 		<property name="password"
-			value="21232f297a57a5a743894a0e4a801fc3" />
+			value="e00cf25ad42683b3df678c61f42c6bda" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
@@ -99,7 +101,7 @@
 		<property name="isNotLocked" value="True" />
 	</bean>
 	
-	<bean id="admin" class="domain.Admin">
+	<bean id="admin1" class="domain.Admin">
 		<property name="name" value="admin" />
 		<property name="surname" value="admin surname" />
 		<property name="VATNumber" value="SE123456789" />
