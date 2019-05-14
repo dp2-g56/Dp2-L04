@@ -166,12 +166,18 @@
 				<jstl:out value="${newMiscellaneousDataMessage}"/>
 			</a>
 		</p>
+			</br>
 	</security:authorize>
 	
+	</br>
 	<security:authorize access="hasRole('ROOKIE')">
 		<acme:cancel url="/curriculum/rookie/list.do" code="rookie.back" /> 
 	</security:authorize>
-	
+	</br>
+	<security:authorize access="hasRole('COMPANY')">
+		<a href="position/company/list.do"><spring:message code="position.back" /></a>
+	</security:authorize>
+	</br>
   	<security:authorize access="hasAnyRole('ROLE_ANONYMOUS')">
   		<a href="anonymous/position/list.do"><spring:message code="position.back" /></a>
   	</security:authorize>
