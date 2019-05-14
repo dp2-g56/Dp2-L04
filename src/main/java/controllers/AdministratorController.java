@@ -64,90 +64,98 @@ public class AdministratorController extends AbstractController {
 
 	@RequestMapping(value = "/administrator/computeScore", method = RequestMethod.GET)
 	public ModelAndView computeScore() {
-		ModelAndView result;
-
-		this.adminService.computeScore();
-		SimpleDateFormat formatter;
-		String moment;
-		Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
-
-		formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		moment = formatter.format(new Date());
-
-		String welcomeMessage;
-		String systemName = this.configurationService.getConfiguration().getSystemName();
-		UserAccount userAccount;
-		String username;
-
 		try {
-			userAccount = LoginService.getPrincipal();
-			username = userAccount.getUsername();
-		} catch (Exception oops) {
-			username = "";
+			ModelAndView result;
+
+			this.adminService.computeScore();
+			SimpleDateFormat formatter;
+			String moment;
+			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
+
+			formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			moment = formatter.format(new Date());
+
+			String welcomeMessage;
+			String systemName = this.configurationService.getConfiguration().getSystemName();
+			UserAccount userAccount;
+			String username;
+
+			try {
+				userAccount = LoginService.getPrincipal();
+				username = userAccount.getUsername();
+			} catch (Exception oops) {
+				username = "";
+			}
+
+			String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
+			if (locale.equals("EN"))
+				welcomeMessage = this.configurationService.getConfiguration().getWelcomeMessageEnglish();
+			else
+				welcomeMessage = this.configurationService.getConfiguration().getWelcomeMessageSpanish();
+
+			result = new ModelAndView("welcome/index");
+			result.addObject("username", username);
+			result.addObject("isMessageBroadcasted", isMessageBroadcasted);
+			result.addObject("moment", moment);
+			result.addObject("welcomeMessage", welcomeMessage);
+			result.addObject("systemName", systemName);
+			result.addObject("confirmation", true);
+
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-
-		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
-		if (locale.equals("EN")) {
-			welcomeMessage = this.configurationService.getConfiguration().getWelcomeMessageEnglish();
-		} else {
-			welcomeMessage = this.configurationService.getConfiguration().getWelcomeMessageSpanish();
-		}
-
-		result = new ModelAndView("welcome/index");
-		result.addObject("username", username);
-		result.addObject("isMessageBroadcasted", isMessageBroadcasted);
-		result.addObject("moment", moment);
-		result.addObject("welcomeMessage", welcomeMessage);
-		result.addObject("systemName", systemName);
-		result.addObject("confirmation", true);
-
-		return result;
 	}
 
 	@RequestMapping(value = "/administrator/create", method = RequestMethod.GET)
 	public ModelAndView createAdmin() {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		FormObjectAdmin formObjectAdmin = new FormObjectAdmin();
-		formObjectAdmin.setTermsAndConditions(false);
+			FormObjectAdmin formObjectAdmin = new FormObjectAdmin();
+			formObjectAdmin.setTermsAndConditions(false);
 
-		result = this.createEditModelAndView(formObjectAdmin);
+			result = this.createEditModelAndView(formObjectAdmin);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/administrator/create", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@Valid FormObjectAdmin formObjectAdmin, BindingResult binding) {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			Admin admin = new Admin();
+			admin = this.adminService.createAdmin();
 
-		Admin admin = new Admin();
-		admin = this.adminService.createAdmin();
+			Configuration configuration = this.configurationService.getConfiguration();
+			String prefix = configuration.getSpainTelephoneCode();
 
-		Configuration configuration = this.configurationService.getConfiguration();
-		String prefix = configuration.getSpainTelephoneCode();
+			//Reconstruccion
+			admin = this.adminService.reconstruct(formObjectAdmin, binding);
 
-		//Reconstruccion
-		admin = this.adminService.reconstruct(formObjectAdmin, binding);
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(formObjectAdmin);
+			else
+				try {
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(formObjectAdmin);
-		} else {
-			try {
+					if (admin.getPhone().matches("([0-9]{4,})$"))
+						admin.setPhone(prefix + admin.getPhone());
+					this.adminService.saveNewAdmin(admin);
 
-				if (admin.getPhone().matches("([0-9]{4,})$")) {
-					admin.setPhone(prefix + admin.getPhone());
+					result = new ModelAndView("redirect:/");
+
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(formObjectAdmin, "company.commit.error");
+
 				}
-				this.adminService.saveNewAdmin(admin);
-
-				result = new ModelAndView("redirect:/");
-
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(formObjectAdmin, "company.commit.error");
-
-			}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-		return result;
 	}
 
 	protected ModelAndView createEditModelAndView(FormObjectAdmin formObjectAdmin) {
@@ -176,92 +184,109 @@ public class AdministratorController extends AbstractController {
 	//LIST SUSPICIOUS ACTORS
 	@RequestMapping(value = "/suspicious/list", method = RequestMethod.GET)
 	public ModelAndView suspicious() {
-		ModelAndView result;
-		List<Actor> actors = new ArrayList<Actor>();
-		actors = this.actorService.findAll();
+		try {
+			ModelAndView result;
+			List<Actor> actors = new ArrayList<Actor>();
+			actors = this.actorService.findAll();
 
-		result = new ModelAndView("suspicious/administrator/list");
+			result = new ModelAndView("suspicious/administrator/list");
 
-		result.addObject("actors", actors);
+			result.addObject("actors", actors);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 
 	}
 
 	//BAN
 	@RequestMapping(value = "/suspicious/ban", method = RequestMethod.GET)
 	public ModelAndView ban(@RequestParam int actorId) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Actor actor;
-		actor = this.actorService.findOne(actorId);
+			Actor actor;
+			actor = this.actorService.findOne(actorId);
 
-		this.adminService.banSuspiciousActor(actor);
-		result = new ModelAndView("redirect:list.do");
+			this.adminService.banSuspiciousActor(actor);
+			result = new ModelAndView("redirect:list.do");
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 
 	}
 
 	//UNBAN
 	@RequestMapping(value = "/suspicious/unban", method = RequestMethod.GET)
 	public ModelAndView unban(@RequestParam int actorId) {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		Actor actor;
-		actor = this.actorService.findOne(actorId);
+			Actor actor;
+			actor = this.actorService.findOne(actorId);
 
-		this.adminService.unBanSuspiciousActor(actor);
-		result = new ModelAndView("redirect:list.do");
+			this.adminService.unBanSuspiciousActor(actor);
+			result = new ModelAndView("redirect:list.do");
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 
 	}
 
 	@RequestMapping(value = "/auditor/create", method = RequestMethod.GET)
 	public ModelAndView createAuditor() {
-		ModelAndView result;
+		try {
+			ModelAndView result;
 
-		FormObjectAuditor formObjectAuditor = new FormObjectAuditor();
-		formObjectAuditor.setTermsAndConditions(false);
+			FormObjectAuditor formObjectAuditor = new FormObjectAuditor();
+			formObjectAuditor.setTermsAndConditions(false);
 
-		result = this.createEditModelAndView(formObjectAuditor);
+			result = this.createEditModelAndView(formObjectAuditor);
 
-		return result;
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
+		}
 	}
 
 	@RequestMapping(value = "/auditor/create", method = RequestMethod.POST, params = "save")
 	public ModelAndView saveAuditor(@Valid FormObjectAuditor formObjectAuditor, BindingResult binding) {
+		try {
+			ModelAndView result;
 
-		ModelAndView result;
+			Auditor auditor = new Auditor();
+			auditor = this.auditorService.createAuditor();
 
-		Auditor auditor = new Auditor();
-		auditor = this.auditorService.createAuditor();
+			Configuration configuration = this.configurationService.getConfiguration();
+			String prefix = configuration.getSpainTelephoneCode();
 
-		Configuration configuration = this.configurationService.getConfiguration();
-		String prefix = configuration.getSpainTelephoneCode();
+			//Reconstruccion
+			auditor = this.auditorService.reconstruct(formObjectAuditor, binding);
 
-		//Reconstruccion
-		auditor = this.auditorService.reconstruct(formObjectAuditor, binding);
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(formObjectAuditor);
+			else
+				try {
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(formObjectAuditor);
-		} else {
-			try {
+					if (auditor.getPhone().matches("([0-9]{4,})$"))
+						auditor.setPhone(prefix + auditor.getPhone());
+					this.auditorService.saveNewAuditor(auditor);
 
-				if (auditor.getPhone().matches("([0-9]{4,})$")) {
-					auditor.setPhone(prefix + auditor.getPhone());
+					result = new ModelAndView("redirect:/");
+
+				} catch (Throwable oops) {
+					result = this.createEditModelAndView(formObjectAuditor, "company.commit.error");
+
 				}
-				this.auditorService.saveNewAuditor(auditor);
-
-				result = new ModelAndView("redirect:/");
-
-			} catch (Throwable oops) {
-				result = this.createEditModelAndView(formObjectAuditor, "company.commit.error");
-
-			}
+			return result;
+		} catch (Throwable oops) {
+			return new ModelAndView("redirect:/");
 		}
-		return result;
 	}
 
 	protected ModelAndView createEditModelAndView(FormObjectAuditor formObjectAuditor) {
