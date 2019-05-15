@@ -54,7 +54,7 @@ public class ItemProviderController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/listLinks", method = RequestMethod.GET)
-	public ModelAndView listLinks(@RequestParam String itemId) {
+	public ModelAndView listLinks(@RequestParam(required = false) String itemId) {
 		ModelAndView result;
 
 		try {
@@ -73,7 +73,7 @@ public class ItemProviderController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/listPictures", method = RequestMethod.GET)
-	public ModelAndView listPictures(@RequestParam String itemId) {
+	public ModelAndView listPictures(@RequestParam(required = false) String itemId) {
 		ModelAndView result;
 
 		try {
@@ -93,7 +93,7 @@ public class ItemProviderController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deleteItem(@RequestParam String itemId) {
+	public ModelAndView deleteItem(@RequestParam(required = false) String itemId) {
 		ModelAndView result;
 
 		try {
@@ -129,7 +129,7 @@ public class ItemProviderController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam String itemId) {
+	public ModelAndView edit(@RequestParam(required = false) String itemId) {
 		ModelAndView result;
 
 		try {

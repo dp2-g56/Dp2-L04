@@ -34,7 +34,7 @@ public class PositionRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/listSkills", method = RequestMethod.GET)
-	public ModelAndView listSkills(@RequestParam String positionId) {
+	public ModelAndView listSkills(@RequestParam(required = false) String positionId) {
 		try {
 			ModelAndView result;
 
@@ -57,7 +57,7 @@ public class PositionRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/listTechnologies", method = RequestMethod.GET)
-	public ModelAndView listTechnologies(@RequestParam String positionId) {
+	public ModelAndView listTechnologies(@RequestParam(required = false) String positionId) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(positionId));
 			int positionIdInt = Integer.parseInt(positionId);
@@ -79,7 +79,7 @@ public class PositionRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
-	public ModelAndView listAudits(@RequestParam String positionId) {
+	public ModelAndView listAudits(@RequestParam(required = false) String positionId) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(positionId));
 			int positionIdInt = Integer.parseInt(positionId);

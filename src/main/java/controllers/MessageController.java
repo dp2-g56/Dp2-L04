@@ -119,7 +119,7 @@ public class MessageController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView delete(@RequestParam String rowId) {
+	public ModelAndView delete(@RequestParam(required = false) String rowId) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(rowId));
 			int rowIdInt = Integer.parseInt(rowId);

@@ -95,7 +95,7 @@ public class PositionAuditorController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
-	public ModelAndView listAudits(@RequestParam String positionId) {
+	public ModelAndView listAudits(@RequestParam(required = false) String positionId) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(positionId));
@@ -128,7 +128,7 @@ public class PositionAuditorController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
-	public ModelAndView listProblems(@RequestParam String positionId, HttpServletRequest request) {
+	public ModelAndView listProblems(@RequestParam(required = false) String positionId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(positionId));
@@ -173,7 +173,7 @@ public class PositionAuditorController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
-	public ModelAndView listAplications(@RequestParam String positionId, HttpServletRequest request) {
+	public ModelAndView listAplications(@RequestParam(required = false) String positionId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(positionId));
@@ -213,7 +213,7 @@ public class PositionAuditorController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/listOne", method = RequestMethod.GET)
-	public ModelAndView listCompany(@RequestParam String positionId, HttpServletRequest request) {
+	public ModelAndView listCompany(@RequestParam(required = false) String positionId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(positionId));

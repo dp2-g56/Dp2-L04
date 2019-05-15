@@ -39,22 +39,25 @@ public class EducationDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
-	public ModelAndView newEducationData(@RequestParam int curriculumId) {
+	public ModelAndView newEducationData(@RequestParam(required = false) String curriculumId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(curriculumId));
+			int curriculumIdInt = Integer.parseInt(curriculumId);
+
 			ModelAndView result;
 
 			EducationData educationData = new EducationData();
 
-			result = this.createEditModelAndView("rookie/createEducationData", educationData, curriculumId);
+			result = this.createEditModelAndView("rookie/createEducationData", educationData, curriculumIdInt);
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/curriculum/rookie/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView editEducationData(@RequestParam String educationDataId) {
+	public ModelAndView editEducationData(@RequestParam(required = false) String educationDataId) {
 		ModelAndView result;
 
 		try {
@@ -75,7 +78,7 @@ public class EducationDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deleteEducationData(@RequestParam String educationDataId) {
+	public ModelAndView deleteEducationData(@RequestParam(required = false) String educationDataId) {
 		ModelAndView result = null;
 
 		try {

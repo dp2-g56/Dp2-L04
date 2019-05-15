@@ -427,7 +427,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/curriculum/list", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam String applicationId, HttpServletRequest request) {
+	public ModelAndView show(@RequestParam(required = false) String applicationId, HttpServletRequest request) {
 		ModelAndView result;
 
 		try {
@@ -465,7 +465,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
-	public ModelAndView listProblems(@RequestParam String positionId, HttpServletRequest request) {
+	public ModelAndView listProblems(@RequestParam(required = false) String positionId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(positionId));
@@ -517,7 +517,7 @@ public class AnonymousController extends AbstractController {
 		}
 	}
 	@RequestMapping(value = "/attachement/list", method = RequestMethod.GET)
-	public ModelAndView listAttachement(@RequestParam String problemId, HttpServletRequest request) {
+	public ModelAndView listAttachement(@RequestParam(required = false) String problemId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(problemId));
@@ -552,7 +552,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
-	public ModelAndView listAplications(@RequestParam String positionId, HttpServletRequest request) {
+	public ModelAndView listAplications(@RequestParam(required = false) String positionId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(positionId));
@@ -599,7 +599,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
-	public ModelAndView listAudits(@RequestParam String positionId, HttpServletRequest request) {
+	public ModelAndView listAudits(@RequestParam(required = false) String positionId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(positionId));
@@ -638,7 +638,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/listOne", method = RequestMethod.GET)
-	public ModelAndView listCompany(@RequestParam String positionId, HttpServletRequest request) {
+	public ModelAndView listCompany(@RequestParam(required = false) String positionId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(positionId));
@@ -715,7 +715,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/positions", method = RequestMethod.GET)
-	public ModelAndView listPositionsOfCompanies(@RequestParam String idCompany, HttpServletRequest request) {
+	public ModelAndView listPositionsOfCompanies(@RequestParam(required = false) String idCompany, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(idCompany));
@@ -876,7 +876,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/item/listLinks", method = RequestMethod.GET)
-	public ModelAndView listLinks(@RequestParam String itemId, HttpServletRequest request) {
+	public ModelAndView listLinks(@RequestParam(required = false) String itemId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(itemId));
@@ -902,7 +902,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/item/listPictures", method = RequestMethod.GET)
-	public ModelAndView listPictures(@RequestParam String itemId, HttpServletRequest request) {
+	public ModelAndView listPictures(@RequestParam(required = false) String itemId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(itemId));
@@ -927,7 +927,7 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/provider/listOne", method = RequestMethod.GET)
-	public ModelAndView listProvider(@RequestParam String providerId, HttpServletRequest request) {
+	public ModelAndView listProvider(@RequestParam(required = false) String providerId, HttpServletRequest request) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(providerId));

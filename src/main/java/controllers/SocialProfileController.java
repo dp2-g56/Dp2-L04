@@ -124,7 +124,7 @@ public class SocialProfileController extends AbstractController {
 	// ---------------------------EDIT SOCIAL
 	// PROFILE--------------------------------------
 	@RequestMapping(value = "/socialProfile/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam String socialProfileId) {
+	public ModelAndView edit(@RequestParam(required = false) String socialProfileId) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(socialProfileId));
 			int socialProfileIdInt = Integer.parseInt(socialProfileId);

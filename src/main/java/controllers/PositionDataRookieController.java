@@ -38,12 +38,15 @@ public class PositionDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
-	public ModelAndView newPositionData(@RequestParam int curriculumId) {
+	public ModelAndView newPositionData(@RequestParam(required = false) String curriculumId) {
 		ModelAndView result;
 		try {
+			Assert.isTrue(StringUtils.isNumeric(curriculumId));
+			int curriculumIdInt = Integer.parseInt(curriculumId);
+
 			PositionData positionData = new PositionData();
 
-			result = this.createEditModelAndView("rookie/createPositionData", positionData, curriculumId);
+			result = this.createEditModelAndView("rookie/createPositionData", positionData, curriculumIdInt);
 
 			return result;
 		} catch (Throwable oops) {
@@ -52,7 +55,7 @@ public class PositionDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView editPositionData(@RequestParam String positionDataId) {
+	public ModelAndView editPositionData(@RequestParam(required = false) String positionDataId) {
 		ModelAndView result;
 
 		try {
@@ -72,7 +75,7 @@ public class PositionDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deletePositionData(@RequestParam String positionDataId) {
+	public ModelAndView deletePositionData(@RequestParam(required = false) String positionDataId) {
 		ModelAndView result = null;
 
 		try {

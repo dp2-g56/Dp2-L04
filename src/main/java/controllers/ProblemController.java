@@ -24,10 +24,11 @@ import domain.Problem;
 public class ProblemController extends AbstractController {
 
 	@Autowired
-	private ProblemService problemService;
+	private ProblemService	problemService;
 
 	@Autowired
-	private CompanyService companyService;
+	private CompanyService	companyService;
+
 
 	public ProblemController() {
 		super();
@@ -59,7 +60,7 @@ public class ProblemController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/listAttachments", method = RequestMethod.GET)
-	public ModelAndView listAttachments(@RequestParam String problemId) {
+	public ModelAndView listAttachments(@RequestParam(required = false) String problemId) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(problemId));
 			int problemIdInt = Integer.parseInt(problemId);
@@ -81,7 +82,7 @@ public class ProblemController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/addAttachment", method = RequestMethod.GET)
-	public ModelAndView addAttachment(@RequestParam String problemId) {
+	public ModelAndView addAttachment(@RequestParam(required = false) String problemId) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(problemId));
 			int problemIdInt = Integer.parseInt(problemId);
@@ -114,7 +115,7 @@ public class ProblemController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/edit", method = RequestMethod.GET)
-	public ModelAndView editProblem(@RequestParam String problemId) {
+	public ModelAndView editProblem(@RequestParam(required = false) String problemId) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(problemId));
 			int problemIdInt = Integer.parseInt(problemId);
@@ -188,7 +189,7 @@ public class ProblemController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/addAttachment", method = RequestMethod.POST, params = "save")
-	public ModelAndView addAttachment(@RequestParam String problemId, String attachment) {
+	public ModelAndView addAttachment(@RequestParam(required = false) String problemId, String attachment) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(problemId));
 			int problemIdInt = Integer.parseInt(problemId);
@@ -241,7 +242,7 @@ public class ProblemController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/deleteAttachment", method = RequestMethod.GET)
-	public ModelAndView copy(@RequestParam String problemId, @RequestParam String attachmentNumber) {
+	public ModelAndView copy(@RequestParam(required = false) String problemId, @RequestParam(required = false) String attachmentNumber) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(problemId));
 			int problemIdInt = Integer.parseInt(problemId);
