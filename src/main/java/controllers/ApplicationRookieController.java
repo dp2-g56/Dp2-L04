@@ -4,9 +4,11 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -136,13 +138,17 @@ public class ApplicationRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView editApplication(@RequestParam int applicationId) {
+	public ModelAndView editApplication(@RequestParam String applicationId) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(applicationId));
+			int applicationIdInt = Integer.parseInt(applicationId);
+
 			ModelAndView result;
 
 			Rookie h = this.rookieService.loggedRookie();
 
-			Application application = this.applicationService.findOne(applicationId);
+			Application application = this.applicationService.findOne(applicationIdInt);
 
 			if (h.getApplications().contains(application) && application.getStatus().equals(Status.PENDING))
 				result = this.createEditModelAndView(application);
@@ -151,7 +157,7 @@ public class ApplicationRookieController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/application/rookie/list.do");
 		}
 	}
 

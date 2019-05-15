@@ -4,6 +4,7 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -53,7 +54,7 @@ public class MessageController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/message/actor/list.do");
 		}
 	}
 
@@ -69,7 +70,7 @@ public class MessageController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/message/actor/list.do");
 		}
 	}
 
@@ -95,7 +96,7 @@ public class MessageController extends AbstractController {
 				}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/message/actor/list.do");
 		}
 	}
 
@@ -113,18 +114,21 @@ public class MessageController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/message/actor/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView delete(@RequestParam int rowId) {
+	public ModelAndView delete(@RequestParam String rowId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(rowId));
+			int rowIdInt = Integer.parseInt(rowId);
+
 			this.actorService.loggedAsActor();
 			UserAccount userAccount = LoginService.getPrincipal();
 			ModelAndView result;
 
-			Message message = this.messageService.findOne(rowId);
+			Message message = this.messageService.findOne(rowIdInt);
 
 			if (!(userAccount.getUsername().equals(message.getSender()) || userAccount.getUsername().equals(message.getReceiver())))
 				return this.list();
@@ -139,7 +143,7 @@ public class MessageController extends AbstractController {
 			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/message/actor/list.do");
 		}
 	}
 

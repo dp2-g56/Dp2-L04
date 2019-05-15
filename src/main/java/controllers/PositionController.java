@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -102,21 +103,24 @@ public class PositionController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 
 	// --------------------------LISTA DE PROBLEMAS----------------------------
 	// ------------------------------------------------------------------------
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam int positionId) {
+	public ModelAndView list(@RequestParam String positionId) {
 		ModelAndView result;
 		try {
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
+
 			Company loggedCompany = this.companyService.loggedCompany();
 
 			List<Problem> allProblems = new ArrayList<>();
 
-			Position position = this.positionService.findOne(positionId);
+			Position position = this.positionService.findOne(positionIdInt);
 
 			allProblems = position.getProblems();
 
@@ -124,30 +128,33 @@ public class PositionController extends AbstractController {
 
 			result.addObject("allProblems", allProblems);
 			result.addObject("requestURI", "problem/company/list.do");
-			result.addObject("positionId", positionId);
+			result.addObject("positionId", positionIdInt);
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 
 	// --------------------------LISTA DE APPLICATIONS----------------------------
 	// ---------------------------------------------------------------------------
 	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
-	public ModelAndView listApplication(@RequestParam int positionId) {
+	public ModelAndView listApplication(@RequestParam String positionId) {
 		ModelAndView result;
 		try {
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
+
 			Company loggedCompany = this.companyService.loggedCompany();
 
 			List<Application> allApplications = new ArrayList<>();
 
-			Position position = this.positionService.findOne(positionId);
+			Position position = this.positionService.findOne(positionIdInt);
 
 			if (position.getIsDraftMode())
 				return this.list();
 
-			allApplications = this.applicationService.getApplicationsCompany(positionId);
+			allApplications = this.applicationService.getApplicationsCompany(positionIdInt);
 			Actor actor = this.positionService.getActorWithPosition(position.getId());
 
 			Actor loggedActor = this.actorService.loggedActor();
@@ -163,11 +170,11 @@ public class PositionController extends AbstractController {
 			result.addObject("allApplications", allApplications);
 			result.addObject("sameActorLogged", sameActorLogged);
 			result.addObject("requestURI", "application/company/list.do");
-			result.addObject("positionId", positionId);
+			result.addObject("positionId", positionIdInt);
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 
@@ -175,18 +182,20 @@ public class PositionController extends AbstractController {
 	// CURRICULUM------------------------------------
 	// ---------------------------------------------------------------------------------
 	@RequestMapping(value = "/curriculum/list", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam int applicationId) {
+	public ModelAndView show(@RequestParam String applicationId) {
 		ModelAndView result;
 
 		try {
+			Assert.isTrue(StringUtils.isNumeric(applicationId));
+			int applicationIdInt = Integer.parseInt(applicationId);
 
 			Company loggedCompany = this.companyService.loggedCompany();
-			Application application = this.applicationService.findOne(applicationId);
+			Application application = this.applicationService.findOne(applicationIdInt);
 			Position position = application.getPosition();
 			if (!loggedCompany.getPositions().contains(position))
 				return this.list();
 
-			Application application2 = this.applicationService.findOneWithAssert(applicationId);
+			Application application2 = this.applicationService.findOneWithAssert(applicationIdInt);
 			Curriculum curriculum = application2.getCurriculum();
 
 			result = new ModelAndView("company/curriculum");
@@ -208,11 +217,14 @@ public class PositionController extends AbstractController {
 	// ---------------------------------------------------------------------------------
 	// ACCEPT APPLICATION
 	@RequestMapping(value = "/application/accept", method = RequestMethod.GET)
-	public ModelAndView acceptApplication(@RequestParam int applicationId) {
+	public ModelAndView acceptApplication(@RequestParam String applicationId) {
 		ModelAndView result;
 		try {
+			Assert.isTrue(StringUtils.isNumeric(applicationId));
+			int applicationIdInt = Integer.parseInt(applicationId);
+
 			Application application;
-			application = this.applicationService.findOne(applicationId);
+			application = this.applicationService.findOne(applicationIdInt);
 			Position position = application.getPosition();
 			Company company = this.companyService.loggedCompany();
 			List<Position> positions = company.getPositions();
@@ -233,11 +245,14 @@ public class PositionController extends AbstractController {
 
 	// REJECT APPLICATION
 	@RequestMapping(value = "/application/reject", method = RequestMethod.GET)
-	public ModelAndView rejectApplication(@RequestParam int applicationId) {
+	public ModelAndView rejectApplication(@RequestParam String applicationId) {
 		ModelAndView result;
 		try {
+			Assert.isTrue(StringUtils.isNumeric(applicationId));
+			int applicationIdInt = Integer.parseInt(applicationId);
+
 			Application application;
-			application = this.applicationService.findOne(applicationId);
+			application = this.applicationService.findOne(applicationIdInt);
 			Position position = application.getPosition();
 			Company company = this.companyService.loggedCompany();
 			List<Position> positions = company.getPositions();
@@ -259,15 +274,19 @@ public class PositionController extends AbstractController {
 	// --------------------------LISTA DE ATTACHEMENTS----------------------------
 	// ---------------------------------------------------------------------------
 	@RequestMapping(value = "/attachement/list", method = RequestMethod.GET)
-	public ModelAndView listAttachement(@RequestParam int problemId) {
+	public ModelAndView listAttachement(@RequestParam String problemId) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(problemId));
+			int problemIdInt = Integer.parseInt(problemId);
+
 			ModelAndView result;
 
 			List<String> list;
 
 			Company loggedCompany = this.companyService.loggedCompany();
 
-			Problem problem = this.problemService.findOne(problemId);
+			Problem problem = this.problemService.findOne(problemIdInt);
 
 			if (!loggedCompany.getProblems().contains(problem))
 				return this.list();
@@ -278,11 +297,11 @@ public class PositionController extends AbstractController {
 
 			result.addObject("list", list);
 			result.addObject("requestURI", "problemPosition/company/attachement/list.do");
-			result.addObject("problemId", problemId);
+			result.addObject("problemId", problemIdInt);
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 
@@ -290,15 +309,18 @@ public class PositionController extends AbstractController {
 	// ---------------------------------------------------------------------------
 	// LIST
 	@RequestMapping(value = "/technology/list", method = RequestMethod.GET)
-	public ModelAndView listTech(@RequestParam int positionId) {
+	public ModelAndView listTech(@RequestParam String positionId) {
 
 		ModelAndView result;
 		try {
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
+
 			List<String> list;
 
 			Company loggedCompany = this.companyService.loggedCompany();
 
-			Position position = this.positionService.findOne(positionId);
+			Position position = this.positionService.findOne(positionIdInt);
 
 			if (!loggedCompany.getPositions().contains(position))
 				return this.list();
@@ -309,23 +331,25 @@ public class PositionController extends AbstractController {
 
 			result.addObject("list", list);
 			result.addObject("requestURI", "position/company/technology/list.do");
-			result.addObject("positionId", positionId);
+			result.addObject("positionId", positionIdInt);
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
-	public ModelAndView listAudits(@RequestParam int positionId) {
+	public ModelAndView listAudits(@RequestParam String positionId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
 
 			ModelAndView result;
 
 			List<Audit> finalAudits = new ArrayList<Audit>();
-			finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
-			Position position = this.positionService.findOne(positionId);
+			finalAudits = this.auditService.getFinalAuditsByPosition(positionIdInt);
+			Position position = this.positionService.findOne(positionIdInt);
 			Assert.isTrue(position.getAudits().containsAll(finalAudits));
 
 			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
@@ -335,13 +359,13 @@ public class PositionController extends AbstractController {
 
 				result.addObject("finalAudits", finalAudits);
 				result.addObject("requestURI", "position/company/audit/list.do");
-				result.addObject("positionId", positionId);
+				result.addObject("positionId", positionIdInt);
 
 			}
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 
@@ -349,15 +373,18 @@ public class PositionController extends AbstractController {
 	// ----------------------------------------------------------------------
 	// LIST
 	@RequestMapping(value = "/skill/list", method = RequestMethod.GET)
-	public ModelAndView listSkill(@RequestParam int positionId) {
+	public ModelAndView listSkill(@RequestParam String positionId) {
 
 		ModelAndView result;
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
 			List<String> list;
 
 			Company loggedCompany = this.companyService.loggedCompany();
 
-			Position position = this.positionService.findOne(positionId);
+			Position position = this.positionService.findOne(positionIdInt);
 
 			if (!loggedCompany.getPositions().contains(position))
 				return this.list();
@@ -368,11 +395,11 @@ public class PositionController extends AbstractController {
 
 			result.addObject("list", list);
 			result.addObject("requestURI", "position/company/skill/list.do");
-			result.addObject("positionId", positionId);
+			result.addObject("positionId", positionIdInt);
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 
@@ -390,17 +417,20 @@ public class PositionController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 
 	// EDIT POSITION
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam int positionId) {
+	public ModelAndView edit(@RequestParam String positionId) {
 		ModelAndView result;
 		try {
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
+
 			Position position;
-			position = this.positionService.findOne(positionId);
+			position = this.positionService.findOne(positionIdInt);
 			Company company = this.companyService.loggedCompany();
 
 			if (company.getPositions().contains(position)) {
@@ -411,7 +441,7 @@ public class PositionController extends AbstractController {
 				if (!(company.getPositions().contains(position)))
 					return this.list();
 
-				FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox = this.positionService.prepareFormObjectPositionProblemCheckbox(positionId);
+				FormObjectPositionProblemCheckbox formObjectPositionProblemCheckbox = this.positionService.prepareFormObjectPositionProblemCheckbox(positionIdInt);
 
 				result = this.createEditModelAndView(formObjectPositionProblemCheckbox);
 
@@ -420,17 +450,20 @@ public class PositionController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 
 	// CANCEL POSITION
 	@RequestMapping(value = "/cancel", method = RequestMethod.GET)
-	public ModelAndView cancel(@RequestParam int positionId) {
+	public ModelAndView cancel(@RequestParam String positionId) {
 		ModelAndView result;
 		try {
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
+
 			Position position;
-			position = this.positionService.findOne(positionId);
+			position = this.positionService.findOne(positionIdInt);
 			Company company = this.companyService.loggedCompany();
 
 			if (position.getIsDraftMode() || position.getIsCancelled())
@@ -443,7 +476,7 @@ public class PositionController extends AbstractController {
 
 			return this.list();
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 
@@ -484,7 +517,7 @@ public class PositionController extends AbstractController {
 				}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/company/list.do");
 		}
 	}
 

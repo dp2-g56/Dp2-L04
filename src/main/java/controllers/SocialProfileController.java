@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -45,28 +46,29 @@ import forms.FormObjectEditRookie;
 public class SocialProfileController extends AbstractController {
 
 	@Autowired
-	private ActorService actorService;
+	private ActorService			actorService;
 
 	@Autowired
-	private SocialProfileService socialProfileService;
+	private SocialProfileService	socialProfileService;
 
 	@Autowired
-	private CompanyService companyService;
+	private CompanyService			companyService;
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ConfigurationService	configurationService;
 
 	@Autowired
-	private AdminService adminService;
+	private AdminService			adminService;
 
 	@Autowired
-	private RookieService rookieService;
+	private RookieService			rookieService;
 
 	@Autowired
-	private AuditorService auditorService;
+	private AuditorService			auditorService;
 
 	@Autowired
-	private ProviderService providerService;
+	private ProviderService			providerService;
+
 
 	// -------------------------------------------------------------------
 	// ---------------------------LIST
@@ -114,7 +116,7 @@ public class SocialProfileController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/authenticated/showProfile.do");
 		}
 	}
 
@@ -122,8 +124,11 @@ public class SocialProfileController extends AbstractController {
 	// ---------------------------EDIT SOCIAL
 	// PROFILE--------------------------------------
 	@RequestMapping(value = "/socialProfile/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam int socialProfileId) {
+	public ModelAndView edit(@RequestParam String socialProfileId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(socialProfileId));
+			int socialProfileIdInt = Integer.parseInt(socialProfileId);
+
 			ModelAndView result;
 			SocialProfile socialProfile;
 
@@ -131,7 +136,7 @@ public class SocialProfileController extends AbstractController {
 
 			List<SocialProfile> socialProfiles = logged.getSocialProfiles();
 
-			socialProfile = this.socialProfileService.findOne(socialProfileId);
+			socialProfile = this.socialProfileService.findOne(socialProfileIdInt);
 			Assert.notNull(socialProfile);
 			result = this.createEditModelAndView(socialProfile);
 
@@ -139,7 +144,7 @@ public class SocialProfileController extends AbstractController {
 				result = this.list();
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/authenticated/showProfile.do");
 		}
 	}
 
@@ -178,7 +183,7 @@ public class SocialProfileController extends AbstractController {
 				}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/authenticated/showProfile.do");
 		}
 	}
 
@@ -201,7 +206,7 @@ public class SocialProfileController extends AbstractController {
 			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/authenticated/showProfile.do");
 		}
 	}
 	// ---------------------------------------------------------------------
@@ -257,7 +262,7 @@ public class SocialProfileController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/authenticated/showProfile.do");
 		}
 	}
 	// ---------------------------------------------------------------------
@@ -279,8 +284,7 @@ public class SocialProfileController extends AbstractController {
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
 			} else
 				try {
-					if (company.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
-							|| company.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+					if (company.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$") || company.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
 						this.companyService.updateCompany(company);
 					else if (company.getPhone().matches("([0-9]{4,})$")) {
 						company.setPhone(prefix + company.getPhone());
@@ -295,7 +299,7 @@ public class SocialProfileController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/authenticated/showProfile.do");
 		}
 	}
 
@@ -314,8 +318,7 @@ public class SocialProfileController extends AbstractController {
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
 			} else
 				try {
-					if (admin.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
-							|| admin.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+					if (admin.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$") || admin.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
 						this.adminService.save(admin);
 					else if (admin.getPhone().matches("([0-9]{4,})$")) {
 						admin.setPhone(prefix + admin.getPhone());
@@ -330,7 +333,7 @@ public class SocialProfileController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/authenticated/showProfile.do");
 		}
 	}
 
@@ -349,8 +352,7 @@ public class SocialProfileController extends AbstractController {
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
 			} else
 				try {
-					if (rookie.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
-							|| rookie.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+					if (rookie.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$") || rookie.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
 						this.rookieService.save(rookie);
 					else if (rookie.getPhone().matches("([0-9]{4,})$")) {
 						rookie.setPhone(prefix + rookie.getPhone());
@@ -365,7 +367,7 @@ public class SocialProfileController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/authenticated/showProfile.do");
 		}
 	}
 
@@ -384,8 +386,7 @@ public class SocialProfileController extends AbstractController {
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
 			} else
 				try {
-					if (auditor.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
-							|| auditor.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+					if (auditor.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$") || auditor.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
 						this.auditorService.save(auditor);
 					else if (auditor.getPhone().matches("([0-9]{4,})$")) {
 						auditor.setPhone(prefix + auditor.getPhone());
@@ -400,7 +401,7 @@ public class SocialProfileController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/authenticated/showProfile.do");
 		}
 	}
 
@@ -419,8 +420,7 @@ public class SocialProfileController extends AbstractController {
 				result.addObject("cardType", this.configurationService.getConfiguration().getCardType());
 			} else
 				try {
-					if (provider.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$")
-							|| provider.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
+					if (provider.getPhone().matches("(\\+[0-9]{1,3})(\\([0-9]{1,3}\\))([0-9]{4,})$") || provider.getPhone().matches("(\\+[0-9]{1,3})([0-9]{4,})$"))
 						this.providerService.updateProvider(provider);
 					else if (provider.getPhone().matches("([0-9]{4,})$")) {
 						provider.setPhone(prefix + provider.getPhone());
@@ -435,7 +435,7 @@ public class SocialProfileController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/authenticated/showProfile.do");
 		}
 	}
 

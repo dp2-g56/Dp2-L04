@@ -3,6 +3,7 @@ package controllers;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -53,13 +54,16 @@ public class EducationDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView editEducationData(@RequestParam int educationDataId) {
+	public ModelAndView editEducationData(@RequestParam String educationDataId) {
 		ModelAndView result;
 
 		try {
+			Assert.isTrue(StringUtils.isNumeric(educationDataId));
+			int educationDataIdInt = Integer.parseInt(educationDataId);
+
 			Rookie rookie = this.rookieService.securityAndRookie();
-			EducationData educationData = this.educationDataService.findOne(educationDataId);
-			Curriculum curriculum = this.curriculumService.getCurriculumOfEducationData(educationDataId);
+			EducationData educationData = this.educationDataService.findOne(educationDataIdInt);
+			Curriculum curriculum = this.curriculumService.getCurriculumOfEducationData(educationDataIdInt);
 			Assert.notNull(this.curriculumService.getCurriculumOfRookie(rookie.getId(), curriculum.getId()));
 
 			result = this.createEditModelAndView("rookie/editEducationData", educationData, curriculum.getId());
@@ -71,12 +75,15 @@ public class EducationDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deleteEducationData(@RequestParam int educationDataId) {
+	public ModelAndView deleteEducationData(@RequestParam String educationDataId) {
 		ModelAndView result = null;
 
 		try {
-			Curriculum curriculum = this.curriculumService.getCurriculumOfEducationData(educationDataId);
-			this.educationDataService.deleteEducationDataAsRookie(educationDataId);
+			Assert.isTrue(StringUtils.isNumeric(educationDataId));
+			int educationDataIdInt = Integer.parseInt(educationDataId);
+
+			Curriculum curriculum = this.curriculumService.getCurriculumOfEducationData(educationDataIdInt);
+			this.educationDataService.deleteEducationDataAsRookie(educationDataIdInt);
 			result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculum.getId());
 		} catch (Throwable oops) {
 			result = new ModelAndView("redirect:/curriculum/rookie/list.do");
@@ -86,9 +93,12 @@ public class EducationDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
-	public ModelAndView savePositionData(@Valid EducationData educationData, BindingResult binding, @Valid int curriculumId) {
+	public ModelAndView savePositionData(@Valid EducationData educationData, BindingResult binding, @Valid String curriculumId) {
 		ModelAndView result;
 		try {
+			Assert.isTrue(StringUtils.isNumeric(curriculumId));
+			int curriculumIdInt = Integer.parseInt(curriculumId);
+
 			String tiles;
 			if (educationData.getId() == 0)
 				tiles = "rookie/createEducationData";
@@ -106,13 +116,13 @@ public class EducationDataRookieController extends AbstractController {
 			}
 
 			if (binding.hasErrors())
-				result = this.createEditModelAndView(tiles, educationData, curriculumId);
+				result = this.createEditModelAndView(tiles, educationData, curriculumIdInt);
 			else
 				try {
-					this.educationDataService.addOrUpdateEducationDataAsRookie(educationData, curriculumId);
-					result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumId);
+					this.educationDataService.addOrUpdateEducationDataAsRookie(educationData, curriculumIdInt);
+					result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumIdInt);
 				} catch (Throwable oops) {
-					result = this.createEditModelAndView(tiles, educationData, curriculumId, "commit.error");
+					result = this.createEditModelAndView(tiles, educationData, curriculumIdInt, "commit.error");
 				}
 
 			return result;

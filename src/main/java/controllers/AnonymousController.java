@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -426,18 +427,21 @@ public class AnonymousController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/curriculum/list", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam int applicationId, HttpServletRequest request) {
+	public ModelAndView show(@RequestParam String applicationId, HttpServletRequest request) {
 		ModelAndView result;
 
 		try {
 
+			Assert.isTrue(StringUtils.isNumeric(applicationId));
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
 
 			request.getSession().setAttribute("imageURL", imageURL);
 			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 
-			Application application = this.applicationService.findOne(applicationId);
+			int applicationIdInt = Integer.parseInt(applicationId);
+
+			Application application = this.applicationService.findOne(applicationIdInt);
 
 			Curriculum curriculum = application.getCurriculum();
 			Assert.isTrue(application.getCurriculum().equals(curriculum));
@@ -454,15 +458,19 @@ public class AnonymousController extends AbstractController {
 			result.addObject("miscellaneousData", curriculum.getMiscellaneousData());
 			result.addObject("requestURI", "/anonymous/curriculum/list.do");
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:list.do");
+			result = new ModelAndView("redirect:/anonymous/position/list.do");
 		}
 
 		return result;
 	}
 
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
-	public ModelAndView listProblems(@RequestParam int positionId, HttpServletRequest request) {
+	public ModelAndView listProblems(@RequestParam String positionId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+
+			int positionIdInt = Integer.parseInt(positionId);
 
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
@@ -475,9 +483,9 @@ public class AnonymousController extends AbstractController {
 			Boolean assignable = false;
 
 			List<Problem> allProblems = new ArrayList<>();
-			allProblems = this.positionService.getProblemsOfPosition(positionId);
-			Actor actor = this.positionService.getActorWithPosition(positionId);
-			Position position = this.positionService.findOne(positionId);
+			allProblems = this.positionService.getProblemsOfPosition(positionIdInt);
+			Actor actor = this.positionService.getActorWithPosition(positionIdInt);
+			Position position = this.positionService.findOne(positionIdInt);
 			Assert.isTrue(position.getProblems().containsAll(allProblems));
 			Assert.isTrue(position.getIsCancelled() == false && position.getIsDraftMode() == false);
 
@@ -505,12 +513,16 @@ public class AnonymousController extends AbstractController {
 			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/position/list.do");
 		}
 	}
 	@RequestMapping(value = "/attachement/list", method = RequestMethod.GET)
-	public ModelAndView listAttachement(@RequestParam int problemId, HttpServletRequest request) {
+	public ModelAndView listAttachement(@RequestParam String problemId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(problemId));
+			int problemIdInt = Integer.parseInt(problemId);
+
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
 
@@ -521,7 +533,7 @@ public class AnonymousController extends AbstractController {
 
 			List<String> list = new ArrayList<String>();
 
-			Problem problem = this.problemService.findOne(problemId);
+			Problem problem = this.problemService.findOne(problemIdInt);
 
 			Boolean publicData = true;
 			list = problem.getAttachments();
@@ -535,13 +547,16 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/position/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
-	public ModelAndView listAplications(@RequestParam int positionId, HttpServletRequest request) {
+	public ModelAndView listAplications(@RequestParam String positionId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
 
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
@@ -553,9 +568,9 @@ public class AnonymousController extends AbstractController {
 			Boolean assignable = false;
 
 			List<Application> allApplications = new ArrayList<Application>();
-			allApplications = this.applicationService.getApplicationsCompany(positionId);
-			Actor actor = this.positionService.getActorWithPosition(positionId);
-			Position position = this.positionService.findOne(positionId);
+			allApplications = this.applicationService.getApplicationsCompany(positionIdInt);
+			Actor actor = this.positionService.getActorWithPosition(positionIdInt);
+			Position position = this.positionService.findOne(positionIdInt);
 			Assert.isTrue(position.getIsCancelled() == false && position.getIsDraftMode() == false);
 			Actor loggedActor = this.actorService.loggedActor();
 			Boolean sameActorLogged;
@@ -579,13 +594,17 @@ public class AnonymousController extends AbstractController {
 			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/position/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
-	public ModelAndView listAudits(@RequestParam int positionId, HttpServletRequest request) {
+	public ModelAndView listAudits(@RequestParam String positionId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
+
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
 
@@ -596,8 +615,8 @@ public class AnonymousController extends AbstractController {
 			Boolean assignable = true;
 
 			List<Audit> finalAudits = new ArrayList<Audit>();
-			finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
-			Position position = this.positionService.findOne(positionId);
+			finalAudits = this.auditService.getFinalAuditsByPosition(positionIdInt);
+			Position position = this.positionService.findOne(positionIdInt);
 			Assert.isTrue(position.getAudits().containsAll(finalAudits));
 			Assert.isTrue(position.getIsCancelled() == false && position.getIsDraftMode() == false);
 
@@ -614,13 +633,17 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/position/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/company/listOne", method = RequestMethod.GET)
-	public ModelAndView listCompany(@RequestParam int positionId, HttpServletRequest request) {
+	public ModelAndView listCompany(@RequestParam String positionId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
+
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
 
@@ -631,9 +654,9 @@ public class AnonymousController extends AbstractController {
 			Boolean assignable = false;
 			List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
 
-			Company company = this.companyService.companyOfRespectivePosition(positionId);
-			Actor actor = this.positionService.getActorWithPosition(positionId);
-			Position position = this.positionService.findOne(positionId);
+			Company company = this.companyService.companyOfRespectivePosition(positionIdInt);
+			Actor actor = this.positionService.getActorWithPosition(positionIdInt);
+			Position position = this.positionService.findOne(positionIdInt);
 			Assert.isTrue(position.getIsCancelled() == false && position.getIsDraftMode() == false);
 			Boolean score = true;
 
@@ -662,7 +685,7 @@ public class AnonymousController extends AbstractController {
 			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/position/list.do");
 		}
 	}
 
@@ -687,13 +710,17 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/company/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/company/positions", method = RequestMethod.GET)
-	public ModelAndView listPositionsOfCompany(@RequestParam int idCompany, HttpServletRequest request) {
+	public ModelAndView listPositionsOfCompanies(@RequestParam String idCompany, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(idCompany));
+			int idCompanyInt = Integer.parseInt(idCompany);
+
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
 
@@ -702,7 +729,7 @@ public class AnonymousController extends AbstractController {
 
 			ModelAndView result;
 
-			List<Position> positions = this.companyService.positionsOfCompanyInFinalNotCancelled(idCompany);
+			List<Position> positions = this.companyService.positionsOfCompanyInFinalNotCancelled(idCompanyInt);
 
 			Map<Integer, Sponsorship> randomSpo = new HashMap<Integer, Sponsorship>();
 			for (Position p : positions)
@@ -722,7 +749,7 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/company/list.do");
 		}
 	}
 
@@ -746,7 +773,7 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/filtered/positions.do");
 		}
 	}
 
@@ -783,7 +810,7 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/filtered/positions.do");
 		}
 	}
 
@@ -807,7 +834,7 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/provider/list.do");
 		}
 	}
 
@@ -815,6 +842,7 @@ public class AnonymousController extends AbstractController {
 	@RequestMapping(value = "/item/list", method = RequestMethod.GET)
 	public ModelAndView itemList(@RequestParam(required = false) Integer providerId, HttpServletRequest request) {
 		try {
+
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
 
@@ -843,13 +871,17 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/provider/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/item/listLinks", method = RequestMethod.GET)
-	public ModelAndView listLinks(@RequestParam int itemId, HttpServletRequest request) {
+	public ModelAndView listLinks(@RequestParam String itemId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(itemId));
+			int itemIdInt = Integer.parseInt(itemId);
+
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
 
@@ -858,20 +890,23 @@ public class AnonymousController extends AbstractController {
 
 			ModelAndView result;
 
-			List<String> links = this.itemService.findOne(itemId).getLinks();
+			List<String> links = this.itemService.findOne(itemIdInt).getLinks();
 
 			result = new ModelAndView("anonymous/item/listLinks");
 			result.addObject("links", links);
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/provider/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/item/listPictures", method = RequestMethod.GET)
-	public ModelAndView listPictures(@RequestParam int itemId, HttpServletRequest request) {
+	public ModelAndView listPictures(@RequestParam String itemId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(itemId));
+			int itemIdInt = Integer.parseInt(itemId);
 
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
@@ -880,20 +915,24 @@ public class AnonymousController extends AbstractController {
 			request.getSession().setAttribute("isMessageBroadcasted", isMessageBroadcasted);
 			ModelAndView result;
 
-			List<String> pictures = this.itemService.findOne(itemId).getPictures();
+			List<String> pictures = this.itemService.findOne(itemIdInt).getPictures();
 
 			result = new ModelAndView("anonymous/item/listPictures");
 			result.addObject("pictures", pictures);
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/provider/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/provider/listOne", method = RequestMethod.GET)
-	public ModelAndView listProvider(@RequestParam int providerId, HttpServletRequest request) {
+	public ModelAndView listProvider(@RequestParam String providerId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(providerId));
+			int providerIdInt = Integer.parseInt(providerId);
+
 			Boolean isMessageBroadcasted = this.configurationService.isRebrandingBroadcasted();
 			String imageURL = this.configurationService.getConfiguration().getImageURL();
 
@@ -903,7 +942,7 @@ public class AnonymousController extends AbstractController {
 			ModelAndView result;
 			List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
 
-			Provider provider = this.providerService.findOne(providerId);
+			Provider provider = this.providerService.findOne(providerIdInt);
 			List<Item> items = provider.getItems();
 
 			Actor loggedActor = this.actorService.loggedActor();
@@ -927,7 +966,7 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/provider/list");
 		}
 	}
 

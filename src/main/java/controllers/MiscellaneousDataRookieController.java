@@ -3,8 +3,10 @@ package controllers;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,16 +36,19 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/listAttachments", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam int miscellaneousDataId) {
+	public ModelAndView list(@RequestParam String miscellaneousDataId) {
 		ModelAndView result;
 
 		try {
-			List<String> attachments = this.miscellaneousDataService.getAttachmentsOfMiscellaneousDataOfLoggedRookie(miscellaneousDataId);
+			Assert.isTrue(StringUtils.isNumeric(miscellaneousDataId));
+			int miscellaneousDataIdInt = Integer.parseInt(miscellaneousDataId);
+
+			List<String> attachments = this.miscellaneousDataService.getAttachmentsOfMiscellaneousDataOfLoggedRookie(miscellaneousDataIdInt);
 
 			result = new ModelAndView("rookie/attachments");
 			result.addObject("attachments", attachments);
 			result.addObject("miscellaneousDataId", miscellaneousDataId);
-			result.addObject("curriculumId", this.curriculumService.getCurriculumOfMiscellaneousData(miscellaneousDataId).getId());
+			result.addObject("curriculumId", this.curriculumService.getCurriculumOfMiscellaneousData(miscellaneousDataIdInt).getId());
 		} catch (Throwable oops) {
 			result = new ModelAndView("redirect:/curriculum/rookie/list.do");
 		}
@@ -52,12 +57,15 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/newAttachment", method = RequestMethod.GET)
-	public ModelAndView newAttachment(@RequestParam int miscellaneousDataId) {
+	public ModelAndView newAttachment(@RequestParam String miscellaneousDataId) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(miscellaneousDataId));
+			int miscellaneousDataIdInt = Integer.parseInt(miscellaneousDataId);
 			ModelAndView result;
 
 			result = new ModelAndView("rookie/createAttachment");
-			result.addObject("miscellaneousDataId", miscellaneousDataId);
+			result.addObject("miscellaneousDataId", miscellaneousDataIdInt);
 			result.addObject("attachment", "");
 
 			return result;
@@ -67,12 +75,18 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/deleteAttachment", method = RequestMethod.GET)
-	public ModelAndView newAttachment(@RequestParam int miscellaneousDataId, @RequestParam int attachmentIndex) {
+	public ModelAndView newAttachment(@RequestParam String miscellaneousDataId, @RequestParam String attachmentIndex) {
 		ModelAndView result;
 
 		try {
-			this.miscellaneousDataService.deleteAttachmentAsRookie(miscellaneousDataId, attachmentIndex);
-			result = new ModelAndView("redirect:listAttachments.do?miscellaneousDataId=" + miscellaneousDataId);
+			Assert.isTrue(StringUtils.isNumeric(miscellaneousDataId));
+			int miscellaneousDataIdInt = Integer.parseInt(miscellaneousDataId);
+
+			Assert.isTrue(StringUtils.isNumeric(attachmentIndex));
+			int attachmentIndexInt = Integer.parseInt(attachmentIndex);
+
+			this.miscellaneousDataService.deleteAttachmentAsRookie(miscellaneousDataIdInt, attachmentIndexInt);
+			result = new ModelAndView("redirect:listAttachments.do?miscellaneousDataId=" + miscellaneousDataIdInt);
 		} catch (Throwable oops) {
 			result = new ModelAndView("redirect:/curriculum/rookie/list.do");
 		}
@@ -81,12 +95,16 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/saveAttachment", method = RequestMethod.POST, params = "save")
-	public ModelAndView saveAttachment(@RequestParam int miscellaneousDataId, @RequestParam String attachment) {
+	public ModelAndView saveAttachment(@RequestParam String miscellaneousDataId, @RequestParam String attachment) {
 		ModelAndView result;
 
 		try {
-			this.miscellaneousDataService.addAttachmentAsRookie(miscellaneousDataId, attachment);
-			result = new ModelAndView("redirect:listAttachments.do?miscellaneousDataId=" + miscellaneousDataId);
+
+			Assert.isTrue(StringUtils.isNumeric(miscellaneousDataId));
+			int miscellaneousDataIdInt = Integer.parseInt(miscellaneousDataId);
+
+			this.miscellaneousDataService.addAttachmentAsRookie(miscellaneousDataIdInt, attachment);
+			result = new ModelAndView("redirect:listAttachments.do?miscellaneousDataId=" + miscellaneousDataIdInt);
 		} catch (Throwable oops) {
 			result = new ModelAndView("rookie/createAttachment");
 			result.addObject("miscellaneousDataId", miscellaneousDataId);
@@ -98,27 +116,32 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
-	public ModelAndView newMiscellaneousData(@RequestParam int curriculumId) {
+	public ModelAndView newMiscellaneousData(@RequestParam String curriculumId) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(curriculumId));
+			int curriculumIdInt = Integer.parseInt(curriculumId);
 			ModelAndView result;
 
 			MiscellaneousData miscellaneousData = this.miscellaneousDataService.create();
 
-			result = this.createEditModelAndView("rookie/createMiscellaneousData", miscellaneousData, curriculumId);
+			result = this.createEditModelAndView("rookie/createMiscellaneousData", miscellaneousData, curriculumIdInt);
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/curriculum/rookie/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView editMiscellaneousData(@RequestParam int miscellaneousDataId) {
+	public ModelAndView editMiscellaneousData(@RequestParam String miscellaneousDataId) {
 		ModelAndView result;
 
 		try {
-			MiscellaneousData miscellaneousData = this.miscellaneousDataService.getMiscellaneousDataOfLoggedRookie(miscellaneousDataId);
-			Curriculum curriculum = this.curriculumService.getCurriculumOfMiscellaneousData(miscellaneousDataId);
+			Assert.isTrue(StringUtils.isNumeric(miscellaneousDataId));
+			int miscellaneousDataIdInt = Integer.parseInt(miscellaneousDataId);
+			MiscellaneousData miscellaneousData = this.miscellaneousDataService.getMiscellaneousDataOfLoggedRookie(miscellaneousDataIdInt);
+			Curriculum curriculum = this.curriculumService.getCurriculumOfMiscellaneousData(miscellaneousDataIdInt);
 
 			result = this.createEditModelAndView("rookie/editMiscellaneousData", miscellaneousData, curriculum.getId());
 		} catch (Throwable oops) {
@@ -129,12 +152,15 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deleteMiscellaneousData(@RequestParam int miscellaneousDataId) {
+	public ModelAndView deleteMiscellaneousData(@RequestParam String miscellaneousDataId) {
 		ModelAndView result = null;
 
 		try {
-			Curriculum curriculum = this.curriculumService.getCurriculumOfMiscellaneousData(miscellaneousDataId);
-			this.miscellaneousDataService.deleteMiscellaneousDataAsRookie(miscellaneousDataId);
+			Assert.isTrue(StringUtils.isNumeric(miscellaneousDataId));
+			int miscellaneousDataIdInt = Integer.parseInt(miscellaneousDataId);
+
+			Curriculum curriculum = this.curriculumService.getCurriculumOfMiscellaneousData(miscellaneousDataIdInt);
+			this.miscellaneousDataService.deleteMiscellaneousDataAsRookie(miscellaneousDataIdInt);
 			result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculum.getId());
 		} catch (Throwable oops) {
 			result = new ModelAndView("redirect:/curriculum/rookie/list.do");
@@ -144,9 +170,13 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
-	public ModelAndView saveMiscellaneousData(MiscellaneousData miscellaneousData, BindingResult binding, int curriculumId) {
+	public ModelAndView saveMiscellaneousData(MiscellaneousData miscellaneousData, BindingResult binding, String curriculumId) {
 		ModelAndView result;
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(curriculumId));
+			int curriculumIdInt = Integer.parseInt(curriculumId);
+
 			String tiles;
 			if (miscellaneousData.getId() == 0)
 				tiles = "rookie/createMiscellaneousData";
@@ -156,13 +186,13 @@ public class MiscellaneousDataRookieController extends AbstractController {
 			MiscellaneousData miscellaneousDataReconstructed = this.miscellaneousDataService.reconstruct(miscellaneousData, binding);
 
 			if (binding.hasErrors())
-				result = this.createEditModelAndView(tiles, miscellaneousDataReconstructed, curriculumId);
+				result = this.createEditModelAndView(tiles, miscellaneousDataReconstructed, curriculumIdInt);
 			else
 				try {
-					this.miscellaneousDataService.addOrUpdateMiscellaneousDataAsRookie(miscellaneousDataReconstructed, curriculumId);
-					result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumId);
+					this.miscellaneousDataService.addOrUpdateMiscellaneousDataAsRookie(miscellaneousDataReconstructed, curriculumIdInt);
+					result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumIdInt);
 				} catch (Throwable oops) {
-					result = this.createEditModelAndView(tiles, miscellaneousDataReconstructed, curriculumId, "commit.error");
+					result = this.createEditModelAndView(tiles, miscellaneousDataReconstructed, curriculumIdInt, "commit.error");
 				}
 
 			return result;

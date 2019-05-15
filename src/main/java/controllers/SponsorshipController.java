@@ -1,12 +1,15 @@
+
 package controllers;
 
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,35 +18,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import domain.CreditCard;
-import domain.Position;
-import domain.Provider;
-import domain.Sponsorship;
-import forms.FormObjectSponsorshipCreditCard;
 import services.ConfigurationService;
 import services.CreditCardService;
 import services.PositionService;
 import services.ProviderService;
 import services.SponsorshipService;
+import domain.CreditCard;
+import domain.Position;
+import domain.Provider;
+import domain.Sponsorship;
+import forms.FormObjectSponsorshipCreditCard;
 
 @Controller
 @RequestMapping("/sponsorship/provider/")
 public class SponsorshipController {
 
 	@Autowired
-	private SponsorshipService sponsorshipService;
+	private SponsorshipService		sponsorshipService;
 
 	@Autowired
-	private ProviderService providerService;
+	private ProviderService			providerService;
 
 	@Autowired
-	private PositionService positionService;
+	private PositionService			positionService;
 
 	@Autowired
-	private CreditCardService creditCardService;
+	private CreditCardService		creditCardService;
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ConfigurationService	configurationService;
+
 
 	public SponsorshipController() {
 		super();
@@ -65,7 +69,7 @@ public class SponsorshipController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/sponsorship/provider/list.do");
 		}
 	}
 
@@ -84,18 +88,21 @@ public class SponsorshipController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/sponsorship/provider/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam int sponsorshipId) {
+	public ModelAndView edit(@RequestParam String sponsorshipId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(sponsorshipId));
+			int sponsorshipIdInt = Integer.parseInt(sponsorshipId);
+
 			ModelAndView result;
 
 			Provider provider = this.providerService.loggedProvider();
 
-			Sponsorship sponsorship = this.sponsorshipService.findOne(sponsorshipId);
+			Sponsorship sponsorship = this.sponsorshipService.findOne(sponsorshipIdInt);
 
 			if (provider.getSponsorships().contains(sponsorship)) {
 
@@ -110,19 +117,17 @@ public class SponsorshipController {
 				result = this.createEditModelAndView("sponsorship/edit", formObject);
 				result.addObject("positions", positions);
 
-			} else {
+			} else
 				result = this.list();
-			}
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/sponsorship/provider/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@ModelAttribute("formObject") @Valid FormObjectSponsorshipCreditCard formObject,
-			BindingResult binding, @RequestParam Position position) {
+	public ModelAndView save(@ModelAttribute("formObject") @Valid FormObjectSponsorshipCreditCard formObject, BindingResult binding, @RequestParam Position position) {
 		try {
 			ModelAndView result;
 
@@ -145,37 +150,29 @@ public class SponsorshipController {
 			if (creditCard.getNumber() != null)
 				if (!this.creditCardService.validateNumberCreditCard(creditCard))
 					if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-						binding.addError(new FieldError("formObject", "number", formObject.getNumber(), false, null,
-								null, "El numero de la tarjeta es invalido"));
+						binding.addError(new FieldError("formObject", "number", formObject.getNumber(), false, null, null, "El numero de la tarjeta es invalido"));
 					else
-						binding.addError(new FieldError("formObject", "number", formObject.getNumber(), false, null,
-								null, "The card number is invalid"));
+						binding.addError(new FieldError("formObject", "number", formObject.getNumber(), false, null, null, "The card number is invalid"));
 
 			if (creditCard.getExpirationMonth() != null && creditCard.getExpirationYear() != null)
 				if (!this.creditCardService.validateDateCreditCard(creditCard))
 					if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-						binding.addError(
-								new FieldError("formObject", "expirationMonth", creditCard.getExpirationMonth(), false,
-										null, null, "La tarjeta no puede estar caducada"));
+						binding.addError(new FieldError("formObject", "expirationMonth", creditCard.getExpirationMonth(), false, null, null, "La tarjeta no puede estar caducada"));
 					else
-						binding.addError(
-								new FieldError("formObject", "expirationMonth", creditCard.getExpirationMonth(), false,
-										null, null, "The credit card can not be expired"));
+						binding.addError(new FieldError("formObject", "expirationMonth", creditCard.getExpirationMonth(), false, null, null, "The credit card can not be expired"));
 
 			List<String> cardType = this.configurationService.getConfiguration().getCardType();
 
 			if (!cardType.contains(sponsorship.getCreditCard().getBrandName()))
 				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "brandName", creditCard.getBrandName(), false, null,
-							null, "Tarjeta no admitida"));
+					binding.addError(new FieldError("formObject", "brandName", creditCard.getBrandName(), false, null, null, "Tarjeta no admitida"));
 				else
-					binding.addError(new FieldError("formObject", "brandName", creditCard.getBrandName(), false, null,
-							null, "The credit card is not accepted"));
+					binding.addError(new FieldError("formObject", "brandName", creditCard.getBrandName(), false, null, null, "The credit card is not accepted"));
 
 			if (binding.hasErrors()) {
 				result = this.createEditModelAndView("sponsorship/create", formObject);
 				result.addObject("positions", positions);
-			} else {
+			} else
 				try {
 					this.sponsorshipService.addOrUpdateSponsorship(sponsorship);
 
@@ -184,22 +181,24 @@ public class SponsorshipController {
 					result = this.createEditModelAndView("sponsorship/create", formObject, "sponsorship.commit.error");
 					result.addObject("positions", positions);
 				}
-			}
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/sponsorship/provider/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView delete(@RequestParam int sponsorshipId) {
+	public ModelAndView delete(@RequestParam String sponsorshipId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(sponsorshipId));
+			int sponsorshipIdInt = Integer.parseInt(sponsorshipId);
+
 			ModelAndView result;
 			this.providerService.loggedAsProvider();
 
 			try {
-				this.sponsorshipService.deleteSponsorship(sponsorshipId);
+				this.sponsorshipService.deleteSponsorship(sponsorshipIdInt);
 				result = new ModelAndView("redirect:list.do");
 			} catch (Throwable oops) {
 				result = this.list();
@@ -208,7 +207,7 @@ public class SponsorshipController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/sponsorship/provider/list.do");
 		}
 	}
 
@@ -224,8 +223,7 @@ public class SponsorshipController {
 		return result;
 	}
 
-	private ModelAndView createEditModelAndView(String tiles, FormObjectSponsorshipCreditCard formObject,
-			String message) {
+	private ModelAndView createEditModelAndView(String tiles, FormObjectSponsorshipCreditCard formObject, String message) {
 		ModelAndView result = this.createEditModelAndView(tiles, formObject);
 
 		result.addObject("message", message);

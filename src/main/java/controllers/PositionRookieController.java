@@ -4,6 +4,7 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -33,12 +34,15 @@ public class PositionRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/listSkills", method = RequestMethod.GET)
-	public ModelAndView listSkills(@RequestParam int positionId) {
+	public ModelAndView listSkills(@RequestParam String positionId) {
 		try {
 			ModelAndView result;
 
 			try {
-				List<String> skills = this.positionService.getSkillsAsRookie(positionId);
+				Assert.isTrue(StringUtils.isNumeric(positionId));
+				int positionIdInt = Integer.parseInt(positionId);
+
+				List<String> skills = this.positionService.getSkillsAsRookie(positionIdInt);
 
 				result = new ModelAndView("rookie/skills");
 				result.addObject("skills", skills);
@@ -48,17 +52,19 @@ public class PositionRookieController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/finder/rookie/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/listTechnologies", method = RequestMethod.GET)
-	public ModelAndView listTechnologies(@RequestParam int positionId) {
+	public ModelAndView listTechnologies(@RequestParam String positionId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
 			ModelAndView result;
 
 			try {
-				List<String> technologies = this.positionService.getTechnologiesAsRookie(positionId);
+				List<String> technologies = this.positionService.getTechnologiesAsRookie(positionIdInt);
 
 				result = new ModelAndView("rookie/technologies");
 				result.addObject("technologies", technologies);
@@ -68,19 +74,21 @@ public class PositionRookieController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/finder/rookie/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
-	public ModelAndView listAudits(@RequestParam int positionId) {
+	public ModelAndView listAudits(@RequestParam String positionId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
 
 			ModelAndView result;
 
 			List<Audit> finalAudits = new ArrayList<Audit>();
-			finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
-			Position position = this.positionService.findOne(positionId);
+			finalAudits = this.auditService.getFinalAuditsByPosition(positionIdInt);
+			Position position = this.positionService.findOne(positionIdInt);
 			Assert.isTrue(position.getAudits().containsAll(finalAudits));
 
 			if (position.getIsCancelled() == true && position.getIsDraftMode() == false)
@@ -90,13 +98,13 @@ public class PositionRookieController extends AbstractController {
 
 				result.addObject("finalAudits", finalAudits);
 				result.addObject("requestURI", "position/rookie/audit/list.do");
-				result.addObject("positionId", positionId);
+				result.addObject("positionId", positionIdInt);
 
 			}
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/finder/rookie/list.do");
 		}
 	}
 }

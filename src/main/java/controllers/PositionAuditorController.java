@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -89,19 +90,22 @@ public class PositionAuditorController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/auditor/listAssignablePositions.do");
 		}
 	}
 
 	@RequestMapping(value = "/audit/list", method = RequestMethod.GET)
-	public ModelAndView listAudits(@RequestParam int positionId) {
+	public ModelAndView listAudits(@RequestParam String positionId) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
 
 			ModelAndView result;
 
 			List<Audit> finalAudits = new ArrayList<Audit>();
-			finalAudits = this.auditService.getFinalAuditsByPosition(positionId);
-			Position position = this.positionService.findOne(positionId);
+			finalAudits = this.auditService.getFinalAuditsByPosition(positionIdInt);
+			Position position = this.positionService.findOne(positionIdInt);
 			Assert.isTrue(position.getAudits().containsAll(finalAudits));
 			Boolean assignable = false;
 
@@ -112,29 +116,32 @@ public class PositionAuditorController extends AbstractController {
 
 				result.addObject("finalAudits", finalAudits);
 				result.addObject("requestURI", "position/auditor/audit/list.do");
-				result.addObject("positionId", positionId);
+				result.addObject("positionId", positionIdInt);
 				result.addObject("assignable", assignable);
 
 			}
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/auditor/audit/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
-	public ModelAndView listProblems(@RequestParam int positionId, HttpServletRequest request) {
+	public ModelAndView listProblems(@RequestParam String positionId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
 
 			ModelAndView result;
 
 			Boolean assignable = true;
 
 			List<Problem> allProblems = new ArrayList<>();
-			allProblems = this.positionService.getProblemsOfPosition(positionId);
-			Actor actor = this.positionService.getActorWithPosition(positionId);
-			Position position = this.positionService.findOne(positionId);
+			allProblems = this.positionService.getProblemsOfPosition(positionIdInt);
+			Actor actor = this.positionService.getActorWithPosition(positionIdInt);
+			Position position = this.positionService.findOne(positionIdInt);
 			Assert.isTrue(position.getProblems().containsAll(allProblems));
 
 			Actor loggedActor = this.actorService.loggedActor();
@@ -156,26 +163,29 @@ public class PositionAuditorController extends AbstractController {
 				result.addObject("publicData", publicData);
 				result.addObject("sameActorLogged", sameActorLogged);
 				result.addObject("requestURI", "position/auditor/problem/list.do");
-				result.addObject("positionId", positionId);
+				result.addObject("positionId", positionIdInt);
 				result.addObject("assignable", assignable);
 			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/auditor/audit/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/application/list", method = RequestMethod.GET)
-	public ModelAndView listAplications(@RequestParam int positionId, HttpServletRequest request) {
+	public ModelAndView listAplications(@RequestParam String positionId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
 
 			ModelAndView result;
 			Boolean assignable = false;
 
 			List<Application> allApplications = new ArrayList<Application>();
-			allApplications = this.applicationService.getApplicationsCompany(positionId);
-			Actor actor = this.positionService.getActorWithPosition(positionId);
-			Position position = this.positionService.findOne(positionId);
+			allApplications = this.applicationService.getApplicationsCompany(positionIdInt);
+			Actor actor = this.positionService.getActorWithPosition(positionIdInt);
+			Position position = this.positionService.findOne(positionIdInt);
 			Actor loggedActor = this.actorService.loggedActor();
 			Boolean sameActorLogged;
 
@@ -193,25 +203,29 @@ public class PositionAuditorController extends AbstractController {
 				result.addObject("allApplications", allApplications);
 				result.addObject("sameActorLogged", sameActorLogged);
 				result.addObject("requestURI", "position/auditor/application/list.do");
-				result.addObject("positionId", positionId);
+				result.addObject("positionId", positionIdInt);
 				result.addObject("assignable", assignable);
 			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/auditor/audit/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/company/listOne", method = RequestMethod.GET)
-	public ModelAndView listCompany(@RequestParam int positionId, HttpServletRequest request) {
+	public ModelAndView listCompany(@RequestParam String positionId, HttpServletRequest request) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
+
 			ModelAndView result;
 			Boolean assignable = true;
 			List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
 
-			Company company = this.companyService.companyOfRespectivePosition(positionId);
-			Actor actor = this.positionService.getActorWithPosition(positionId);
-			Position position = this.positionService.findOne(positionId);
+			Company company = this.companyService.companyOfRespectivePosition(positionIdInt);
+			Actor actor = this.positionService.getActorWithPosition(positionIdInt);
+			Position position = this.positionService.findOne(positionIdInt);
 			Boolean score = true;
 
 			Actor loggedActor = this.actorService.loggedActor();
@@ -239,7 +253,7 @@ public class PositionAuditorController extends AbstractController {
 			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/position/auditor/audit/list.do");
 		}
 	}
 
