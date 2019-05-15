@@ -409,9 +409,11 @@ public class AnonymousController extends AbstractController {
 			for (Position p : publicPositions)
 				if (!p.getSponsorships().isEmpty()) {
 					Sponsorship spo = this.sponsorshipService.getRandomSponsorship(p.getId());
-					if (this.actorService.loggedAsActorBoolean())
-						if (spo.getProvider() != null && (this.providerService.loggedProvider() != spo.getProvider()))
+					if (this.actorService.loggedAsActorBoolean()) {
+						if (spo.getProvider() != null && (this.actorService.loggedActor() != spo.getProvider()))
 							this.sponsorshipService.sendMessageToProvider(spo.getProvider());
+					} else
+						this.sponsorshipService.sendMessageToProvider(spo.getProvider());
 					randomSpo.put(p.getId(), spo);
 				}
 
