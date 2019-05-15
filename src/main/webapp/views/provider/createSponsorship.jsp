@@ -60,7 +60,6 @@
 	</jstl:if>
 	<jstl:if test="${formObject.id>0}">
 		<acme:submit code="sponsorship.update" name="save" />
-		<acme:submit code="sponsorship.delete" name="delete" />
 	</jstl:if>
 	<acme:cancel url="/sponsorship/provider/list.do" code="sponsorship.cancel" /> 
 	

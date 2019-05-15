@@ -187,7 +187,7 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
 	@Query("select avg(p.items.size), min(p.items.size), max(p.items.size), (sqrt(sum(p.items.size * p.items.size) / count(p.items.size) - (avg(p.items.size) * avg(p.items.size)))) from Provider p")
 	public Double[] itemsPerProvider();
 
-	@Query("select a from Provider a join a.items f order by count(f)")
+	@Query("select a from Provider a order by a.items.size desc")
 	public List<Provider> providerTermsofItemsOrdered();
 
 	/**
