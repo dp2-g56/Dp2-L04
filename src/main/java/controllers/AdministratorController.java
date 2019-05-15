@@ -119,7 +119,7 @@ public class AdministratorController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/administrator/administrator/create.do");
 		}
 	}
 
@@ -154,7 +154,7 @@ public class AdministratorController extends AbstractController {
 				}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/administrator/administrator/create.do");
 		}
 	}
 
@@ -250,7 +250,7 @@ public class AdministratorController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/administrator/auditor/create.do");
 		}
 	}
 
@@ -285,7 +285,7 @@ public class AdministratorController extends AbstractController {
 				}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/administrator/auditor/create.do");
 		}
 	}
 
