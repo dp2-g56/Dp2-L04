@@ -6,7 +6,9 @@ import java.util.Date;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -17,15 +19,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
+@Table(indexes = { @Index(columnList = "isDraftMode") })
 public class Audit extends DomainEntity {
 
-	private Date		momentCreation;
-	private String		freeText;
-	private int			score;
-	private Position	position;
-	private Auditor		auditor;
-	private Boolean		isDraftMode;
-
+	private Date momentCreation;
+	private String freeText;
+	private int score;
+	private Position position;
+	private Auditor auditor;
+	private Boolean isDraftMode;
 
 	@NotNull
 	public Boolean getIsDraftMode() {

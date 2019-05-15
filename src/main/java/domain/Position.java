@@ -24,30 +24,30 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
-@Table(indexes = {
-	@Index(columnList = "title, description, ticker, requiredProfile, isDraftMode"), @Index(columnList = "deadline, isDraftMode"), @Index(columnList = "offeredSalary, isDraftMode"), @Index(columnList = "isDraftMode")
-})
+@Table(indexes = { @Index(columnList = "title, description, ticker, requiredProfile, isDraftMode"),
+		@Index(columnList = "deadline, isDraftMode"), @Index(columnList = "offeredSalary, isDraftMode"),
+		@Index(columnList = "isDraftMode"), @Index(columnList = "offeredSalary"), @Index(columnList = "isCancelled"),
+		@Index(columnList = "isCancelled, isDraftMode"), @Index(columnList = "isCancelled, isDraftMode, ticker") })
 public class Position extends DomainEntity {
 
-	private String				title;
-	private String				description;
-	private Date				deadline;
-	private String				requiredProfile;
-	private List<String>		requiredSkills;
-	private List<String>		requiredTecnologies;
-	private Double				offeredSalary;
-	private String				ticker;
-	private Boolean				isDraftMode;
-	private Boolean				isCancelled;
+	private String title;
+	private String description;
+	private Date deadline;
+	private String requiredProfile;
+	private List<String> requiredSkills;
+	private List<String> requiredTecnologies;
+	private Double offeredSalary;
+	private String ticker;
+	private Boolean isDraftMode;
+	private Boolean isCancelled;
 
-	private List<Problem>		problems;
+	private List<Problem> problems;
 
-	private List<Application>	applications;
+	private List<Application> applications;
 
-	private List<Audit>			audits;
+	private List<Audit> audits;
 
-	private List<Sponsorship>	sponsorships;
-
+	private List<Sponsorship> sponsorships;
 
 	@NotBlank
 	public String getTitle() {
