@@ -29,6 +29,13 @@ public class DeleteMessageServiceTest extends AbstractTest {
 	 * Total test = 4
 	 * Total coverage of the problem = 100%
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		MessageService: 5.2%
+	 * 		ActorService: 10.3%
+	 * 
+	 */
 
 	@Test
 	public void driverDeleteMessage() {

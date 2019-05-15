@@ -48,6 +48,13 @@ public class CreateSponsorshipsOfProviderServiceTest extends AbstractTest {
 	 * 
 	 * Coverage = 16/12 = 100%
 	 * */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		SponsorhipService: 27.2%
+	 * 		CreditCardService: 87.8%
+	 * 
+	 */
 
 	@Test
 	public void driverCreateSponsorshipsOfProvider() {

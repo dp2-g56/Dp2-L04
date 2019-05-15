@@ -59,6 +59,13 @@ public class AdminServiceTest extends AbstractTest {
 	 * 3. Ban an actor with the spammer flag.
 	 * 
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		AdminService: 19.8%
+	 * 		CreditCardService: 71.1%
+	 * 
+	 */
 
 	@Test
 	public void driverBan() {

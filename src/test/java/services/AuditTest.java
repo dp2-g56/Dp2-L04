@@ -44,6 +44,14 @@ public class AuditTest extends AbstractTest {
 	/**
 	 * Ratio of data coverage: 9/9 = 100%
 	 */
+	
+	/**
+	 * 
+	 * Sentence Coverage:	
+	 * 		Audit Service: 34.9%
+	 * 		Auditor service 8.7%
+	 * 
+	 */
 	@Test
 	public void driverAssignPosition() {
 

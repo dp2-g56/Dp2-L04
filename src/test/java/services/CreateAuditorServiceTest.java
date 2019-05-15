@@ -37,6 +37,13 @@ public class CreateAuditorServiceTest extends AbstractTest {
 	 * Total test = 16
 	 * Total coverage of the problem = 100%
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		AuditorService:	12.0%
+	 * 		CreditCardService: 71.1%
+	 * 
+	 */
 
 	@Test
 	public void driverCreateAuditor() {

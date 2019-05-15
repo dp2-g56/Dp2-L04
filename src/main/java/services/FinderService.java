@@ -13,18 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
-import repositories.CompanyRepository;
-import repositories.FinderRepository;
-import repositories.RookieRepository;
-import security.Authority;
-import security.LoginService;
-import security.UserAccount;
-import domain.Company;
+
 import domain.Finder;
-import domain.Rookie;
 import domain.Message;
 import domain.Position;
-import domain.Problem;
+import domain.Rookie;
+import repositories.FinderRepository;
 
 @Service
 @Transactional
@@ -39,37 +33,37 @@ public class FinderService {
 	@Autowired
 	private PositionService positionService;
 	@Autowired
-	private	MessageService	messageService;
+	private MessageService messageService;
 	@Autowired
 	private Validator validator;
 
 	public List<Position> finderList(Finder finder) {
 		Rookie rookie = this.rookieService.securityAndRookie();
-		
+
 		Assert.notNull(finder);
-		Assert.isTrue(finder.getId()>0);
+		Assert.isTrue(finder.getId() > 0);
 		Assert.isTrue(rookie.getFinder().getId() == finder.getId());
-		
+
 		List<Position> positions = new ArrayList<>();
 		List<Position> finderPositions = finder.getPositions();
-		
-		if(finder.getLastEdit()!=null) {
+
+		if (finder.getLastEdit() != null) {
 			// Current Date
 			Date currentDate = new Date();
 
 			Calendar calendar1 = Calendar.getInstance();
 			calendar1.setTime(currentDate);
-			
+
 			// LastEdit Finder
 			Date lastEdit = finder.getLastEdit();
-			
+
 			Calendar calendar2 = Calendar.getInstance();
 			calendar2.setTime(lastEdit);
-			
+
 			Integer time = this.configurationService.getConfiguration().getTimeFinder();
-			
+
 			calendar2.add(Calendar.HOUR, time);
-			
+
 			if (calendar2.after(calendar1)) {
 				Integer numFinderResult = this.configurationService.getConfiguration().getFinderResult();
 
@@ -80,21 +74,21 @@ public class FinderService {
 					positions = finderPositions;
 			}
 		}
-		
+
 		return positions;
 	}
 
 	public List<Position> getFinalPositionsAndCleanFinder(Finder finder) {
 		Rookie rookie = this.rookieService.securityAndRookie();
-		
+
 		Assert.notNull(finder);
-		Assert.isTrue(finder.getId()>0);
+		Assert.isTrue(finder.getId() > 0);
 		Assert.isTrue(rookie.getFinder().getId() == finder.getId());
-		
+
 		List<Position> positions = this.positionService.getFinalPositions();
-		
+
 		Date date = new Date();
-		
+
 		finder.setDeadLine(null);
 		finder.setKeyWord("");
 		finder.setLastEdit(date);
@@ -102,74 +96,74 @@ public class FinderService {
 		finder.setMinSalary(0.);
 		finder.setPositions(positions);
 		this.finderRepository.save(finder);
-		
+
 		this.finderRepository.flush();
-		
+
 		return positions;
 	}
 
 	public Finder reconstruct(Finder finderForm, BindingResult binding) {
 		Finder result = new Finder();
-		
+
 		Finder finder = this.finderRepository.findOne(finderForm.getId());
-		
+
 		result.setId(finder.getId());
 		result.setVersion(finder.getVersion());
 		result.setPositions(finder.getPositions());
-		
+
 		Date date = new Date();
 		result.setLastEdit(date);
-		
+
 		result.setKeyWord(finderForm.getKeyWord());
 		result.setDeadLine(finderForm.getDeadLine());
 		result.setMaxDeadLine(finderForm.getMaxDeadLine());
-		
+
 		result.setMinSalary(finderForm.getMinSalary());
-		
+
 		this.validator.validate(result, binding);
-		
+
 		return result;
 	}
 
 	public void filterPositionsByFinder(Finder finder) {
 		Rookie rookie = this.rookieService.securityAndRookie();
-		
+
 		Assert.notNull(finder);
-		Assert.isTrue(finder.getId()>0);
+		Assert.isTrue(finder.getId() > 0);
 		Assert.isTrue(rookie.getFinder().getId() == finder.getId());
-		
+
 		List<Position> filter = new ArrayList<>();
 		List<Position> result = this.positionService.getFinalPositions();
-		
+
 		// Keyword
-		if(!finder.getKeyWord().equals(null) && !finder.getKeyWord().contentEquals("")) {
+		if (!finder.getKeyWord().equals(null) && !finder.getKeyWord().contentEquals("")) {
 			filter = this.getPositionsByKeyWord(finder.getKeyWord());
 			result.retainAll(filter);
 		}
-		
+
 		// Deadline
 		if (finder.getDeadLine() != null) {
 			filter = this.finderRepository.getPositionsByDeadline(finder.getDeadLine());
 			result.retainAll(filter);
 		}
-		
+
 		// Max deadline
 		if (finder.getMaxDeadLine() != null) {
 			filter = this.finderRepository.getPositionsByMaxDeadline(finder.getMaxDeadLine());
 			result.retainAll(filter);
 		}
-		
+
 		// Min salary
 		try {
 			Assert.notNull(finder.getMinSalary());
 			filter = this.finderRepository.getPositionsByMinSalary(finder.getMinSalary());
 			result.retainAll(filter);
-		} catch(Throwable oops) {
+		} catch (Throwable oops) {
 			finder.setMinSalary(0.);
 		}
-		
+
 		finder.setPositions(result);
-		
+
 		Finder finderRes = this.finderRepository.save(finder);
 		rookie.setFinder(finderRes);
 		this.rookieService.save(rookie);
@@ -197,20 +191,19 @@ public class FinderService {
 
 	/*
 	 * public void updateFinders() {
-	 * 
+	 *
 	 * Date thisMoment = new Date();
-	 * 
-	 * Calendar calendar = Calendar.getInstance();
-	 * calendar.setTime(thisMoment);
-	 * calendar.add(Calendar.HOUR_OF_DAY, -this.configurationService.getConfiguration().getTimeFinder());
-	 * 
-	 * List<Finder> finders = new ArrayList<Finder>();
-	 * finders = this.finderRepository.getFindersNeedToUpdate(calendar.getTime());
-	 * for (Finder f : finders)
-	 * f.setPositions(new ArrayList<Position>());
+	 *
+	 * Calendar calendar = Calendar.getInstance(); calendar.setTime(thisMoment);
+	 * calendar.add(Calendar.HOUR_OF_DAY,
+	 * -this.configurationService.getConfiguration().getTimeFinder());
+	 *
+	 * List<Finder> finders = new ArrayList<Finder>(); finders =
+	 * this.finderRepository.getFindersNeedToUpdate(calendar.getTime()); for (Finder
+	 * f : finders) f.setPositions(new ArrayList<Position>());
 	 */
 
-	//}
+	// }
 
 	public void updateAllFinders() {
 
@@ -242,7 +235,8 @@ public class FinderService {
 			Integer lastEditMonth = calendar.get(Calendar.MONTH);
 			Integer lastEditYear = calendar.get(Calendar.YEAR);
 			Integer lastEditHour = calendar.get(Calendar.HOUR);
-			if (!(currentDay.equals(lastEditDay) && currentMonth.equals(lastEditMonth) && currentYear.equals(lastEditYear) && lastEditHour < (currentHour + time))) {
+			if (!(currentDay.equals(lastEditDay) && currentMonth.equals(lastEditMonth)
+					&& currentYear.equals(lastEditYear) && lastEditHour < (currentHour + time))) {
 				f.setPositions(positions);
 				this.save(f);
 			}
@@ -274,9 +268,12 @@ public class FinderService {
 		String requiredProfile = "%" + position.getRequiredProfile() + "%";
 		String ticker = "%" + position.getTicker() + "%";
 
-		List<Rookie> rookies = this.finderRepository.getRookiesThatFinderKeyWordIsContaine(rs, rt, title, desription, requiredProfile, ticker);
+		List<Rookie> rookies = this.finderRepository.getRookiesThatFinderKeyWordIsContaine(rs, rt, title, desription,
+				requiredProfile, ticker);
 
-		Message message2 = this.messageService.create("Nueva oferta / New offer", "Una nueva oferta concuerda con tu busqueda / A new offer matches your finder criteria", "STATUS, NOTIFICATION", "NOTIFICATION", "");
+		Message message2 = this.messageService.create("Nueva oferta / New offer",
+				"Una nueva oferta concuerda con tu busqueda / A new offer matches your finder criteria",
+				"STATUS, NOTIFICATION", "NOTIFICATION", "");
 
 		for (Rookie a : rookies) {
 

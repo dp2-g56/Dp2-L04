@@ -22,6 +22,13 @@ public class EditAuditorServiceTest extends AbstractTest {
 	 * 100% 
 	 * Data coverage: 94,1%
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		AuditorService: 6.2%
+	 * 				
+	 * 
+	 */
 
 	@Test
 	public void driverUpdateAuditor() {

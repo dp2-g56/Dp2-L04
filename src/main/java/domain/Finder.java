@@ -7,28 +7,28 @@ import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Past;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
+@Table(indexes = { @Index(columnList = "lastEdit"), @Index(columnList = "keyWord") })
 public class Finder extends DomainEntity {
 
-	private String	keyWord;
-	private Date	deadLine;
-	private Double	minSalary;
-	private Date	maxDeadLine;
-	
+	private String keyWord;
+	private Date deadLine;
+	private Double minSalary;
+	private Date maxDeadLine;
+
 	private Date lastEdit;
 	private List<Position> positions;
-
 
 	@Valid
 	public String getKeyWord() {
@@ -69,7 +69,7 @@ public class Finder extends DomainEntity {
 	public void setMaxDeadLine(Date maxDeadLine) {
 		this.maxDeadLine = maxDeadLine;
 	}
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Valid
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
@@ -84,11 +84,11 @@ public class Finder extends DomainEntity {
 	@Valid
 	@ManyToMany
 	public List<Position> getPositions() {
-		return positions;
+		return this.positions;
 	}
 
 	public void setPositions(List<Position> positions) {
 		this.positions = positions;
-	}	
+	}
 
 }

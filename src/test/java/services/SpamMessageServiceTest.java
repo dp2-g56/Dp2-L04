@@ -34,6 +34,13 @@ public class SpamMessageServiceTest extends AbstractTest {
 	 * Total coverage of the problem = 100%
 	 * We test each of the possibilities of spam words with asserts in the test method
 	 */
+	/**
+	 * Sentence Coverage
+	 * 		ConfigurationService:	18.2%
+	 * 		MessageService:			28.3%
+	 * 		ActorService:			40.4%
+	 * 
+	 */
 
 	@Test
 	public void driverSpamMessage() {

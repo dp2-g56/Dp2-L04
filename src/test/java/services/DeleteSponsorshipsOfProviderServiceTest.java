@@ -31,6 +31,13 @@ public class DeleteSponsorshipsOfProviderServiceTest extends AbstractTest {
 	 * 
 	 * Coverage = 3/3 = 100%
 	 * */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		SponosrhipService: 12.5%
+	 * 		ProviderService: 3.6%
+	 * 
+	 */
 
 	@Test
 	public void driverDeleteSponsorshipsOfProvider() {

@@ -12,7 +12,7 @@
 
 	<display:table pagesize="5" name="audits" id="row" requestURI="${requestURI}" >
 	
-	<display:column titleKey="position.status" >
+	<display:column titleKey="position.title" >
 		<jstl:out value="${row.position.title}"></jstl:out>
 	</display:column>
 

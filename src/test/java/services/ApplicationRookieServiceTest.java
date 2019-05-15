@@ -51,6 +51,14 @@ public class ApplicationRookieServiceTest extends AbstractTest {
 	 */
 
 	// Ratio of data coverage: 6/6 = 100%
+	
+	/**
+	 * Sentence coverage:
+	 * 
+	 * 	Application Service: 13.3%
+	 * 
+	 * 
+	 */
 	@Test
 	public void driverListApplication() {
 

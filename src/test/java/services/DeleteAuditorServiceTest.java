@@ -22,6 +22,12 @@ public class DeleteAuditorServiceTest extends AbstractTest {
 	 * 100%
 	 * data coverage: 100%
 	 */
+	/**
+	 * Sentence Coverage:
+	 * 		AuditService: 12.4%
+	 * 		AuditorService: 2.9%
+	 * 
+	 */
 
 	@Test
 	public void driverDeleteAuditor() {

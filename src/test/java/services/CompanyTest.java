@@ -46,6 +46,13 @@ public class CompanyTest extends AbstractTest {
 	 * Total test = 5
 	 * Total coverage of the problem = 100%
 	 */
+	
+	/**
+	 * Sentence Coverage:
+	 * 		CompanyService: 30.1%
+	 * 		ProblemService: 59.7%
+	 * 		CreditCardService:	71.1%
+	 */
 	@Test
 	public void driverEditProblem() {
 		Object testingData[][] = {

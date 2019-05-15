@@ -34,6 +34,13 @@ public class ListSponsorshipsOfProviderServiceTest extends AbstractTest {
 	 * 
 	 * Coverage = 3/3 = 100%
 	 * */
+	
+	/**
+	 * Sentence Coverage:
+	 * 			SponsorhipService: 3.5%
+	 * 			ProviderService: 2.9%
+	 * 
+	 */
 
 	@Test
 	public void driverListSponsorshipsOfProvider() {

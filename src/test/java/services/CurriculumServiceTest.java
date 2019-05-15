@@ -40,6 +40,13 @@ public class CurriculumServiceTest extends AbstractTest {
 	 *  - Access as a rookie or not
 	 * 
 	 **/
+	
+	/**
+	 * Sentence Coverage:
+	 * 		CurriculumService	16.1%
+	 * 
+	 * 
+	 */
 	@Test
 	public void driverListCurriculums() {
 

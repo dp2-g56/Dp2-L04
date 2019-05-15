@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import javax.validation.constraints.Past;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -13,18 +15,18 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
+@Table(indexes = { @Index(columnList = "sender") })
 public class Message extends DomainEntity {
 
-	private Date	moment;
-	private String	subject;
-	private String	body;
-	private String	tags;
+	private Date moment;
+	private String subject;
+	private String body;
+	private String tags;
 
-	private String	sender;
-	private String	receiver;
+	private String sender;
+	private String receiver;
 
-
-	public Message() {		//For Json purposes
+	public Message() { // For Json purposes
 		super();
 	}
 

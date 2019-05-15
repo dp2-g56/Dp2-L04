@@ -15,10 +15,9 @@ import javax.validation.Valid;
 @Access(AccessType.PROPERTY)
 public class Rookie extends Actor {
 
-	private List<Curriculum>	curriculums;
-	private List<Application>	applications;
-	private Finder				finder;
-
+	private List<Curriculum> curriculums;
+	private List<Application> applications;
+	private Finder finder;
 
 	@Valid
 	@OneToMany(cascade = CascadeType.ALL)

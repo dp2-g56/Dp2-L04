@@ -38,6 +38,13 @@ public class CreateProviderServiceTest extends AbstractTest {
 	 * Ratio of data coverage: 100%. 14 attributes with restrictions + Positive
 	 * case.
 	 **/
+	
+	/**
+	 * Sentence Coverage:	
+	 * 			ProviderService: 12.7%
+	 * 			CreditCardService: 70%
+	 * 
+	 */
 
 	@Test
 	public void driverCreateProvider() {
