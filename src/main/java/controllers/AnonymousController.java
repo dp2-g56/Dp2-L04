@@ -148,7 +148,7 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/rookie/create.do");
 		}
 	}
 
@@ -175,7 +175,7 @@ public class AnonymousController extends AbstractController {
 						rookie.setPhone(prefix + rookie.getPhone());
 					this.rookieService.save(rookie);
 
-					result = new ModelAndView("redirect:/");
+					result = new ModelAndView("redirect:/security/login.do");
 
 				} catch (Throwable oops) {
 					result = this.createEditModelAndView(formObjectRookie, "company.duplicated.user");
@@ -183,7 +183,7 @@ public class AnonymousController extends AbstractController {
 				}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/rookie/create.do");
 		}
 	}
 
@@ -236,7 +236,7 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/company/create.do");
 		}
 	}
 
@@ -263,7 +263,7 @@ public class AnonymousController extends AbstractController {
 						company.setPhone(prefix + company.getPhone());
 					this.companyService.save(company);
 
-					result = new ModelAndView("redirect:/");
+					result = new ModelAndView("redirect:/security/login.do");
 
 				} catch (Throwable oops) {
 					result = this.createEditModelAndView(formObjectCompany, "company.duplicated.user");
@@ -271,7 +271,7 @@ public class AnonymousController extends AbstractController {
 				}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/company/create.do");
 		}
 	}
 
@@ -324,7 +324,7 @@ public class AnonymousController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/provider/create.do");
 		}
 	}
 
@@ -351,7 +351,7 @@ public class AnonymousController extends AbstractController {
 						provider.setPhone(prefix + provider.getPhone());
 					this.providerService.save(provider);
 
-					result = new ModelAndView("redirect:/");
+					result = new ModelAndView("redirect:/security/login.do");
 
 				} catch (Throwable oops) {
 					result = this.createEditModelAndView(formObjectProvider, "company.duplicated.user");
@@ -359,7 +359,7 @@ public class AnonymousController extends AbstractController {
 				}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/anonymous/provider/create.do");
 		}
 	}
 
