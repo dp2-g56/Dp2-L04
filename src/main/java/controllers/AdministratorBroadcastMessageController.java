@@ -157,8 +157,6 @@ public class AdministratorBroadcastMessageController extends AbstractController 
 			result = new ModelAndView("redirect:/");
 		else {
 			result = new ModelAndView("broadcast/administrator/sendRebranding");
-
-			result.addObject("targetUri", "broadcast/administrator/sendRebranding.do");
 			result.addObject("messageSend", message);
 			result.addObject("message", messageCode);
 		}
