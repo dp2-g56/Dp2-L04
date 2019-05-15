@@ -10,7 +10,6 @@ import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -18,9 +17,8 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class Company extends Actor {
 
-
-	private String			companyName;
-	private Double			score;
+	private String companyName;
+	private Double score;
 	private List<Problem> problems;
 	private List<Position> positions;
 
