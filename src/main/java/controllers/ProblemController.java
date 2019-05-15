@@ -4,8 +4,10 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,35 +59,41 @@ public class ProblemController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/company/listAttachments", method = RequestMethod.GET)
-	public ModelAndView listAttachments(@RequestParam int problemId) {
+	public ModelAndView listAttachments(@RequestParam String problemId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(problemId));
+			int problemIdInt = Integer.parseInt(problemId);
+
 			ModelAndView result;
 
-			Problem problem = this.problemService.findOne(problemId);
+			Problem problem = this.problemService.findOne(problemIdInt);
 			Boolean sameActorLogged = true;
 			result = new ModelAndView("problem/company/listAttachments");
 			result.addObject("attachments", problem.getAttachments());
-			result.addObject("problemId", problemId);
+			result.addObject("problemId", problemIdInt);
 			result.addObject("sameActorLogged", sameActorLogged);
 			result.addObject("canEdit", problem.getIsDraftMode());
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/problem/company/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/company/addAttachment", method = RequestMethod.GET)
-	public ModelAndView addAttachment(@RequestParam int problemId) {
+	public ModelAndView addAttachment(@RequestParam String problemId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(problemId));
+			int problemIdInt = Integer.parseInt(problemId);
+
 			ModelAndView result;
 
 			result = new ModelAndView("problem/company/addAttachment");
-			result.addObject("problemId", problemId);
+			result.addObject("problemId", problemIdInt);
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/problem/company/list.do");
 		}
 	}
 
@@ -101,27 +109,29 @@ public class ProblemController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/problem/company/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/company/edit", method = RequestMethod.GET)
-	public ModelAndView editProblem(@RequestParam int problemId) {
+	public ModelAndView editProblem(@RequestParam String problemId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(problemId));
+			int problemIdInt = Integer.parseInt(problemId);
+
 			ModelAndView result;
 
-			Problem problem = this.problemService.findOne(problemId);
+			Problem problem = this.problemService.findOne(problemIdInt);
 			Company company = this.companyService.loggedCompany();
 
-			if (problem != null && company.getProblems().contains(problem)) {
+			if (problem != null && company.getProblems().contains(problem))
 				result = this.createEditModelAndView(problem);
-			} else {
+			else
 				result = new ModelAndView("redirect:list.do");
-			}
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/problem/company/list.do");
 		}
 	}
 
@@ -134,9 +144,9 @@ public class ProblemController extends AbstractController {
 
 			p = this.problemService.reconstruct(problem, binding);
 
-			if (binding.hasErrors()) {
+			if (binding.hasErrors())
 				result = this.createEditModelAndView(problem);
-			} else {
+			else
 				try {
 					this.companyService.addProblem(p);
 
@@ -145,10 +155,9 @@ public class ProblemController extends AbstractController {
 					result = this.createEditModelAndView(problem, "company.commit.error");
 
 				}
-			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/problem/company/list.do");
 		}
 	}
 
@@ -161,9 +170,9 @@ public class ProblemController extends AbstractController {
 
 			p = this.problemService.reconstruct(problem, binding);
 
-			if (binding.hasErrors()) {
+			if (binding.hasErrors())
 				result = this.createEditModelAndView(problem);
-			} else {
+			else
 				try {
 					this.problemService.updateProblem(p);
 
@@ -172,41 +181,41 @@ public class ProblemController extends AbstractController {
 					result = this.createEditModelAndView(problem, "company.commit.error");
 
 				}
-			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/problem/company/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/company/addAttachment", method = RequestMethod.POST, params = "save")
-	public ModelAndView addAttachment(@RequestParam int problemId, String attachment) {
+	public ModelAndView addAttachment(@RequestParam String problemId, String attachment) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(problemId));
+			int problemIdInt = Integer.parseInt(problemId);
+
 			ModelAndView result;
 
-			Problem problem = this.problemService.findOne(problemId);
+			Problem problem = this.problemService.findOne(problemIdInt);
 
 			if (!this.problemService.isUrl(attachment.trim())) {
 				result = new ModelAndView("problem/company/addAttachment");
-				result.addObject("problemId", problemId);
+				result.addObject("problemId", problemIdInt);
 				result.addObject("message", "company.notValidUrl");
-			} else {
-
+			} else
 				try {
 					this.problemService.addAttachment(attachment, problem);
 
 					result = new ModelAndView("redirect:listAttachments.do");
-					result.addObject("problemId", problemId);
+					result.addObject("problemId", problemIdInt);
 				} catch (Throwable oops) {
 					result = new ModelAndView("problem/company/addAttachment");
-					result.addObject("problemId", problemId);
+					result.addObject("problemId", problemIdInt);
 					result.addObject("message", "company.commit.error");
 				}
-			}
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/problem/company/list.do");
 		}
 	}
 
@@ -227,28 +236,34 @@ public class ProblemController extends AbstractController {
 			}
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/problem/company/list.do");
 		}
 	}
 
 	@RequestMapping(value = "/company/deleteAttachment", method = RequestMethod.GET)
-	public ModelAndView copy(@RequestParam int problemId, @RequestParam int attachmentNumber) {
+	public ModelAndView copy(@RequestParam String problemId, @RequestParam String attachmentNumber) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(problemId));
+			int problemIdInt = Integer.parseInt(problemId);
+
+			Assert.isTrue(StringUtils.isNumeric(attachmentNumber));
+			int attachmentNumberInt = Integer.parseInt(attachmentNumber);
+
 			ModelAndView result;
 
 			try {
-				Problem problem = this.problemService.findOne(problemId);
-				this.problemService.removeAttachment(problem, attachmentNumber);
+				Problem problem = this.problemService.findOne(problemIdInt);
+				this.problemService.removeAttachment(problem, attachmentNumberInt);
 
 			} catch (Throwable oops) {
 
 			}
 
 			result = new ModelAndView("redirect:listAttachments.do");
-			result.addObject("problemId", problemId);
+			result.addObject("problemId", problemIdInt);
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/problem/company/list.do");
 		}
 	}
 

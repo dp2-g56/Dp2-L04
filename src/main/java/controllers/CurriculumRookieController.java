@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,11 +56,14 @@ public class CurriculumRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam int curriculumId) {
+	public ModelAndView show(@RequestParam String curriculumId) {
 		ModelAndView result;
 
 		try {
-			Curriculum curriculum = this.curriculumService.getCurriculumOfLoggedRookie(curriculumId);
+			Assert.isTrue(StringUtils.isNumeric(curriculumId));
+			int curriculumIdInt = Integer.parseInt(curriculumId);
+
+			Curriculum curriculum = this.curriculumService.getCurriculumOfLoggedRookie(curriculumIdInt);
 
 			result = new ModelAndView("rookie/curriculum");
 			result.addObject("curriculum", curriculum);
@@ -86,13 +91,17 @@ public class CurriculumRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView editCurriculum(@RequestParam int curriculumId) {
+	public ModelAndView editCurriculum(@RequestParam String curriculumId) {
 		ModelAndView result;
 
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(curriculumId));
+			int curriculumIdInt = Integer.parseInt(curriculumId);
+
 			FormObjectCurriculumPersonalData formObject = new FormObjectCurriculumPersonalData();
 
-			Curriculum curriculum = this.curriculumService.getCurriculumOfLoggedRookie(curriculumId);
+			Curriculum curriculum = this.curriculumService.getCurriculumOfLoggedRookie(curriculumIdInt);
 
 			formObject.setId(curriculum.getId());
 			formObject.setTitle(curriculum.getTitle());
@@ -111,11 +120,14 @@ public class CurriculumRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deleteCurriculum(@RequestParam int curriculumId) {
+	public ModelAndView deleteCurriculum(@RequestParam String curriculumId) {
 		ModelAndView result;
 
 		try {
-			this.curriculumService.deleteCurriculumAsRookie(curriculumId);
+			Assert.isTrue(StringUtils.isNumeric(curriculumId));
+			int curriculumIdInt = Integer.parseInt(curriculumId);
+
+			this.curriculumService.deleteCurriculumAsRookie(curriculumIdInt);
 
 			result = new ModelAndView("redirect:list.do");
 		} catch (Throwable oops) {

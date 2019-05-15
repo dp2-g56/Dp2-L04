@@ -6,8 +6,10 @@ import java.io.IOException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,12 +52,15 @@ public class ExportDataController {
 
 	@RequestMapping(value = "/rookie", method = RequestMethod.GET)
 	public @ResponseBody
-	String export(@RequestParam(value = "id", defaultValue = "-1") int id, HttpServletResponse response) throws IOException {
+	String export(@RequestParam(value = "id", defaultValue = "-1") String id, HttpServletResponse response) throws IOException {
 
 		this.rookieService.loggedAsRookie();
 
+		Assert.isTrue(StringUtils.isNumeric(id));
+		int idInt = Integer.parseInt(id);
+
 		Rookie rookie = new Rookie();
-		rookie = this.rookieService.findOne(id);
+		rookie = this.rookieService.findOne(idInt);
 
 		// Defines un StringBuilder para construir tu string
 		StringBuilder sb = new StringBuilder();
@@ -81,7 +86,7 @@ public class ExportDataController {
 		sb.append(System.getProperty("line.separator"));
 		sb.append(this.curriculumService.curriculumToStringExport()).append(System.getProperty("line.separator"));
 
-		if (rookie == null || this.rookieService.loggedRookie().getId() != id)
+		if (rookie == null || this.rookieService.loggedRookie().getId() != idInt)
 			return null;
 
 		// Defines el nombre del archivo y la extension

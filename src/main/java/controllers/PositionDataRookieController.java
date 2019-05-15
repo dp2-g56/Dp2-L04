@@ -3,6 +3,7 @@ package controllers;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -51,12 +52,15 @@ public class PositionDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView editPositionData(@RequestParam int positionDataId) {
+	public ModelAndView editPositionData(@RequestParam String positionDataId) {
 		ModelAndView result;
 
 		try {
-			PositionData positionData = this.positionDataService.findOne(positionDataId);
-			Curriculum curriculum = this.curriculumService.getCurriculumOfPositionData(positionDataId);
+			Assert.isTrue(StringUtils.isNumeric(positionDataId));
+			int positionDataIdInt = Integer.parseInt(positionDataId);
+
+			PositionData positionData = this.positionDataService.findOne(positionDataIdInt);
+			Curriculum curriculum = this.curriculumService.getCurriculumOfPositionData(positionDataIdInt);
 			Assert.notNull(this.curriculumService.getCurriculumOfLoggedRookie(curriculum.getId()));
 
 			result = this.createEditModelAndView("rookie/editPositionData", positionData, curriculum.getId());
@@ -68,12 +72,15 @@ public class PositionDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deletePositionData(@RequestParam int positionDataId) {
+	public ModelAndView deletePositionData(@RequestParam String positionDataId) {
 		ModelAndView result = null;
 
 		try {
-			Curriculum curriculum = this.curriculumService.getCurriculumOfPositionData(positionDataId);
-			this.positionDataService.deletePositionDataAsRookie(positionDataId);
+			Assert.isTrue(StringUtils.isNumeric(positionDataId));
+			int positionDataIdInt = Integer.parseInt(positionDataId);
+
+			Curriculum curriculum = this.curriculumService.getCurriculumOfPositionData(positionDataIdInt);
+			this.positionDataService.deletePositionDataAsRookie(positionDataIdInt);
 			result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculum.getId());
 		} catch (Throwable oops) {
 			result = new ModelAndView("redirect:/curriculum/rookie/list.do");
@@ -83,9 +90,12 @@ public class PositionDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
-	public ModelAndView savePositionData(@Valid PositionData positionData, BindingResult binding, @Valid int curriculumId) {
+	public ModelAndView savePositionData(@Valid PositionData positionData, BindingResult binding, @Valid String curriculumId) {
 		ModelAndView result;
 		try {
+			Assert.isTrue(StringUtils.isNumeric(curriculumId));
+			int curriculumIdInt = Integer.parseInt(curriculumId);
+
 			String tiles;
 			if (positionData.getId() == 0)
 				tiles = "rookie/createPositionData";
@@ -103,13 +113,13 @@ public class PositionDataRookieController extends AbstractController {
 			}
 
 			if (binding.hasErrors())
-				result = this.createEditModelAndView(tiles, positionData, curriculumId);
+				result = this.createEditModelAndView(tiles, positionData, curriculumIdInt);
 			else
 				try {
-					this.positionDataService.addOrUpdatePositionDataAsRookie(positionData, curriculumId);
-					result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumId);
+					this.positionDataService.addOrUpdatePositionDataAsRookie(positionData, curriculumIdInt);
+					result = new ModelAndView("redirect:/curriculum/rookie/show.do?curriculumId=" + curriculumIdInt);
 				} catch (Throwable oops) {
-					result = this.createEditModelAndView(tiles, positionData, curriculumId, "commit.error");
+					result = this.createEditModelAndView(tiles, positionData, curriculumIdInt, "commit.error");
 				}
 
 			return result;

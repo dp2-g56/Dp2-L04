@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,19 +18,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import domain.Item;
-import forms.FormObjectItem;
 import services.ItemService;
 import services.ProviderService;
+import domain.Item;
+import forms.FormObjectItem;
 
 @Controller
 @RequestMapping("/item/provider")
 public class ItemProviderController extends AbstractController {
 
 	@Autowired
-	private ItemService itemService;
+	private ItemService		itemService;
 	@Autowired
-	private ProviderService providerService;
+	private ProviderService	providerService;
+
 
 	public ItemProviderController() {
 		super();
@@ -44,53 +47,64 @@ public class ItemProviderController extends AbstractController {
 			result = new ModelAndView("provider/items");
 			result.addObject("items", items);
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			result = new ModelAndView("redirect:/item/provider/list.do");
 		}
 
 		return result;
 	}
 
 	@RequestMapping(value = "/listLinks", method = RequestMethod.GET)
-	public ModelAndView listLinks(@RequestParam int itemId) {
+	public ModelAndView listLinks(@RequestParam String itemId) {
 		ModelAndView result;
 
 		try {
-			List<String> links = this.itemService.getLinksOfItem(itemId);
+			Assert.isTrue(StringUtils.isNumeric(itemId));
+			int itemIdInt = Integer.parseInt(itemId);
+
+			List<String> links = this.itemService.getLinksOfItem(itemIdInt);
 
 			result = new ModelAndView("provider/links");
 			result.addObject("links", links);
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			result = new ModelAndView("redirect:/item/provider/list.do");
 		}
 
 		return result;
 	}
 
 	@RequestMapping(value = "/listPictures", method = RequestMethod.GET)
-	public ModelAndView listPictures(@RequestParam int itemId) {
+	public ModelAndView listPictures(@RequestParam String itemId) {
 		ModelAndView result;
 
 		try {
-			List<String> pictures = this.itemService.getPicturesOfItem(itemId);
+
+			Assert.isTrue(StringUtils.isNumeric(itemId));
+			int itemIdInt = Integer.parseInt(itemId);
+
+			List<String> pictures = this.itemService.getPicturesOfItem(itemIdInt);
 
 			result = new ModelAndView("provider/pictures");
 			result.addObject("pictures", pictures);
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			result = new ModelAndView("redirect:/item/provider/list.do");
 		}
 
 		return result;
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deleteItem(@RequestParam int itemId) {
+	public ModelAndView deleteItem(@RequestParam String itemId) {
 		ModelAndView result;
 
 		try {
-			this.itemService.deleteItem(itemId);
+
+			Assert.isTrue(StringUtils.isNumeric(itemId));
+			int itemIdInt = Integer.parseInt(itemId);
+
+			this.itemService.deleteItem(itemIdInt);
 			result = new ModelAndView("redirect:list.do");
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			result = new ModelAndView("redirect:/item/provider/list.do");
 		}
 
 		return result;
@@ -108,31 +122,34 @@ public class ItemProviderController extends AbstractController {
 			result = new ModelAndView("provider/createItem");
 			result.addObject("formObjectItem", formObjectItem);
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			result = new ModelAndView("redirect:/item/provider/list.do");
 		}
 
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam int itemId) {
+	public ModelAndView edit(@RequestParam String itemId) {
 		ModelAndView result;
 
 		try {
-			FormObjectItem formObjectItem = this.itemService.prepareFormObject(itemId);
+
+			Assert.isTrue(StringUtils.isNumeric(itemId));
+			int itemIdInt = Integer.parseInt(itemId);
+
+			FormObjectItem formObjectItem = this.itemService.prepareFormObject(itemIdInt);
 
 			result = new ModelAndView("provider/editItem");
 			result.addObject("formObjectItem", formObjectItem);
 		} catch (Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			result = new ModelAndView("redirect:/item/provider/list.do");
 		}
 
 		return result;
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST, params = "save")
-	public ModelAndView saveItem(@ModelAttribute("formObjectItem") @Valid FormObjectItem formObjectItem,
-			BindingResult binding) {
+	public ModelAndView saveItem(@ModelAttribute("formObjectItem") @Valid FormObjectItem formObjectItem, BindingResult binding) {
 		ModelAndView result;
 		try {
 			String tiles;
@@ -152,11 +169,9 @@ public class ItemProviderController extends AbstractController {
 				for (String s : item.getLinks())
 					if (!this.itemService.isUrl(s)) {
 						if (locale.contains("ES"))
-							binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false,
-									null, null, "URLs incorrecta"));
+							binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false, null, null, "URLs incorrecta"));
 						else
-							binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false,
-									null, null, "Wrong URLs"));
+							binding.addError(new FieldError("formObjectItem", "links", formObjectItem.getLinks(), false, null, null, "Wrong URLs"));
 						break;
 					}
 
@@ -165,11 +180,9 @@ public class ItemProviderController extends AbstractController {
 				for (String s : item.getPictures())
 					if (!this.itemService.isUrl(s)) {
 						if (locale.contains("ES"))
-							binding.addError(new FieldError("formObjectItem", "pictures", formObjectItem.getPictures(),
-									false, null, null, "URLs incorrecta"));
+							binding.addError(new FieldError("formObjectItem", "pictures", formObjectItem.getPictures(), false, null, null, "URLs incorrecta"));
 						else
-							binding.addError(new FieldError("formObjectItem", "pictures", formObjectItem.getPictures(),
-									false, null, null, "Wrong URLs"));
+							binding.addError(new FieldError("formObjectItem", "pictures", formObjectItem.getPictures(), false, null, null, "Wrong URLs"));
 						break;
 					}
 

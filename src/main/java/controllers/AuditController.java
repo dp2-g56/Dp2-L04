@@ -3,8 +3,10 @@ package controllers;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -62,11 +64,15 @@ public class AuditController extends AbstractController {
 
 	// CREATE AUDIT
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView createAudit(@RequestParam int positionId) {
+	public ModelAndView createAudit(@RequestParam String positionId) {
 		try {
+
+			Assert.isTrue(StringUtils.isNumeric(positionId));
+			int positionIdInt = Integer.parseInt(positionId);
+
 			ModelAndView result;
 
-			Position position = this.positionService.findOne(positionId);
+			Position position = this.positionService.findOne(positionIdInt);
 
 			//Si la position no esta cancelada ni en draft y no tiene ya un audit del auditor logueado
 			if (!this.auditorService.showAssignablePositions().contains(position))
@@ -79,17 +85,20 @@ public class AuditController extends AbstractController {
 
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/audit/auditor/list.do");
 		}
 	}
 
 	// EDIT AUDIT
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam int auditId) {
+	public ModelAndView edit(@RequestParam String auditId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(auditId));
+			int auditIdInt = Integer.parseInt(auditId);
+
 			ModelAndView result;
 			Position position;
-			Audit audit = this.auditService.findOne(auditId);
+			Audit audit = this.auditService.findOne(auditIdInt);
 			Auditor loggedAuditor = this.auditorService.loggedAuditor();
 
 			if (audit == null)
@@ -103,7 +112,7 @@ public class AuditController extends AbstractController {
 			result = this.createEditModelAndView(audit);
 			return result;
 		} catch (Throwable oops) {
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/audit/auditor/list.do");
 		}
 	}
 
