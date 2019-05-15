@@ -55,7 +55,14 @@
 					</jstl:otherwise>
 				</jstl:choose>
 		</tr>
+		
+		<tr>
+			<td><spring:message code="actor.companyName" /></td>
+				<td><jstl:out value="${actor.companyName}" /></td>
+		</tr>
 	</jstl:if> 
+	
+	
 	
 	<security:authorize access="hasAnyRole('ADMIN')">
 		<tr>
