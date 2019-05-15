@@ -64,7 +64,7 @@ public class AuditController extends AbstractController {
 
 	// CREATE AUDIT
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView createAudit(@RequestParam String positionId) {
+	public ModelAndView createAudit(@RequestParam(required = false) String positionId) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(positionId));
@@ -91,7 +91,7 @@ public class AuditController extends AbstractController {
 
 	// EDIT AUDIT
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam String auditId) {
+	public ModelAndView edit(@RequestParam(required = false) String auditId) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(auditId));
 			int auditIdInt = Integer.parseInt(auditId);

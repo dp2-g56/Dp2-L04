@@ -36,7 +36,7 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/listAttachments", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam String miscellaneousDataId) {
+	public ModelAndView list(@RequestParam(required = false) String miscellaneousDataId) {
 		ModelAndView result;
 
 		try {
@@ -57,7 +57,7 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/newAttachment", method = RequestMethod.GET)
-	public ModelAndView newAttachment(@RequestParam String miscellaneousDataId) {
+	public ModelAndView newAttachment(@RequestParam(required = false) String miscellaneousDataId) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(miscellaneousDataId));
@@ -75,7 +75,7 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/deleteAttachment", method = RequestMethod.GET)
-	public ModelAndView newAttachment(@RequestParam String miscellaneousDataId, @RequestParam String attachmentIndex) {
+	public ModelAndView newAttachment(@RequestParam(required = false) String miscellaneousDataId, @RequestParam(required = false) String attachmentIndex) {
 		ModelAndView result;
 
 		try {
@@ -116,7 +116,7 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
-	public ModelAndView newMiscellaneousData(@RequestParam String curriculumId) {
+	public ModelAndView newMiscellaneousData(@RequestParam(required = false) String curriculumId) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(curriculumId));
@@ -134,7 +134,7 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView editMiscellaneousData(@RequestParam String miscellaneousDataId) {
+	public ModelAndView editMiscellaneousData(@RequestParam(required = false) String miscellaneousDataId) {
 		ModelAndView result;
 
 		try {
@@ -152,7 +152,7 @@ public class MiscellaneousDataRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deleteMiscellaneousData(@RequestParam String miscellaneousDataId) {
+	public ModelAndView deleteMiscellaneousData(@RequestParam(required = false) String miscellaneousDataId) {
 		ModelAndView result = null;
 
 		try {

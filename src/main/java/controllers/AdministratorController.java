@@ -17,9 +17,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -202,12 +204,15 @@ public class AdministratorController extends AbstractController {
 
 	//BAN
 	@RequestMapping(value = "/suspicious/ban", method = RequestMethod.GET)
-	public ModelAndView ban(@RequestParam int actorId) {
+	public ModelAndView ban(@RequestParam(required = false) String actorId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(actorId));
+			int actorIdInt = Integer.parseInt(actorId);
+
 			ModelAndView result;
 
 			Actor actor;
-			actor = this.actorService.findOne(actorId);
+			actor = this.actorService.findOne(actorIdInt);
 
 			this.adminService.banSuspiciousActor(actor);
 			result = new ModelAndView("redirect:list.do");
@@ -221,12 +226,15 @@ public class AdministratorController extends AbstractController {
 
 	//UNBAN
 	@RequestMapping(value = "/suspicious/unban", method = RequestMethod.GET)
-	public ModelAndView unban(@RequestParam int actorId) {
+	public ModelAndView unban(@RequestParam(required = false) String actorId) {
 		try {
+			Assert.isTrue(StringUtils.isNumeric(actorId));
+			int actorIdInt = Integer.parseInt(actorId);
+
 			ModelAndView result;
 
 			Actor actor;
-			actor = this.actorService.findOne(actorId);
+			actor = this.actorService.findOne(actorIdInt);
 
 			this.adminService.unBanSuspiciousActor(actor);
 			result = new ModelAndView("redirect:list.do");

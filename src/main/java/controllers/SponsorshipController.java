@@ -93,7 +93,7 @@ public class SponsorshipController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam String sponsorshipId) {
+	public ModelAndView edit(@RequestParam(required = false) String sponsorshipId) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(sponsorshipId));
 			int sponsorshipIdInt = Integer.parseInt(sponsorshipId);
@@ -189,7 +189,7 @@ public class SponsorshipController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView delete(@RequestParam String sponsorshipId) {
+	public ModelAndView delete(@RequestParam(required = false) String sponsorshipId) {
 		try {
 			Assert.isTrue(StringUtils.isNumeric(sponsorshipId));
 			int sponsorshipIdInt = Integer.parseInt(sponsorshipId);

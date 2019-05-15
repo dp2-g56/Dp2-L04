@@ -56,7 +56,7 @@ public class CurriculumRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam String curriculumId) {
+	public ModelAndView show(@RequestParam(required = false) String curriculumId) {
 		ModelAndView result;
 
 		try {
@@ -91,7 +91,7 @@ public class CurriculumRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView editCurriculum(@RequestParam String curriculumId) {
+	public ModelAndView editCurriculum(@RequestParam(required = false) String curriculumId) {
 		ModelAndView result;
 
 		try {
@@ -120,7 +120,7 @@ public class CurriculumRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deleteCurriculum(@RequestParam String curriculumId) {
+	public ModelAndView deleteCurriculum(@RequestParam(required = false) String curriculumId) {
 		ModelAndView result;
 
 		try {

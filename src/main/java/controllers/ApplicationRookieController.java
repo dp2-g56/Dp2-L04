@@ -138,7 +138,7 @@ public class ApplicationRookieController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView editApplication(@RequestParam String applicationId) {
+	public ModelAndView editApplication(@RequestParam(required = false) String applicationId) {
 		try {
 
 			Assert.isTrue(StringUtils.isNumeric(applicationId));
