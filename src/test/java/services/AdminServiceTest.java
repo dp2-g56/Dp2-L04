@@ -59,11 +59,11 @@ public class AdminServiceTest extends AbstractTest {
 	 * 3. Ban an actor with the spammer flag.
 	 * 
 	 */
-	
+
 	/**
 	 * Sentence Coverage:
-	 * 		AdminService: 19.8%
-	 * 		CreditCardService: 71.1%
+	 * AdminService: 19.8%
+	 * CreditCardService: 71.1%
 	 * 
 	 */
 
@@ -399,13 +399,13 @@ public class AdminServiceTest extends AbstractTest {
 	@Test
 	public void testMaxApplicationsRookie() {
 		Float query = this.adminRepository.maxApplicationsRookie();
-		Assert.isTrue(query == 1.0);
+		Assert.isTrue(query == 2.0);
 	}
 
 	@Test
 	public void testStddevApplicationsRookie() {
 		Float query = this.adminRepository.stddevApplicationsRookie();
-		Assert.isTrue(query < 0.2 && query > 0.1);
+		Assert.isTrue(query < 0.4 && query > 0.3);
 	}
 
 	@Test
@@ -548,8 +548,13 @@ public class AdminServiceTest extends AbstractTest {
 	public void testProviderTermsOfItemsOrdered() {
 		List<Provider> query = this.adminService.providerTermsofItemsOrdered();
 
-		Assert.isTrue(query.size() == 1);
-		Assert.isTrue(query.get(0).getMake().equals("the master provider"));
+		Assert.isTrue(query.size() == 5);
+		Assert.isTrue(query.get(0).getMake().equals("Acme"));
+		Assert.isTrue(query.get(1).getMake().equals("the master provider"));
+
+		Assert.isTrue(query.get(2).getMake().equals("provider3"));
+		Assert.isTrue(query.get(3).getMake().equals("provider4"));
+		Assert.isTrue(query.get(4).getMake().equals("provider5"));
 
 	}
 
