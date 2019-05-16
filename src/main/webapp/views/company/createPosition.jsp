@@ -57,7 +57,8 @@
 	<acme:submit code="position.createButton" name="save" />
 	<br />
 	<jstl:if test="${positionId != 0 }">
- 		<acme:submit name="delete" code="position.delete" />
+		<input type="submit" name="delete" value="<spring:message code="position.delete" />" 
+		 onclick="return confirm('<spring:message code="position.confirmDelete" />')"/>
  	</jstl:if> 
 	<br />
 </form:form> 

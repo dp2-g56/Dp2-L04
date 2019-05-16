@@ -31,7 +31,11 @@
  	<jstl:choose>
  		<jstl:when test="${problem.id != 0}">
  			<acme:submit name="edit" code="company.save" />  
- 			<acme:submit name="delete" code="company.delete" />
+
+ 			
+ 			<input type="submit" name="delete" value="<spring:message code="company.delete" />" 
+		 onclick="return confirm('<spring:message code="problem.confirmDelete" />')"/>
+ 			
  		</jstl:when> <jstl:otherwise>
  			<acme:submit name="save" code="company.save" />  	
  		</jstl:otherwise>

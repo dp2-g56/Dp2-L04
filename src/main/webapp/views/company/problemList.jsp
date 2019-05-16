@@ -101,12 +101,15 @@
 <security:authorize access="hasRole('COMPANY')">   
 <br />
 <jstl:if test="${sameActorLogged}">
-	<spring:url var="createUrl" value="/problem/company/create.do"/>       	
+	<spring:url var="createUrl" value="/problem/company/create.do"/>  
+  
+ <jstl:if test="${positionId==null}">	
     <a href="${createUrl}">
     	<spring:message var ="create" code="problem.create" />
     	<jstl:out value="${create}" />  
     </a>
-    </jstl:if>
+</jstl:if>
+ </jstl:if>   
   </security:authorize>  
   
   <br />
