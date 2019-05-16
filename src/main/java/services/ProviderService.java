@@ -18,37 +18,34 @@ import repositories.ProviderRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
-import domain.Company;
 import domain.CreditCard;
-import domain.Finder;
 import domain.Item;
 import domain.Message;
 import domain.Provider;
-import domain.Rookie;
 import domain.SocialProfile;
 import domain.Sponsorship;
 import forms.FormObjectEditProvider;
 import forms.FormObjectProvider;
-import forms.FormObjectRookie;
 
 @Service
 @Transactional
 public class ProviderService {
 
 	@Autowired
-	private ProviderRepository providerRepository;
+	private ProviderRepository		providerRepository;
 
 	@Autowired
-	private ItemService itemService;
+	private ItemService				itemService;
 
 	@Autowired
-	private SponsorshipService sponsorshipService;
+	private SponsorshipService		sponsorshipService;
 
 	@Autowired
-	private CreditCardService creditCardService;
+	private CreditCardService		creditCardService;
 
 	@Autowired
-	private ConfigurationService configurationService;
+	private ConfigurationService	configurationService;
+
 
 	public Provider findOne(int id) {
 		return this.providerRepository.findOne(id);
@@ -166,60 +163,60 @@ public class ProviderService {
 		String locale = LocaleContextHolder.getLocale().getLanguage().toUpperCase();
 
 		// Confirmacion contrasena
-		if (!formObjectProvider.getPassword().equals(formObjectProvider.getConfirmPassword()))
-			if (locale.contains("ES"))
-				binding.addError(new FieldError("formObjectAdmin", "password", formObjectProvider.getPassword(), false,
-						null, null, "Las contrasenas no coinciden"));
-			else
-				binding.addError(new FieldError("formObjectAdmin", "password", formObjectProvider.getPassword(), false,
-						null, null, "Passwords don't match"));
+		if (!formObjectProvider.getPassword().equals(formObjectProvider.getConfirmPassword())) {
+			if (locale.contains("ES")) {
+				binding.addError(new FieldError("formObjectAdmin", "password", formObjectProvider.getPassword(), false, null, null, "Las contrasenas no coinciden"));
+			} else {
+				binding.addError(new FieldError("formObjectAdmin", "password", formObjectProvider.getPassword(), false, null, null, "Passwords don't match"));
+			}
+		}
 
 		// Confirmacion terminos y condiciones
-		if (!formObjectProvider.getTermsAndConditions())
-			if (locale.contains("ES"))
-				binding.addError(new FieldError("formObjectAdmin", "termsAndConditions",
-						formObjectProvider.getTermsAndConditions(), false, null, null,
-						"Debe aceptar los terminos y condiciones"));
-			else
-				binding.addError(new FieldError("formObjectAdmin", "termsAndConditions",
-						formObjectProvider.getTermsAndConditions(), false, null, null,
-						"You must accept the terms and conditions"));
+		if (!formObjectProvider.getTermsAndConditions()) {
+			if (locale.contains("ES")) {
+				binding.addError(new FieldError("formObjectAdmin", "termsAndConditions", formObjectProvider.getTermsAndConditions(), false, null, null, "Debe aceptar los terminos y condiciones"));
+			} else {
+				binding.addError(new FieldError("formObjectAdmin", "termsAndConditions", formObjectProvider.getTermsAndConditions(), false, null, null, "You must accept the terms and conditions"));
+			}
+		}
 
-		if (card.getNumber() != null)
-			if (!this.creditCardService.validateNumberCreditCard(card))
-				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "number", formObjectProvider.getNumber(), false, null,
-							null, "El numero de la tarjeta es invalido"));
-				else
-					binding.addError(new FieldError("formObject", "number", formObjectProvider.getNumber(), false, null,
-							null, "The card number is invalid"));
+		if (card.getNumber() != null) {
+			if (!this.creditCardService.validateNumberCreditCard(card)) {
+				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES")) {
+					binding.addError(new FieldError("formObject", "number", formObjectProvider.getNumber(), false, null, null, "El numero de la tarjeta es invalido"));
+				} else {
+					binding.addError(new FieldError("formObject", "number", formObjectProvider.getNumber(), false, null, null, "The card number is invalid"));
+				}
+			}
+		}
 
-		if (card.getExpirationMonth() != null && card.getExpirationYear() != null)
-			if (!this.creditCardService.validateDateCreditCard(card))
-				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
-							null, null, "La tarjeta no puede estar caducada"));
-				else
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
-							null, null, "The credit card can not be expired"));
+		if (card.getExpirationMonth() != null && card.getExpirationYear() != null) {
+			if (!this.creditCardService.validateDateCreditCard(card)) {
+				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES")) {
+					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false, null, null, "La tarjeta no puede estar caducada"));
+				} else {
+					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false, null, null, "The credit card can not be expired"));
+				}
+			}
+		}
 
 		List<String> cardType = this.configurationService.getConfiguration().getCardType();
 
-		if (!cardType.contains(result.getCreditCard().getBrandName()))
-			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null,
-						"Tarjeta no admitida"));
-			else
-				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null,
-						"The credit card is not accepted"));
+		if (!cardType.contains(result.getCreditCard().getBrandName())) {
+			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES")) {
+				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null, "Tarjeta no admitida"));
+			} else {
+				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null, "The credit card is not accepted"));
+			}
+		}
 
-		if (result.getEmail().matches("[\\w.%-]+\\<[\\w.%-]+\\@+\\>|[\\w.%-]+"))
-			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-				binding.addError(new FieldError("member", "email", result.getEmail(), false, null, null,
-						"No sigue el patron ejemplo@dominio.asd o alias <ejemplo@dominio.asd>"));
-			else
-				binding.addError(new FieldError("member", "email", result.getEmail(), false, null, null,
-						"Dont follow the pattern example@domain.asd or alias <example@domain.asd>"));
+		if (result.getEmail().matches("[\\w.%-]+\\<[\\w.%-]+\\@+\\>|[\\w.%-]+")) {
+			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES")) {
+				binding.addError(new FieldError("member", "email", result.getEmail(), false, null, null, "No sigue el patron ejemplo@dominio.asd o alias <ejemplo@dominio.asd>"));
+			} else {
+				binding.addError(new FieldError("member", "email", result.getEmail(), false, null, null, "Dont follow the pattern example@domain.asd or alias <example@domain.asd>"));
+			}
+		}
 
 		return result;
 	}
@@ -253,17 +250,19 @@ public class ProviderService {
 		List<Item> items = new ArrayList<Item>();
 		provider = this.loggedProvider();
 
-		items = provider.getItems();
+		items = new ArrayList<Item>();
+		items.addAll(provider.getItems());
 
 		provider.getItems().clear();
 
-		this.itemService.deleteInBatch(items);
+		for (Item i : items) {
+			this.itemService.delete(i);
+		}
 
 		this.sponsorshipService.deleteAllSponsorships();
 
 		this.providerRepository.delete(provider);
 	}
-
 	public FormObjectEditProvider getFormObjectEditProvider(Provider provider) {
 
 		FormObjectEditProvider res = new FormObjectEditProvider();
@@ -327,33 +326,35 @@ public class ProviderService {
 		res.setItems(provider.getItems());
 		res.setSponsorships(provider.getSponsorships());
 
-		if (card.getNumber() != null)
-			if (!this.creditCardService.validateNumberCreditCard(card))
-				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "number", formObjectProvider.getNumber(), false, null,
-							null, "El numero de la tarjeta es invalido"));
-				else
-					binding.addError(new FieldError("formObject", "number", formObjectProvider.getNumber(), false, null,
-							null, "The card number is invalid"));
+		if (card.getNumber() != null) {
+			if (!this.creditCardService.validateNumberCreditCard(card)) {
+				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES")) {
+					binding.addError(new FieldError("formObject", "number", formObjectProvider.getNumber(), false, null, null, "El numero de la tarjeta es invalido"));
+				} else {
+					binding.addError(new FieldError("formObject", "number", formObjectProvider.getNumber(), false, null, null, "The card number is invalid"));
+				}
+			}
+		}
 
-		if (card.getExpirationMonth() != null && card.getExpirationYear() != null)
-			if (!this.creditCardService.validateDateCreditCard(card))
-				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
-							null, null, "La tarjeta no puede estar caducada"));
-				else
-					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false,
-							null, null, "The credit card can not be expired"));
+		if (card.getExpirationMonth() != null && card.getExpirationYear() != null) {
+			if (!this.creditCardService.validateDateCreditCard(card)) {
+				if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES")) {
+					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false, null, null, "La tarjeta no puede estar caducada"));
+				} else {
+					binding.addError(new FieldError("formObject", "expirationMonth", card.getExpirationMonth(), false, null, null, "The credit card can not be expired"));
+				}
+			}
+		}
 
 		List<String> cardType = this.configurationService.getConfiguration().getCardType();
 
-		if (!cardType.contains(res.getCreditCard().getBrandName()))
-			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES"))
-				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null,
-						"Tarjeta no admitida"));
-			else
-				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null,
-						"The credit card is not accepted"));
+		if (!cardType.contains(res.getCreditCard().getBrandName())) {
+			if (LocaleContextHolder.getLocale().getLanguage().toUpperCase().contains("ES")) {
+				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null, "Tarjeta no admitida"));
+			} else {
+				binding.addError(new FieldError("formObject", "brandName", card.getBrandName(), false, null, null, "The credit card is not accepted"));
+			}
+		}
 
 		return res;
 
